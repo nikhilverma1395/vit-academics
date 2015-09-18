@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dadeff"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@android:color/holo_blue_dark" />
+
+    <LinearLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/card"
+        android:elevation="5dp"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="100dp">
+
+        <TextView
+            android:id="@+id/fac_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="Robin Hood"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/fac_desig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="Assistant Professor"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/fac_school"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="SCSE"
+            android:textSize="22sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:id="@+id/fac_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="9876567656"
+                android:textSize="20sp" />
+
+            <com.gc.materialdesign.views.ButtonFloat
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="70dp"
+                materialdesign:animate="true"
+                materialdesign:iconDrawable="@drawable/call" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/fac_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:text="Email"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/fac_room"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="Room"
+            android:textSize="25sp" />
+    </LinearLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/fac_img"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_alignBottom="@id/header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-110dp"
+        android:elevation="6dp"
+        android:src="@drawable/header" />
+
+</RelativeLayout>

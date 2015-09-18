@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="circulartxt">
+        <attr name="ctxt_color" format="color" />
+        <attr name="ctxt_textSize" format="dimension" />
+        <attr name="ctxt_elevation" format="dimension" />
+        <attr name="ctxt_radius" format="integer" />
+        <attr name="text" format="string" />
+    </declare-styleable>
+</resources>

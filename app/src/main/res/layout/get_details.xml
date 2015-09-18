@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#4644aa">
+
+    <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+        android:id="@+id/progress_getdet"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:id="@+id/regno_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="80dp"
+            app:mtf_image="@drawable/ic_mail_black_24dp">
+
+            <EditText
+                android:id="@+id/regno_getdet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Registration No."
+                android:textColor="#b2ad91f8"
+                android:textColorHint="#ffa459"
+                android:textSize="18sp" />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:id="@+id/dob_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:mtf_image="@drawable/ic_mail_black_24dp">
+
+            <EditText
+                android:id="@+id/dob_getdet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Date of Birth"
+                android:textColor="#b2ad91f8"
+                android:textColorHint="#ffa459"
+                android:textSize="15sp" />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:id="@+id/parentcell_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:mtf_image="@drawable/ic_mail_black_24dp">
+
+            <EditText
+                android:id="@+id/parentcellno_getdet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Parent Cell Number"
+                android:textColor="#b2ad91f8"
+                android:textColorHint="#ffa459"
+                android:textSize="15sp" />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        <ImageView
+            android:id="@+id/get_details_captcha_iv"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" />
+
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:id="@+id/captcha_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:mtf_image="@drawable/ic_mail_black_24dp">
+
+            <EditText
+                android:id="@+id/captcha_getdet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Captcha"
+                android:textColor="#b2ad91f8"
+                android:textColorHint="#ffa459"
+                android:textSize="15sp" />
+
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:id="@+id/proceed_getdet"
+            android:layout_width="140dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@color/accent_color"
+            android:text="Proceed" />
+    </LinearLayout>
+</FrameLayout>

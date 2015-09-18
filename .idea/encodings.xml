@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Fragments/MarksView.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Fragments/Slots.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Fragments/StudentLogin.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Http/Http.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Listener/RecyclerItemClickListener.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/adapter/CoursesAdapter.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/adapter/TimeTableAdapter.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/database/CBL_Get_Set.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/database/CBL_MarksHelper.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/database/MySqlHelper_Slots.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/database/PBL_Get_Set.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/database/PBL_Helper.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/database/Slots_GetSet.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/database/Spotlight_WebView.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/model/DetailAtten.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/model/Marks_Model.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/model/Model_Daywise.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/model/Model_Slots.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/model/PBL_Model.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/model/Slots_Timings.java" charset="windows-1252" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>

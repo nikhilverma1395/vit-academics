@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/stud_log_frag"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/captcha_student"
+            android:layout_width="200dp"
+            android:layout_height="200dp" />
+
+        <EditText
+            android:layout_width="250dp"
+            android:id="@+id/fac_name_post"
+            android:layout_height="wrap_content"
+            android:hint="Faculty Name" />
+
+        <EditText
+            android:id="@+id/captcha_edit_student"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="Captcha" />
+
+        <Button
+            android:id="@+id/assign_stud_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click For Pic" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_stud"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </ScrollView>
+    </LinearLayout>
+</FrameLayout>

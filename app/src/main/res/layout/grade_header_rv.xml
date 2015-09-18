@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_daywise"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    card_view:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/header_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:text="Nikhil Verma"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/header_regno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:text="13BCE0037"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/header_program"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_name"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="B.Tech. Computer Science and Engineering"
+            android:textSize="19sp" />
+
+        <View
+            android:layout_marginLeft="20dp"
+            android:id="@+id/breakline"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_below="@id/header_program"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+        <TextView
+            android:id="@+id/reg_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/breakline"
+            android:layout_marginLeft="20dp"
+            android:text="Credits Registered"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/header_registr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/reg_head"
+            android:layout_marginLeft="20dp"
+            android:text="92"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/earn_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/breakline"
+            android:layout_centerHorizontal="true"
+            android:text="Credits Earned"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/header_earned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/earn_head"
+            android:layout_centerHorizontal="true"
+            android:hint="Jack"
+            android:text="92"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/gpa_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/breakline"
+            android:layout_marginRight="20dp"
+            android:text="CGPA"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/header_gpa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/gpa_head"
+            android:layout_marginRight="20dp"
+            android:text="8.40"
+            android:textSize="18sp" />
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="google-material-typeface-1.2.0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/myapplication/build/intermediates/exploded-aar/com.mikepenz/google-material-typeface/1.2.0.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/myapplication/build/intermediates/exploded-aar/com.mikepenz/google-material-typeface/1.2.0.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
