@@ -8,6 +8,8 @@
       <root url="file://$PROJECT_DIR$/myapplication/build/intermediates/exploded-aar/com.github.florent37/materialviewpager/1.1.0/res" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.florent37/materialviewpager/1.1.0/fbefcb55eabf84566a6b1b904974b5ea5b48268b/materialviewpager-1.1.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

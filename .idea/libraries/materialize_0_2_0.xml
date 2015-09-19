@@ -5,6 +5,8 @@
       <root url="file://$PROJECT_DIR$/myapplication/build/intermediates/exploded-aar/com.mikepenz/materialize/0.2.0/res" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/materialize/0.2.0/26f38380f4b3d754718b06fddf568ce9bdf4c239/materialize-0.2.0-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

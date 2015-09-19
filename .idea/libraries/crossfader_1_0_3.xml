@@ -5,6 +5,8 @@
       <root url="jar://$PROJECT_DIR$/myapplication/build/intermediates/exploded-aar/com.mikepenz/crossfader/1.0.3/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikepenz/crossfader/1.0.3/36a38428cb54feccba3c295ea8dceab09652d13c/crossfader-1.0.3-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

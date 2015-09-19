@@ -182,33 +182,33 @@ public class MarksParser {
         for (Elements d : marks_indiv) {
             if (d.get(4).html().contains("Theory")) {
                 Marks_Model mm = new Marks_Model(
-                        d.get(0).html(),//Sl
-                        d.get(1).html(),//Class Nbr
-                        d.get(2).html(),//Code
-                        d.get(3).html(),//Sub Name
-                        d.get(4).html(),//Type
-                        d.get(5).html(),//Attend c1
-                        d.get(6).html(),//marks c1
-                        d.get(7).html(),
-                        d.get(8).html(),
-                        d.get(9).html(),
-                        d.get(10).html(),
-                        d.get(11).html(),
-                        d.get(12).html(),
-                        d.get(13).html(),
-                        d.get(14).html(),
-                        d.get(15).html(),
-                        d.get(16).html(),
+                        d.get(0).html().trim(),//Sl
+                        d.get(1).html().trim(),//Class Nbr
+                        d.get(2).html().trim(),//Code
+                        d.get(3).html().trim(),//Sub Name
+                        d.get(4).html().trim(),//Type
+                        d.get(5).html().trim(),//Attend c1
+                        d.get(6).html().trim(),//marks c1
+                        d.get(7).html().trim(),
+                        d.get(8).html().trim(),
+                        d.get(9).html().trim(),
+                        d.get(10).html().trim(),
+                        d.get(11).html().trim(),
+                        d.get(12).html().trim(),
+                        d.get(13).html().trim(),
+                        d.get(14).html().trim(),
+                        d.get(15).html().trim(),
+                        d.get(16).html().trim(),
                         "-",
                         "-");
                 marks_det.add(mm);
             } else {
                 Marks_Model mm = new Marks_Model(
-                        d.get(0).html(),
-                        d.get(1).html(),
-                        d.get(2).html(),
-                        d.get(3).html(),
-                        d.get(4).html(),
+                        d.get(0).html().trim(),
+                        d.get(1).html().trim(),
+                        d.get(2).html().trim(),
+                        d.get(3).html().trim(),
+                        d.get(4).html().trim(),
                         "-",
                         "-",
                         "-",
@@ -221,8 +221,8 @@ public class MarksParser {
                         "-",
                         "-",
                         "-",
-                        d.get(6).html(),
-                        d.get(7).html());
+                        d.get(6).html().trim(),
+                        d.get(7).html().trim());
                 marks_det.add(mm);
             }
 
@@ -251,50 +251,50 @@ public class MarksParser {
         List<PBL_Model> lis = new ArrayList<>();
         for (List<Elements> pbldet : pbldeta) {
             PBL_Model pb = new PBL_Model();
-            pb.setClas_nbr(pbldet.get(0).get(1).html());
-            pb.setCourse_code(pbldet.get(0).get(2).html());
+            pb.setClas_nbr(pbldet.get(0).get(1).html().trim());
+            pb.setCourse_code(pbldet.get(0).get(2).html().trim());
 
-            pb.setOption1_Title(pbldet.get(0).get(6).html());
-            pb.setOption2_Title(pbldet.get(0).get(7).html());
-            pb.setOption3_Title(pbldet.get(0).get(8).html());
-            pb.setOption4_Title(pbldet.get(0).get(9).html());
-            pb.setOption5_Title(pbldet.get(0).get(10).html());
+            pb.setOption1_Title(pbldet.get(0).get(6).html().trim());
+            pb.setOption2_Title(pbldet.get(0).get(7).html().trim());
+            pb.setOption3_Title(pbldet.get(0).get(8).html().trim());
+            pb.setOption4_Title(pbldet.get(0).get(9).html().trim());
+            pb.setOption5_Title(pbldet.get(0).get(10).html().trim());
 
-            pb.setOption1_Max_Mark(pbldet.get(1).get(1).html());
-            pb.setOption2_Max_Mark(pbldet.get(1).get(2).html());
-            pb.setOption3_Max_Mark(pbldet.get(1).get(3).html());
-            pb.setOption4_Max_Mark(pbldet.get(1).get(4).html());
-            pb.setOption5__Max_Mark(pbldet.get(1).get(5).html());
+            pb.setOption1_Max_Mark(pbldet.get(1).get(1).html().trim());
+            pb.setOption2_Max_Mark(pbldet.get(1).get(2).html().trim());
+            pb.setOption3_Max_Mark(pbldet.get(1).get(3).html().trim());
+            pb.setOption4_Max_Mark(pbldet.get(1).get(4).html().trim());
+            pb.setOption5__Max_Mark(pbldet.get(1).get(5).html().trim());
 
-            pb.setOption1_Weightage(pbldet.get(2).get(1).html());
-            pb.setOption2_Weightage(pbldet.get(2).get(2).html());
-            pb.setOption3_Weightage(pbldet.get(2).get(3).html());
-            pb.setOption4_Weightage(pbldet.get(2).get(4).html());
-            pb.setOption5_Weightage(pbldet.get(2).get(5).html());
+            pb.setOption1_Weightage(pbldet.get(2).get(1).html().trim());
+            pb.setOption2_Weightage(pbldet.get(2).get(2).html().trim());
+            pb.setOption3_Weightage(pbldet.get(2).get(3).html().trim());
+            pb.setOption4_Weightage(pbldet.get(2).get(4).html().trim());
+            pb.setOption5_Weightage(pbldet.get(2).get(5).html().trim());
 
-            pb.setOption1_Date(pbldet.get(3).get(1).html());
-            pb.setOption2_Date(pbldet.get(3).get(2).html());
-            pb.setOption3_Date(pbldet.get(3).get(3).html());
-            pb.setOption4_Date(pbldet.get(3).get(4).html());
-            pb.setOption5_Date(pbldet.get(3).get(5).html());
+            pb.setOption1_Date(pbldet.get(3).get(1).html().trim());
+            pb.setOption2_Date(pbldet.get(3).get(2).html().trim());
+            pb.setOption3_Date(pbldet.get(3).get(3).html().trim());
+            pb.setOption4_Date(pbldet.get(3).get(4).html().trim());
+            pb.setOption5_Date(pbldet.get(3).get(5).html().trim());
 
-            pb.setOption1_Attend(pbldet.get(4).get(1).html());
-            pb.setOption2_Attend(pbldet.get(4).get(2).html());
-            pb.setOption3_Attend(pbldet.get(4).get(3).html());
-            pb.setOption4_Attend(pbldet.get(4).get(4).html());
-            pb.setOption5_Attend(pbldet.get(4).get(5).html());
+            pb.setOption1_Attend(pbldet.get(4).get(1).html().trim());
+            pb.setOption2_Attend(pbldet.get(4).get(2).html().trim());
+            pb.setOption3_Attend(pbldet.get(4).get(3).html().trim());
+            pb.setOption4_Attend(pbldet.get(4).get(4).html().trim());
+            pb.setOption5_Attend(pbldet.get(4).get(5).html().trim());
 
-            pb.setOption1_Scored(pbldet.get(5).get(1).html());
-            pb.setOption2_Scored(pbldet.get(5).get(2).html());
-            pb.setOption3_Scored(pbldet.get(5).get(3).html());
-            pb.setOption4_Scored(pbldet.get(5).get(4).html());
-            pb.setOption5_Scored(pbldet.get(5).get(5).html());
+            pb.setOption1_Scored(pbldet.get(5).get(1).html().trim());
+            pb.setOption2_Scored(pbldet.get(5).get(2).html().trim());
+            pb.setOption3_Scored(pbldet.get(5).get(3).html().trim());
+            pb.setOption4_Scored(pbldet.get(5).get(4).html().trim());
+            pb.setOption5_Scored(pbldet.get(5).get(5).html().trim());
 
-            pb.setOption1_Scored_Percent(pbldet.get(6).get(1).html());
-            pb.setOption2_Scored_Percent(pbldet.get(6).get(2).html());
-            pb.setOption3_Scored_Percent(pbldet.get(6).get(3).html());
-            pb.setOption4_Scored_Percent(pbldet.get(6).get(4).html());
-            pb.setOption5_Scored_Percent(pbldet.get(6).get(5).html());
+            pb.setOption1_Scored_Percent(pbldet.get(6).get(1).html().trim());
+            pb.setOption2_Scored_Percent(pbldet.get(6).get(2).html().trim());
+            pb.setOption3_Scored_Percent(pbldet.get(6).get(3).html().trim());
+            pb.setOption4_Scored_Percent(pbldet.get(6).get(4).html().trim());
+            pb.setOption5_Scored_Percent(pbldet.get(6).get(5).html().trim());
             lis.add(pb);
         }
         return lis;
