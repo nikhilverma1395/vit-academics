@@ -47,8 +47,8 @@ public class StudentLogin extends Fragment {
     private ButtonRectangle assign_stud_pic;
     private ImageView captcha_student;
     private String SPOTLIGHT = "https://academics.vit.ac.in/student/include_spotlight.asp";
-    private String student_Login_Link = "https://academics.vit.ac.in/student/stud_login_submit.asp";
-    private String student_Login_Captcha_Link = "https://academics.vit.ac.in/student/captcha.asp";
+    public static String student_Login_Link = "https://academics.vit.ac.in/student/stud_login_submit.asp";
+    public static String student_Login_Captcha_Link = "https://academics.vit.ac.in/student/captcha.asp";
     private String student_Login_Photo_Link = "https://academics.vit.ac.in/student/view_photo.asp";
     private String per = "https://academics.vit.ac.in/student/profile_personal_view.asp";
     private static String captchaText = "";

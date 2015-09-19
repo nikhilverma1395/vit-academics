@@ -7,9 +7,9 @@ public class GradeModel {
     private long id;
     private String subcode;
     private String subname;
+    private String grade;
     private String subtype;
     private String credit;
-    private String grade;
     private String examheld;
     private String examresult;
     private String courseoption;

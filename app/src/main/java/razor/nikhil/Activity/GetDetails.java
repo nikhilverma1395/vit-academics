@@ -44,12 +44,15 @@ public class GetDetails extends Fragment {
     private ProgressBarCircularIndeterminate progress_bar;
     private String regno_str = "", dob_str = "", parentcell_str = "", captcha_str = "";
     private MaterialTextField mtf_reg, mtf_parcell, mtf_dob, mtf_cap;
-private GetDetails gd=null;
+    private GetDetails gd = null;
+
     public GetDetails() {
     }
+
     public GetDetails(GetDetails frag) {
-    gd=frag;
+        gd = frag;
     }
+
     public static DefaultHttpClient getThreadSafeClient() {
 
         DefaultHttpClient client = new DefaultHttpClient();
@@ -243,13 +246,12 @@ private GetDetails gd=null;
                 String mark = new SharedPrefs(getActivity()).getMsg("marksdone");
                 String att = new SharedPrefs(getActivity()).getMsg("ttdone");
                 String tt = new SharedPrefs(getActivity()).getMsg("attendone");
-                if (mark == "y" && att == "y" && tt == "y") {
+                if ((mark == "y" && att == "y" && tt == "y") || (mark.equals("y") && att.equals("y") && tt.equals("y"))) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            progress_bar.setVisibility(View.INVISIBLE);
-
-                            if (gd.isAdded()&& gd!=null)
+                            progress_bar.setVisibility(View.GONE);
+                            if (gd.isAdded() && gd != null)
                                 getActivity().getSupportFragmentManager()
                                         .beginTransaction().remove(gd).commit();
                         }

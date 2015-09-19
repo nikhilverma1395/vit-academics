@@ -3,7 +3,7 @@
 <android.support.v7.widget.Toolbar
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#196928"
+    android:background="#263b69"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"

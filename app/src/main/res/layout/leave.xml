@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/captcha_leave_iv"
+        android:layout_width="180dp"
+        android:layout_height="45dp"
+        android:scaleType="fitXY" />
+
+    <EditText
+        android:id="@+id/captcha_leave_et"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="Captcha" />
+
+    <Button
+        android:layout_width="150dp"
+        android:id="@+id/button_leave"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+
+    <ScrollView
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/log_leave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+</LinearLayout>

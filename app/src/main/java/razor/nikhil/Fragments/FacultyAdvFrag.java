@@ -1,6 +1,8 @@
 package razor.nikhil.Fragments;
 
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.gc.materialdesign.views.ButtonFloat;
 
 import razor.nikhil.Activity.Config;
 import razor.nikhil.R;
@@ -23,6 +27,7 @@ public class FacultyAdvFrag extends Fragment {
         return new FacultyAdvFrag();
     }
 
+    private ButtonFloat call;
     private Typeface roboto_light, regular;
     private ImageView dp;
     private TextView name, desig, room, school, mobile, email;
@@ -38,6 +43,7 @@ public class FacultyAdvFrag extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        call = (ButtonFloat) view.findViewById(R.id.call_fac_butfloat);
         dp = (ImageView) view.findViewById(R.id.fac_img);
         name = (TextView) view.findViewById(R.id.fac_name);
         desig = (TextView) view.findViewById(R.id.fac_desig);
@@ -64,6 +70,14 @@ public class FacultyAdvFrag extends Fragment {
         email.setText(pref.getMsg(Config.FADV_EMAIL));
         room.setText(pref.getMsg(Config.FADV_ROOM));
         mobile.setText(pref.getMsg(Config.FADV_MOBILE));
+        final Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + mobile.getText().toString().trim()));
+        call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(intent);
+            }
+        });
 
     }
+
 }

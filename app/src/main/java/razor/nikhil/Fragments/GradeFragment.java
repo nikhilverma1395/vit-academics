@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
 import razor.nikhil.adapter.GradeAdapter;
 import razor.nikhil.model.GradeModel;
@@ -42,5 +43,12 @@ public class GradeFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(new GradeAdapter(list, getActivity()));
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                if (position != 0)
+                    GradeInfoDialog.newInstance(list.get(position - 1)).show(getActivity().getSupportFragmentManager(), "");
+            }
+        }));
     }
 }

@@ -24,6 +24,7 @@ import java.util.List;
 
 import razor.nikhil.Fragments.FacultyAdvFrag;
 import razor.nikhil.Fragments.GradeFragment;
+import razor.nikhil.Fragments.LeaveRequest;
 import razor.nikhil.Fragments.Slots;
 import razor.nikhil.Fragments.StudentLogin;
 import razor.nikhil.Fragments.TimeTableVP;
@@ -49,9 +50,9 @@ import razor.nikhil.model.detailattlist_subcode;
 public class MainActivity extends ActionBarActivity {
 
 
-    String TITLES[] = {"Courses", "Photo Login", "Details", "TimeTable", "Grades", "Faculty Adviser", "Events", "Free Play", "Open Source"};
+    String TITLES[] = {"Courses", "Photo Login", "Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "Free Play", "Open Source"};
     int ICONS[] = {R.mipmap.user_icon,
-            R.mipmap.assignment,-
+            R.mipmap.assignment, -
             R.mipmap.tick,
             R.mipmap.book,
             R.mipmap.ic_dns,
@@ -176,8 +177,8 @@ public class MainActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
-        setSupportActionBar(toolbar);
+    toolbar = (Toolbar) findViewById(R.id.toolbar_layout_main);
+     setSupportActionBar(toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -252,6 +253,9 @@ public class MainActivity extends ActionBarActivity {
                 break;
             case 6:
                 fragment = FacultyAdvFrag.newInstance();
+                break;
+            case 7:
+                fragment = new LeaveRequest();
                 break;
             default:
                 displayView(1);
