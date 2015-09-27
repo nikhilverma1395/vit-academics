@@ -9,11 +9,10 @@
         android:id="@+id/materialViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:viewpager_logo="@layout/header_logo_2"
         app:viewpager_pagerTitleStrip="@layout/material_view_pager_pagertitlestrip_newstand"
         app:viewpager_logoMarginTop="100dp"
         app:viewpager_color="@color/colorPrimary"
-        app:viewpager_headerHeight="300dp"
+        app:viewpager_headerHeight="@dimen/timetable_vp_header_height"
         app:viewpager_headerAlpha="1.0"
         app:viewpager_hideLogoWithFade="false"
         app:viewpager_hideToolbarAndTitle="true"
@@ -26,5 +25,6 @@
 
         />
 
+    <include layout="@layout/drawer" />
 
 </android.support.v4.widget.DrawerLayout>

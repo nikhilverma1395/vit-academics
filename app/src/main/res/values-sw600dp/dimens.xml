@@ -1,0 +1,53 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="textSize">35sp</dimen>
+    <dimen name="padding_image_button">25dp</dimen>
+    <dimen name="margin_top_image">50dp</dimen>
+    <dimen name="image_w">300dp</dimen>
+    <dimen name="my_txt_size">34sp</dimen>
+    <dimen name="logo_">38sp</dimen>
+    <dimen name="dialog_size">400dp</dimen>
+    <dimen name="info_text_size">20sp</dimen>
+    <dimen name="margin_turn">350dp</dimen>
+    <dimen name="pro">130dp</dimen>
+    <dimen name="margin_card_left_right">50dp</dimen>
+    <dimen name="margin_card_top">25dp</dimen>
+    <dimen name="list_width">150dp</dimen>
+    <dimen name="mbottom">100dp</dimen>
+    <dimen name="small_texts">17sp</dimen>
+    <dimen name="margin_card_image">20dp</dimen>
+    <dimen name="title_font">22sp</dimen>
+    <dimen name="title_font_head">25sp</dimen>
+    <!-- New for academics -->
+    <dimen name="drawer_width">380dp</dimen>
+    <dimen name="navbar_header_height">240dp</dimen>
+
+    <dimen name="header_circle_image">80dp</dimen>
+    <dimen name="courses_card_main_padding_left_right">10dp</dimen>
+    <dimen name="slots_circle_branch">80dp</dimen>
+    <dimen name="slots_item_margin_left">25dp</dimen>
+    <dimen name="slots_circle_margin_bottom">18dp</dimen>
+    <dimen name="slots_circle_padding">10dp</dimen>
+    <dimen name="slots_bigfont_size">32sp</dimen>
+    <dimen name="slots_card_size">200dp</dimen>
+
+
+    <!-- Marks-->
+    <dimen name="marks_grid_item_width">205dp</dimen>
+    <dimen name="marks_grid_item_bigfont">33sp</dimen>
+    <dimen name="marks_grid_item_bigfont_less">32sp</dimen>
+    <dimen name="marks_grid_item_present_block_width_height">37dp</dimen>
+    <dimen name="marks_grid_item_paper_type_margin_left">30dp</dimen>
+    <dimen name="marks_grid_item_totol_mark_height">40dp</dimen>
+    <dimen name="marks_grid_item_card_margin_left_right">5dp</dimen>
+    <dimen name="marks_grid_item_title_font">20sp</dimen>
+    <!--Timetable-->
+    <!-- TimeTable -->
+    <dimen name="timetable_vp_header_height">250dp</dimen>
+    <dimen name="timetable_rv_item_margin_lr">25dp</dimen>
+    <dimen name="timetable_rv_item_fonts">22sp</dimen>
+    <dimen name="timetable_rv_item_font_code">22sp</dimen>
+    <dimen name="timetable_rv_item_slotfont">20sp</dimen>
+    <!-- GPA -->
+    <dimen name="spinner_width">120dp</dimen>
+</resources>

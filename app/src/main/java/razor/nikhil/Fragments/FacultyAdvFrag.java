@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.gc.materialdesign.views.ButtonFloat;
 
-import razor.nikhil.Activity.Config;
+import razor.nikhil.Config;
 import razor.nikhil.R;
 import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.database.StoreAndGetImage;

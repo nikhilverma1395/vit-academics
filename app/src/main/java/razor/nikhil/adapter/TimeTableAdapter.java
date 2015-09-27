@@ -68,7 +68,7 @@ public class TimeTableAdapter extends RecyclerView.Adapter<TimeTableAdapter.Card
             slot = (TextView) v.findViewById(R.id.slot_daywise);
             venue = (TextView) v.findViewById(R.id.venue_daywise);
             timings = (TextView) v.findViewById(R.id.timings_daywise);
-            subname.setTypeface(light);
+            subname.setTypeface(regular);
             subcode.setTypeface(light);
             venue.setTypeface(roboto_light);
             slot.setTypeface(bold);

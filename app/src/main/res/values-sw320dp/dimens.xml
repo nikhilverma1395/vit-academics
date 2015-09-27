@@ -1,0 +1,17 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="textSize">15sp</dimen>
+    <dimen name="padding_image_button">11dp</dimen>
+    <dimen name="margin_top_image">12dp</dimen>
+    <dimen name="image_w">150dp</dimen>
+    <dimen name="my_txt_size">16sp</dimen>
+    <dimen name="logo_">22sp</dimen>
+    <dimen name="pro">80dp</dimen>
+    <dimen name="margin_turn">50dp</dimen>
+    <dimen name="elevation_low">9dp</dimen>
+
+    <dimen name="elevation_high">12dp</dimen>
+
+    <dimen name="mbottom">50dp</dimen>
+    <dimen name="list_width">90dp</dimen>
+</resources>

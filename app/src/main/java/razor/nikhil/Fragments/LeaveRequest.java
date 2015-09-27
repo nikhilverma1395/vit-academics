@@ -20,9 +20,9 @@ import org.apache.http.client.HttpClient;
 import java.io.IOException;
 import java.util.HashMap;
 
-import razor.nikhil.Activity.GetDetails;
 import razor.nikhil.Http.BitmapUrlClient;
 import razor.nikhil.Http.Http;
+import razor.nikhil.Http.MySSLSocketFactory;
 import razor.nikhil.R;
 
 /**
@@ -46,7 +46,7 @@ public class LeaveRequest extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         init(view);
-        httpClient = GetDetails.getThreadSafeClient();
+        httpClient = MySSLSocketFactory.getNewHttpClient();
         try {
             new SetCaptcha().execute();
         } catch (Exception e) {
@@ -109,29 +109,44 @@ public class LeaveRequest extends Fragment {
             }
             HashMap<String, String> map = new HashMap<>();
             map.put("apply", "11934\\FA");
-            map.put("exitdate", "19-Sep-2015");
-            map.put("sttime_hh", "10");
+            map.put("lvtype", "EY");
+            //ot
+            map.put("exitdate", "24-Sep-2015");
+//            map.put("exitdate", "21-Sep-2015");
+            map.put("sttime_hh", "2");//After 7am defore 6pm , ,max diff 6 hrs
             map.put("sttime_mm", "30");
             map.put("frm_timetype", "PM");
-
-            map.put("reentry_date", "21-Sep-2015");
-            map.put("endtime_hh", "1");
+            map.put("reentry_date", "26-Sep-2015");
+            map.put("endtime_hh", "4");
             map.put("endtime_mm", "30");
             map.put("to_timetype", "PM");
 
-            map.put("lvtype", "HT");
-            map.put("place", "Vellore ssjldb sdsbd skd sb dhsbdshhd" );
-            map.put("reason ", "Birthay jbdsdui sgdusd jshd shdus dsb udus");
+            map.put("place", "Vellore ");
+            map.put("reason", "Birthay ");
             String data = "";
+
+            String huy = "";
             try {
+                Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//need this as a pre-req
+                Http.getData("https://academics.vit.ac.in/student/student_leave_report.asp", httpClient);//3nd pre-reqr
+                final String weq = Http.getData("https://academics.vit.ac.in/student/leave_apply_dt.asp?x=%20&lvtyp=EY", httpClient);//2nd pre-req
+                final String we = Http.getData(POST_LINK_PRE, httpClient);//3nd pre-reqr
+                Http.getData("https://academics.vit.ac.in/student/leave_apply_dt.asp?x=%20&lvtyp=EY", httpClient);//2nd pre-req
                 Http.getData(POST_LINK_PRE, httpClient);
                 data = Http.postMethod(MAIN_POST_LINK, map, httpClient);
+                final String finalData = data;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        log.setText(we + "\n\n" + weq + "\n\n\n" + finalData);
+                    }
+                });
             } catch (HttpException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("Data",data);
+            Log.d("Data", data);
             return null;
         }
     }

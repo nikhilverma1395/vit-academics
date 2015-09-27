@@ -1,4 +1,4 @@
-package razor.nikhil.Activity;
+package razor.nikhil;
 
 /**
  * Created by Nikhil Verma on 9/16/2015.

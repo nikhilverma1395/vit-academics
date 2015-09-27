@@ -254,11 +254,11 @@ public class MarksParser {
             pb.setClas_nbr(pbldet.get(0).get(1).html().trim());
             pb.setCourse_code(pbldet.get(0).get(2).html().trim());
 
-            pb.setOption1_Title(pbldet.get(0).get(6).html().trim());
-            pb.setOption2_Title(pbldet.get(0).get(7).html().trim());
-            pb.setOption3_Title(pbldet.get(0).get(8).html().trim());
-            pb.setOption4_Title(pbldet.get(0).get(9).html().trim());
-            pb.setOption5_Title(pbldet.get(0).get(10).html().trim());
+            pb.setOption1_Title(ParseTimeTable.FirstCharCap(pbldet.get(0).get(6).html().trim()));
+            pb.setOption2_Title(ParseTimeTable.FirstCharCap(pbldet.get(0).get(7).html().trim()));
+            pb.setOption3_Title(ParseTimeTable.FirstCharCap(pbldet.get(0).get(8).html().trim()));
+            pb.setOption4_Title(ParseTimeTable.FirstCharCap(pbldet.get(0).get(9).html().trim()));
+            pb.setOption5_Title(ParseTimeTable.FirstCharCap(pbldet.get(0).get(10).html().trim()));
 
             pb.setOption1_Max_Mark(pbldet.get(1).get(1).html().trim());
             pb.setOption2_Max_Mark(pbldet.get(1).get(2).html().trim());

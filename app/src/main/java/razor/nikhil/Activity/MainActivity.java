@@ -21,8 +21,11 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import razor.nikhil.Fragments.CgpaFragment;
 import razor.nikhil.Fragments.FacultyAdvFrag;
+import razor.nikhil.Fragments.GetDetails;
 import razor.nikhil.Fragments.GradeFragment;
 import razor.nikhil.Fragments.LeaveRequest;
 import razor.nikhil.Fragments.Slots;
@@ -30,6 +33,7 @@ import razor.nikhil.Fragments.StudentLogin;
 import razor.nikhil.Fragments.TimeTableVP;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
+import razor.nikhil.adapter.NavBarRVAdapter;
 import razor.nikhil.database.Attend_GetSet;
 import razor.nikhil.database.CBL_Get_Set;
 import razor.nikhil.database.GradeGetSet;
@@ -47,13 +51,13 @@ import razor.nikhil.model.Model_Slots;
 import razor.nikhil.model.PBL_Model;
 import razor.nikhil.model.detailattlist_subcode;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.HeaderItemClicked {
 
 
-    String TITLES[] = {"Courses", "Photo Login", "Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "Free Play", "Open Source"};
+    String TITLES[] = {"Courses", "Photo Login", "Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "Cgpa Calculator", "Open Source"};
     int ICONS[] = {R.mipmap.user_icon,
-            R.mipmap.assignment, -
-            R.mipmap.tick,
+            R.mipmap.assignment,
+            R.mipmap.tick_icon,
             R.mipmap.book,
             R.mipmap.ic_dns,
             R.mipmap.bug_report,
@@ -72,10 +76,12 @@ public class MainActivity extends ActionBarActivity {
     public static List<AttendBrief> attendBriefs = null;
     public static List<Marks_Model> marks_det;
     public static List<PBL_Model> lpbl;
-
     String NAME = "Mike Ross";
     String EMAIL = "mike@gmail.com";
+    private List<String> subnames;
+    private List<Integer> cur_credits_sum = new ArrayList<>();
     int PROFILE = R.drawable.head;
+    private HashMap<String, Integer> mapsubcred = new HashMap<>();
     public static Context context;
     private Toolbar toolbar;
 
@@ -125,16 +131,34 @@ public class MainActivity extends ActionBarActivity {
         context = getApplicationContext();
         gd = new GetDetails(gd);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.container_main, gd).commit();
+            //    getSupportFragmentManager().beginTransaction().add(R.id.container_main, gd).commit();
         }
         try {
             //Getting the list of slots
             list = new Slots_GetSet(this).getAllCredentials();
             String classnbrs[] = new String[list.size()];
+            subnames = new ArrayList<>();
+
             int r = 0;
             //getting the name of individual attendance tables
+
             for (Model_Slots ms : list) {
                 classnbrs[r++] = ms.getNumber().trim();
+                String n = ms.getSubject_name().trim();
+                if (!(ms.getSlot().trim().toLowerCase().contains("l")))//subnames for gpa calc, ignoring labs
+                {
+                    subnames.add(n);
+
+                }
+                String credstr = ms.getLTPJC().trim();
+                int cred = Integer.parseInt(credstr.charAt(credstr.length() - 1) + "");
+                Log.d(n, cred + "");
+                if (mapsubcred.get(n) == null) {
+                    mapsubcred.put(n, cred);
+                    Log.d(n, cred + "");
+                } else {
+                    mapsubcred.put(n, mapsubcred.get(n) + cred);
+                }//adding lab credits
             }
             //getting lists of detailed att of individual subjects
             for (int t = 0; t < classnbrs.length; t++) {
@@ -143,6 +167,9 @@ public class MainActivity extends ActionBarActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        for (Map.Entry<String, Integer> map : mapsubcred.entrySet()) {
+            cur_credits_sum.add(map.getValue());
         }
         try {
             Runnable runnable = new Runnable() {
@@ -177,13 +204,13 @@ public class MainActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
-    toolbar = (Toolbar) findViewById(R.id.toolbar_layout_main);
-     setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_layout_main);
+        setSupportActionBar(toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE);
+        mAdapter = new NavBarRVAdapter(TITLES, ICONS, NAME, EMAIL, PROFILE, this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(recycleritemlict);
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
@@ -257,6 +284,9 @@ public class MainActivity extends ActionBarActivity {
             case 7:
                 fragment = new LeaveRequest();
                 break;
+            case 8:
+                fragment = CgpaFragment.newInstance(subnames, cur_credits_sum);
+                break;
             default:
                 displayView(1);
                 break;
@@ -269,4 +299,13 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+    @Override
+    public void OnImage(View v) {
+        Log.d("Image", "Yep");
+    }
+
+    @Override
+    public void OnProfile(View v) {
+        Log.d("Profile", "Yep");
+    }
 }

@@ -3,6 +3,7 @@ package razor.nikhil.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +17,9 @@ import java.util.List;
 import razor.nikhil.Activity.MainActivity;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
+import razor.nikhil.View.SlidingTabLayout;
 import razor.nikhil.adapter.CoursesAdapter;
+import razor.nikhil.adapter.TabsFragmentPager;
 import razor.nikhil.model.AttendBrief;
 import razor.nikhil.model.DetailAtten;
 import razor.nikhil.model.Marks_Model;
@@ -35,6 +38,14 @@ public class Slots extends Fragment {
     private List<Marks_Model> marks_det;
     private List<PBL_Model> lpbl;
     private HashMap<String, List<DetailAtten>> hash = new HashMap<>();
+    //
+    ViewPager pager;
+    TabsFragmentPager adapter;
+    SlidingTabLayout tabs;
+    CharSequence Titles[] = {"Subject", "Marks", "Attendance"};
+    int Numboftabs = 3;
+
+//
 
     public Slots() {
         lists = MainActivity.list;
@@ -55,6 +66,14 @@ public class Slots extends Fragment {
         recyclerView.setLayoutManager(llm);
         context = getActivity();
         CoursesAdapter ca = new CoursesAdapter(lists, attendBriefs, context);
+        //
+        adapter = new TabsFragmentPager(getChildFragmentManager(), Titles, Numboftabs);
+        pager = (ViewPager) v.findViewById(R.id.viewpager_custom);
+//        pager.setAdapter(adapter);
+        tabs = (SlidingTabLayout) v.findViewById(R.id.sliding_tabs_custom);
+
+        // Setting the ViewPager For the SlidingTabsLayout
+        //tabs.setViewPager(pager);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -65,8 +84,13 @@ public class Slots extends Fragment {
                                 if (pe.getClas_nbr().trim().equals(classnbr.toString().trim())) {
                                     List<DetailAtten> laDetailAttens;
                                     laDetailAttens = hash.get(pe.getClas_nbr().trim());
-                                    getActivity().getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.recylerview_, new MarksView(pe, laDetailAttens)).addToBackStack(null).commit();
+                                    getActivity()
+                                            .getSupportFragmentManager().beginTransaction()
+                                            .setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom,
+                                                    R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
+                                            .replace(R.id.recylerview_, new MarksView(pe, laDetailAttens))
+                                            .addToBackStack(null)
+                                            .commit();
                                     isPBL = false;
                                 }
                             }
@@ -84,15 +108,26 @@ public class Slots extends Fragment {
                                 List<DetailAtten> laDetailAttens;
                                 laDetailAttens = hash.get(classnbr);
 
-                                getActivity().getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.recylerview_, new MarksView(marks_det.get(position), laDetailAttens)).addToBackStack(null).commit();
+                                getActivity()
+                                        .getSupportFragmentManager()
+                                        .beginTransaction()
+                                        .setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom,
+                                                R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
+
+                                        .replace(R.id.recylerview_, new MarksView(marks_det.get(position), laDetailAttens))
+                                        .addToBackStack(null).commit();
                             } else {
                                 for (int er = 0; er < marks_det.size(); er++) {
                                     if (marks_det.get(er).getClassnbr().trim().equals(classnbr)) {
                                         List<DetailAtten> laDetailAttens;
                                         laDetailAttens = hash.get(classnbr);
-                                        getActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.recylerview_, new MarksView(marks_det.get(er), laDetailAttens)).addToBackStack(null).commit();
+                                        getActivity()
+                                                .getSupportFragmentManager()
+                                                .beginTransaction()
+                                                .setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom,
+                                                        R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
+                                                .replace(R.id.recylerview_, new MarksView(marks_det.get(er), laDetailAttens))
+                                                .addToBackStack(null).commit();
                                     }
                                 }
 
@@ -104,4 +139,6 @@ public class Slots extends Fragment {
         recyclerView.setAdapter(ca);
         return v;
     }
+
+
 }

@@ -24,7 +24,7 @@ import razor.nikhil.model.PBL_Model;
  */
 public class MarksView extends Fragment {
     private TextView marks_main;
-    private Marks_Model marks_cbl;
+    private Marks_Model marks_cbl = null;
     private PBL_Model marks_pbl = null;
     RecyclerView mRecyclerView;
     RecyclerView.LayoutManager mLayoutManager;
@@ -47,13 +47,22 @@ public class MarksView extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recyclerview, container, false);
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        View view = inflater.inflate(R.layout.recycler_marks_info, container, false);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_minfo);
         mRecyclerView.setHasFixedSize(true);
-        // The number of Columns
+        //No. of Cols
         mLayoutManager = new GridLayoutManager(inflater.getContext(), 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MarksGridAdapter(getActivity(), marks_cbl);
+        if (marks_cbl != null) {
+            if (marks_cbl.getASIIGN().trim().equals("-")) {
+                mAdapter = new MarksGridAdapter(getActivity(), marks_cbl, false);
+            } else {
+                mAdapter = new MarksGridAdapter(getActivity(), marks_cbl, true);
+            }
+        }
+        if (marks_pbl != null) {
+            mAdapter = new MarksGridAdapter(getActivity(), marks_pbl);
+        }
         mRecyclerView.setAdapter(mAdapter);
         //  recyclerView = (RecyclerView) view.findViewById(R.id.detail_att_list);
         //recyclerView.setHasFixedSize(true);

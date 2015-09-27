@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_gpa"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:focusable="true"
+    card_view:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+     >
+
+        <TextView
+            android:id="@+id/subname_cgpa_cal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:text="Theory Of Computation"
+            android:textSize="20sp" />
+
+        <fr.ganfra.materialspinner.MaterialSpinner
+            android:id="@+id/spinner_cgpa"
+            android:layout_width="@dimen/spinner_width"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:ms_alignLabels="false"
+            app:ms_arrowColor="#0000FF"
+            app:ms_arrowSize="12dp"
+            app:ms_baseColor="#ce3f3f"
+            app:ms_errorColor="@color/red"
+            app:ms_floatingLabelColor="#00FF00"
+            app:ms_floatingLabelText="Probable Grade"
+            app:ms_highlightColor="#663094ce"
+            app:ms_hint="ex: B"
+            app:ms_multiline="false"
+            app:ms_thickness="2"
+            app:ms_typeface="Roboto-Thin.ttf" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

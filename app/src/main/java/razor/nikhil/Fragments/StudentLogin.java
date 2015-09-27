@@ -18,7 +18,6 @@ import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -33,6 +32,7 @@ import java.util.List;
 
 import razor.nikhil.Http.BitmapUrlClient;
 import razor.nikhil.Http.Http;
+import razor.nikhil.Http.MySSLSocketFactory;
 import razor.nikhil.Http.ParseTimeTable;
 import razor.nikhil.R;
 
@@ -123,7 +123,7 @@ public class StudentLogin extends Fragment {
             HttpParams httpParameters = new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(httpParameters, 15000);
             HttpConnectionParams.setSoTimeout(httpParameters, 15000);
-            httpClient = new DefaultHttpClient(httpParameters);
+            httpClient = MySSLSocketFactory.getNewHttpClient();
             try {
                 final Bitmap bmp = BitmapUrlClient.getBitmapFromURL(student_Login_Captcha_Link, httpClient);
                 getActivity().runOnUiThread(new Runnable() {
@@ -200,7 +200,10 @@ public class StudentLogin extends Fragment {
         protected void onPostExecute(bmparr strings) {
             pbar.setVisibility(View.GONE);
             try {
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.fac_info_getdata_frame, new FacInfoFrag(strings)).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_left_in, R.anim.push_left_out)
+                        .add(R.id.fac_info_getdata_frame, new FacInfoFrag(strings))
+                        .addToBackStack(null)
+                        .commit();
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -3,17 +3,17 @@
     android:id="@+id/actor_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="@dimen/courses_card_main_padding_left_right"
     android:background="@android:color/transparent"
-    android:elevation="14dp"
+    android:elevation="10dp"
     android:paddingBottom="5dp"
-    android:paddingLeft="15dp"
-    android:paddingRight="15dp">
+    android:paddingLeft="@dimen/courses_card_main_padding_left_right"
+    android:paddingRight="@dimen/courses_card_main_padding_left_right">
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view_slot"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_height="@dimen/slots_card_size"
         android:clickable="true"
         card_view:cardBackgroundColor="@android:color/holo_purple"
         android:focusable="true"
@@ -21,45 +21,46 @@
         card_view:cardCornerRadius="5dp">
 
         <RelativeLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?android:attr/selectableItemBackground"
-            android:padding="15dp">
+            android:padding="@dimen/courses_card_main_padding_left_right">
 
             <TextView
-                android:layout_width="80dp"
+                android:layout_width="@dimen/slots_circle_branch"
                 android:id="@+id/branch_circle"
-                android:layout_height="80dp"
-                android:layout_marginLeft="25dp"
+                android:layout_height="@dimen/slots_circle_branch"
+                android:layout_marginLeft="@dimen/slots_item_margin_left"
                 android:layout_alignParentTop="true"
                 android:background="@drawable/tvcircle"
                 android:gravity="center"
-                android:layout_marginBottom="8dp"
-                android:padding="10dp"
+                android:layout_marginBottom="@dimen/slots_circle_margin_bottom"
+                android:padding="@dimen/slots_circle_padding"
                 android:text="CSE"
                 android:textColor="#FDFEFE"
-                android:textSize="24sp" />
+                android:textSize="@dimen/marks_grid_item_bigfont_less" />
             <TextView
                 android:id="@+id/subject_name"
                 android:layout_marginBottom="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="@dimen/slots_item_margin_left"
                 android:layout_below="@id/branch_circle"
                 android:text="Theory Of Computation"
                 android:textColor="#FDFEFE"
-                android:textSize="22sp" />
+                android:textSize="@dimen/timetable_rv_item_font_code" />
 
 
             <TextView
                 android:id="@+id/teacher"
-                android:layout_marginLeft="25dp"
+                android:layout_marginLeft="@dimen/slots_item_margin_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/subject_name"
                 android:text="Lakshmanan K."
                 android:textColor="#FDFEFE"
-                android:textSize="18sp" />
+                android:textSize="@dimen/timetable_rv_item_fonts" />
 
             <TextView
                 android:id="@+id/slot"
@@ -68,7 +69,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="20dp"
-                android:layout_marginRight="25dp"
+                android:layout_marginRight="@dimen/slots_item_margin_left"
                 android:text="E1"
                 android:textColor="#FDFEFE"
                 android:textSize="19sp"
@@ -96,7 +97,7 @@
                 android:layout_marginTop="15dp"
                 android:text="75 %"
                 android:textColor="#FDFEFE"
-                android:textSize="35sp"
+                android:textSize="@dimen/slots_bigfont_size"
                 android:textStyle="italic" />
 
         </RelativeLayout>

@@ -10,7 +10,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import razor.nikhil.Activity.Config;
+import razor.nikhil.Config;
 import razor.nikhil.database.GradeGetSet;
 import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.model.GradeModel;

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import razor.nikhil.Activity.Config;
+import razor.nikhil.Config;
 import razor.nikhil.Activity.MainActivity;
 import razor.nikhil.database.GradeGetSet;
 import razor.nikhil.database.SharedPrefs;

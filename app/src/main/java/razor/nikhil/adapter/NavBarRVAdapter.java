@@ -1,7 +1,6 @@
-package razor.nikhil.Activity;
+package razor.nikhil.adapter;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,16 +15,27 @@ import razor.nikhil.R;
  */
 
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    private static final int TYPE_HEADER = 0;
-    private static final int TYPE_ITEM = 1;
+public class NavBarRVAdapter extends RecyclerView.Adapter<NavBarRVAdapter.ViewHolder> {
+    private final int TYPE_HEADER = 0;
+    private final int TYPE_ITEM = 1;
     private String mNavTitles[];
     private int mIcons[];
     private String name;
     private int profile;
     private String email;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public NavBarRVAdapter() {
+    }
+
+    public interface HeaderItemClicked {
+        void OnImage(View v);
+
+        void OnProfile(View v);
+    }
+
+    private static HeaderItemClicked headerInrer;
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         int Holderid;
         TextView textView;
         ImageView imageView;
@@ -48,13 +58,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 namecontainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d("Clicked C", "Yep");
+                        headerInrer.OnProfile(view);
                     }
                 });
                 profile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d("Clicked P", "Yep");
+                        headerInrer.OnImage(view);
                     }
                 });
                 Holderid = 0;
@@ -63,7 +73,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     }
 
-    MyAdapter(String Titles[], int Icons[], String Name, String Email, int Profile) {
+   public NavBarRVAdapter(String Titles[], int Icons[], String Name, String Email, int Profile, HeaderItemClicked inter) {
+        headerInrer = inter;
         mNavTitles = Titles;
         mIcons = Icons;
         name = Name;
@@ -72,7 +83,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NavBarRVAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_row_new, parent, false);
             ViewHolder vhItem = new ViewHolder(v, viewType);
@@ -86,7 +97,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(MyAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(NavBarRVAdapter.ViewHolder holder, int position) {
         if (holder.Holderid == 1) {
             holder.textView.setText(mNavTitles[position - 1]);
             holder.imageView.setImageResource(mIcons[position - 1]);

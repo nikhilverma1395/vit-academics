@@ -28,7 +28,10 @@ public class ParseTimeTable {
     public ParseTimeTable() {
     }
 
-    public String FirstCharCap(String source) {
+    public static String FirstCharCap(String source) {
+        if (source.trim().equals("") || source == "" || source == null || source.equalsIgnoreCase("N/A")) {
+            return "N/A";
+        }
         StringBuffer res = new StringBuffer();
         String[] strArr = source.toLowerCase().split(" ");
         for (String str : strArr) {
@@ -48,8 +51,9 @@ public class ParseTimeTable {
         Elements dd = eel.getElementsByTag("tr");
         dd.remove(0);
         dd.remove(dd.size() - 1);
-        List<Model_Slots> list_slots = new ArrayList<Model_Slots>();
-        for (Element one : dd) {
+        List<Model_Slots> list_slots = new ArrayList<>();
+        for (int t = 0; t < dd.size(); t++) {
+            Element one = dd.get(t);
             Elements ui = one.getElementsByTag("td");
             Model_Slots mmodel = new Model_Slots();
             if (ui.size() != 8) {
@@ -81,9 +85,11 @@ public class ParseTimeTable {
                     if (i == 5) mmodel.setSlot(d);
                     if (i == 6) mmodel.setVenue(d);
                     if (i == 7) mmodel.setTeacher(FirstCharCap(d));
+                    if (t != 0)
+                        mmodel.setSubject_name(list_slots.get(t - 1).getSubject_name());
+                    else mmodel.setSubject_name("Lab");
                     mmodel.setNumber("Lab");
                     mmodel.setCode("Lab");
-                    mmodel.setSubject_name("Lab");
                     mmodel.setStatus("Lab");
                 }
                 list_slots.add(mmodel);

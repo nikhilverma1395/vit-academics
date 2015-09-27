@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import razor.nikhil.Activity.Config;
+import razor.nikhil.Config;
 import razor.nikhil.R;
 import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.model.GradeModel;

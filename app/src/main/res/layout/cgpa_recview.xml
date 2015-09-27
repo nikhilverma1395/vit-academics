@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rview_cgpa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp" />
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/calc_cgpa_button"
+        android:layout_width="120dp"
+        android:layout_marginBottom="55dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="right"
+        android:layout_marginTop="10dp"
+        android:text="Calculate" />
+
+    <TextView
+        android:id="@+id/cur_cgpa_calc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/calc_cgpa_button"
+        android:layout_alignParentLeft="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp"
+        android:text="Current CGPA : \n  n/a"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/calculated_gpa_calc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/calc_cgpa_button"
+        android:layout_centerHorizontal="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp"
+        android:text="Calculated GPA: \n n/a"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/calculated_cgpa_calc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/calc_cgpa_button"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp"
+        android:text="Calculated CGPA: \n n/a"
+        android:textSize="15sp" />
+
+</RelativeLayout>

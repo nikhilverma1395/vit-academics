@@ -109,7 +109,5 @@ public class TimeTableVP extends Fragment {
         mViewPager.getPagerTitleStrip().setViewPager(mViewPager.getViewPager());
         mViewPager.getToolbar().setVisibility(View.INVISIBLE);
         mViewPager.getPagerTitleStrip().setTextColor(Color.BLACK);
-        View logo = view.findViewById(R.id.logo_white);
-
     }
 }

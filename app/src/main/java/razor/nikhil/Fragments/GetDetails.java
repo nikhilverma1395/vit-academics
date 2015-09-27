@@ -1,4 +1,4 @@
-package razor.nikhil.Activity;
+package razor.nikhil.Fragments;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -23,6 +23,7 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
 
 import razor.nikhil.Http.BitmapUrlClient;
+import razor.nikhil.Http.MySSLSocketFactory;
 import razor.nikhil.Http.PostParent;
 import razor.nikhil.R;
 import razor.nikhil.database.SharedPrefs;
@@ -84,7 +85,7 @@ public class GetDetails extends Fragment {
         proceed.setEnabled(false);
         captchaIV = (ImageView) view.findViewById(R.id.get_details_captcha_iv);
         //Setting up HttpClient
-        globalClient = getThreadSafeClient();
+        globalClient = MySSLSocketFactory.getNewHttpClient();
         //Get Bitmap for captcha
         try {
             new SetCaptcha().execute();//Setting up Captcha is new AsyncTask()

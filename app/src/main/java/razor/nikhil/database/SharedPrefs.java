@@ -24,7 +24,7 @@ public class SharedPrefs {
     }
 
     public String getMsg(String prefix) {
-        return preferences.getString(prefix, "");
+        return preferences.getString(prefix, "").trim();
     }
 
 }
