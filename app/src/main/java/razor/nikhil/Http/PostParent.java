@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import razor.nikhil.Config;
 import razor.nikhil.Activity.MainActivity;
+import razor.nikhil.Config;
 import razor.nikhil.database.GradeGetSet;
 import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.database.StoreAndGetImage;
@@ -111,7 +111,7 @@ public class PostParent {
                             e.printStackTrace();
                         }
                         if (facpic == null) {
-                            Log.d("Null", "yep");
+                            Log.d("Null", "Faculty Adv Image is Null");
                         }
                         String storedpath = null;
                         try {

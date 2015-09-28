@@ -53,7 +53,8 @@ public class MarksView extends Fragment {
         //No. of Cols
         mLayoutManager = new GridLayoutManager(inflater.getContext(), 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        if (marks_cbl != null) {
+        if (marks_cbl != null)
+        {
             if (marks_cbl.getASIIGN().trim().equals("-")) {
                 mAdapter = new MarksGridAdapter(getActivity(), marks_cbl, false);
             } else {

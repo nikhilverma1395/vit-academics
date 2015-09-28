@@ -6,7 +6,7 @@
 
     <razor.nikhil.View.SlidingTabLayout
         android:id="@+id/sliding_tabs_custom"
-        android:background="#ec0004"
+        android:background="#263b69"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

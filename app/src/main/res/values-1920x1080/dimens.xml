@@ -1,4 +1,6 @@
 <resources>
+    <bool name="isfullhd_phone">true</bool>
+    <bool name="isfullhd_tab">false</bool>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
@@ -6,6 +8,8 @@
     <!-- Navbar-->
     <dimen name="navbar_header_height">180dp</dimen>
     <dimen name="header_circle_image">60dp</dimen>
+    <dimen name="navbar_item_margin">10dp</dimen>
+
     <!-- Slots-->
     <dimen name="courses_card_main_padding_left_right">4dp</dimen>
     <dimen name="slots_circle_branch">70dp</dimen>
@@ -31,4 +35,14 @@
     <dimen name="timetable_rv_item_slotfont">16sp</dimen>
     <!-- GPA -->
     <dimen name="spinner_width">80dp</dimen>
+    <dimen name="cgpa_margin_bottom_button">15dp</dimen>
+    <dimen name="cgpa_card_margin">2dp</dimen>
+    <dimen name="cgpa_button_back_height">120dp</dimen>
+    <!--Fac Info-->
+    <dimen name="facinfo_top_view_width">170dp</dimen>
+    <dimen name="facinfo_name_marginTop">115dp</dimen>
+    <dimen name="facinfo_upview_marginleft">20dp</dimen>
+    <dimen name="facinfo_imagedimen">100dp</dimen>
+    <dimen name="facinfo_data_pad_top">20dp</dimen>
+    <dimen name="facinfo_items_mtop">15dp</dimen>
 </resources>

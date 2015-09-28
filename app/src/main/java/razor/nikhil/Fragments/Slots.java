@@ -3,7 +3,6 @@ package razor.nikhil.Fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,9 +16,7 @@ import java.util.List;
 import razor.nikhil.Activity.MainActivity;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
-import razor.nikhil.View.SlidingTabLayout;
 import razor.nikhil.adapter.CoursesAdapter;
-import razor.nikhil.adapter.TabsFragmentPager;
 import razor.nikhil.model.AttendBrief;
 import razor.nikhil.model.DetailAtten;
 import razor.nikhil.model.Marks_Model;
@@ -38,14 +35,6 @@ public class Slots extends Fragment {
     private List<Marks_Model> marks_det;
     private List<PBL_Model> lpbl;
     private HashMap<String, List<DetailAtten>> hash = new HashMap<>();
-    //
-    ViewPager pager;
-    TabsFragmentPager adapter;
-    SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Subject", "Marks", "Attendance"};
-    int Numboftabs = 3;
-
-//
 
     public Slots() {
         lists = MainActivity.list;
@@ -58,22 +47,10 @@ public class Slots extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.recycler, container, false);
-        recyclerView = (RecyclerView) v.findViewById(R.id.card_list);
-        recyclerView.setHasFixedSize(true);
-        final LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(llm);
         context = getActivity();
+        final View v = inflater.inflate(R.layout.recycler, container, false);
+        setRv(v);
         CoursesAdapter ca = new CoursesAdapter(lists, attendBriefs, context);
-        //
-        adapter = new TabsFragmentPager(getChildFragmentManager(), Titles, Numboftabs);
-        pager = (ViewPager) v.findViewById(R.id.viewpager_custom);
-//        pager.setAdapter(adapter);
-        tabs = (SlidingTabLayout) v.findViewById(R.id.sliding_tabs_custom);
-
-        // Setting the ViewPager For the SlidingTabsLayout
-        //tabs.setViewPager(pager);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -138,6 +115,14 @@ public class Slots extends Fragment {
         );
         recyclerView.setAdapter(ca);
         return v;
+    }
+
+    private void setRv(View v) {
+        recyclerView = (RecyclerView) v.findViewById(R.id.card_list);
+        recyclerView.setHasFixedSize(true);
+        final LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
     }
 
 

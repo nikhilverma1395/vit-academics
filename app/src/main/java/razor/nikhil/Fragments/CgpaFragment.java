@@ -75,7 +75,14 @@ public class CgpaFragment extends Fragment {
             e.printStackTrace();
         }
         Resources r = getResources();
-        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 85, r.getDisplayMetrics());
+        float pxq = 0;
+        boolean tabletSize = getResources().getBoolean(R.bool.isfullhd_tab);
+        if (!tabletSize) {
+            pxq = 60;
+        } else {
+            pxq = 85;
+        }
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pxq, r.getDisplayMetrics());
         int viewHeight = (int) px * adap.getItemCount();
         recyclerView.getLayoutParams().height = viewHeight;
     }

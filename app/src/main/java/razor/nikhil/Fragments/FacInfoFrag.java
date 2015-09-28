@@ -16,14 +16,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import razor.nikhil.R;
+import razor.nikhil.model.MyTeacherDet;
 
 /**
  * Created by Nikhil Verma on 9/18/2015.
  */
 public class FacInfoFrag extends Fragment {
+    private MyTeacherDet myt = null;
     private String[] data;
     private Bitmap image;
-    private Toolbar toolbar;
     private View head;
     private Typeface roboto_light, regular;
     private ImageView dp;
@@ -39,6 +40,10 @@ public class FacInfoFrag extends Fragment {
         this.openhours = bmp.open;
     }
 
+    public FacInfoFrag(MyTeacherDet modelmyt) {
+        this.myt = modelmyt;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,44 +55,68 @@ public class FacInfoFrag extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         init(view);
-        name.setText(data[0]);
-        school.setText(data[1]);
-        desig.setText(data[2]);
-        if (data[2].trim() == "" || data[2].equals(""))
-            desig.setVisibility(View.GONE);
-        room.setText(data[3]);
-        if (data[3].trim() == "" || data[3].equals(""))
-            room.setVisibility(View.GONE);
-        email.setText(data[4]);
-        if (data[4].trim() == "" || data[4].equals(""))
-            email.setVisibility(View.GONE);
-        divi.setText(data[5]);
-        if (data[5].trim() == "" || data[5].equals(""))
-            divi.setVisibility(View.GONE);
-        addrole.setText(data[6]);
-        if (data[6].trim() == "" || data[6].equals(""))
-            addrole.setVisibility(View.GONE);
-        if (openhours == null)
-            openhrs.setText(data[7]);
-        else {
-            StringBuilder build = new StringBuilder();
-            for (StudentLogin.OpenHours op : openhours) {
-                build.append(Html.fromHtml("<b>" + op.day.trim() + "</b>") + "\t\t\t" + op.from.trim() + "\t\t to \t\t" + op.to.trim() + "\t\t\n\n");
+
+        if (myt == null) {
+            name.setText(data[0]);
+            school.setText(data[1]);
+            desig.setText(data[2]);
+            if (data[2].trim() == "" || data[2].equals(""))
+                desig.setVisibility(View.GONE);
+            room.setText(data[3]);
+            if (data[3].trim() == "" || data[3].equals(""))
+                room.setVisibility(View.GONE);
+            email.setText(data[4]);
+            if (data[4].trim() == "" || data[4].equals(""))
+                email.setVisibility(View.GONE);
+            divi.setText(data[5]);
+            if (data[5].trim() == "" || data[5].equals(""))
+                divi.setVisibility(View.GONE);
+            addrole.setText(data[6]);
+            if (data[6].trim() == "" || data[6].equals(""))
+                addrole.setVisibility(View.GONE);
+            if (openhours == null)
+                openhrs.setText(data[7]);
+            else {
+                StringBuilder build = new StringBuilder();
+                for (StudentLogin.OpenHours op : openhours) {
+                    build.append(Html.fromHtml("<b>" + op.day.trim() + "</b>") + "\t\t\t" + op.from.trim() + "\t\t to \t\t" + op.to.trim() + "\t\t\n\n");
+                }
+                openhrs.setText(build.toString());
             }
-            openhrs.setText(build.toString());
+            try {
+                if (image != null)
+                    dp.setImageBitmap(image);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (data[7].trim() == "" || data[7].equals(""))
+                openhrs.setVisibility(View.GONE);
+        } else {
+            name.setText(myt.getNAME());
+            school.setText(myt.getSCHOOL());
+            desig.setText(myt.getDESIGNATION());
+            if (myt.getDESIGNATION() == "" || myt.getDESIGNATION().equals(""))
+                desig.setVisibility(View.GONE);
+            room.setText(myt.getROOM());
+            if (myt.getDESIGNATION() == "" || myt.getDESIGNATION().equals(""))
+                room.setVisibility(View.GONE);
+            email.setText(myt.getEMAIL());
+            if (myt.getEMAIL() == "" || myt.getEMAIL().equals(""))
+                email.setVisibility(View.GONE);
+            divi.setText(myt.getDIVISION());
+            if (myt.getDIVISION() == "" || myt.getDIVISION().equals(""))
+                divi.setVisibility(View.GONE);
+            addrole.setText(myt.getADDROLE());
+            if (myt.getADDROLE() == "" || myt.getADDROLE().equals(""))
+                addrole.setVisibility(View.GONE);
+            openhrs.setText(myt.getOPENHRS());
+            if (myt.getOPENHRS() == "" || myt.getOPENHRS().equals(""))
+                openhrs.setVisibility(View.GONE);
+            dp.setVisibility(View.GONE);
         }
-        try {
-            if (image != null)
-                dp.setImageBitmap(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (data[7].trim() == "" || data[7].equals(""))
-            openhrs.setVisibility(View.GONE);
     }
 
     private void init(View view) {
-        toolbar = (Toolbar) view.findViewById(R.id.facinfotool);
         head = (View) view.findViewById(R.id.head_f);
         dp = (ImageView) view.findViewById(R.id.fac_img);
         name = (TextView) view.findViewById(R.id.fac_name_info);

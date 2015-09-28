@@ -58,7 +58,7 @@ public class ParseTimeTable {
             Model_Slots mmodel = new Model_Slots();
             if (ui.size() != 8) {
                 for (int i = 0; i < ui.size(); i++) {
-                    String d = ui.get(i).getElementsByTag("font").get(0).html().toString();
+                    String d = ui.get(i).getElementsByTag("font").get(0).html().toString().trim();
                     if (i == 0) mmodel.setNumber(d);
                     if (i == 1) mmodel.setCode(d);
                     if (i == 2) mmodel.setSubject_name(d);
@@ -76,7 +76,7 @@ public class ParseTimeTable {
             } else {
 
                 for (int i = 0; i < ui.size(); i++) {
-                    String d = ui.get(i).getElementsByTag("font").get(0).html().toString();
+                    String d = ui.get(i).getElementsByTag("font").get(0).html().toString().trim();
                     if (i == 0) mmodel.setClass_number(d);
                     if (i == 1) mmodel.setCourse_type(d);
                     if (i == 2) mmodel.setLTPJC(d);
@@ -84,17 +84,20 @@ public class ParseTimeTable {
                     if (i == 4) mmodel.setCourse_option(d);
                     if (i == 5) mmodel.setSlot(d);
                     if (i == 6) mmodel.setVenue(d);
-                    if (i == 7) mmodel.setTeacher(FirstCharCap(d));
-                    if (t != 0)
-                        mmodel.setSubject_name(list_slots.get(t - 1).getSubject_name());
-                    else mmodel.setSubject_name("Lab");
-                    mmodel.setNumber("Lab");
-                    mmodel.setCode("Lab");
-                    mmodel.setStatus("Lab");
+                    if (i == 7) {
+                        mmodel.setTeacher(FirstCharCap(d));
+                        if (t != 0)
+                            mmodel.setSubject_name(list_slots.get(t - 1).getSubject_name());
+                        else mmodel.setSubject_name("Lab");
+                        mmodel.setNumber("Lab");
+                        mmodel.setCode("Lab");
+                        mmodel.setStatus("Lab");
+                    }
                 }
                 list_slots.add(mmodel);
             }
         }
+
         try {
             Slots_GetSet mes = new Slots_GetSet(context);
             if (mes.getEntriesCount() == 0) {
@@ -139,6 +142,8 @@ public class ParseTimeTable {
             alldayslist.add(daywiseList);
         }
         new StoreTimeTable(context).insertMTWTFinDB(alldayslist);
-
     }
+
+
+
 }

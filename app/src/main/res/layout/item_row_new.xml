@@ -5,8 +5,8 @@
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:orientation="horizontal"
-    android:paddingBottom="15dp"
-    android:paddingTop="15dp">
+    android:paddingBottom="@dimen/navbar_item_margin"
+    android:paddingTop="@dimen/navbar_item_margin">
 
 
     <ImageView

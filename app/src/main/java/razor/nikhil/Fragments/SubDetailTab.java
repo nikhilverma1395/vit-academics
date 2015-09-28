@@ -13,6 +13,10 @@ import razor.nikhil.R;
  * Created by Nikhil Verma on 9/21/2015.
  */
 public class SubDetailTab extends Fragment {
+    public static SubDetailTab newInstance() {
+        return new SubDetailTab();
+    }
+
     public SubDetailTab() {
     }
 

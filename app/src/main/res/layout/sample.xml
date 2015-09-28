@@ -4,16 +4,10 @@
     android:layout_height="match_parent"
     android:background="@android:color/white">
 
-    <include
-        android:id="@+id/facinfotool"
-        layout="@layout/toolbar"
-        android:layout_alignParentTop="true" />
-
     <View
         android:id="@+id/head_f"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_below="@id/facinfotool"
+        android:layout_height="@dimen/facinfo_top_view_width"
         android:background="#36a054" />
 
     <TextView
@@ -21,22 +15,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginLeft="@dimen/facinfo_upview_marginleft"
+        android:layout_marginTop="@dimen/facinfo_name_marginTop"
         android:text="Shashwat Shukla"
         android:textColor="@android:color/white"
-        android:textSize="26sp" />
+        android:textSize="@dimen/timetable_rv_item_font_code" />
 
     <TextView
         android:id="@+id/fac_desig_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/fac_name_info"
-        android:layout_marginLeft="45dp"
+        android:layout_marginLeft="@dimen/facinfo_upview_marginleft"
         android:layout_marginTop="8dp"
         android:text="Assistent Manager"
         android:textColor="#e8e8e8"
-        android:textSize="22sp" />
+        android:textSize="@dimen/timetable_rv_item_fonts" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -48,9 +42,9 @@
             android:layout_height="match_parent"
             android:layout_below="@id/head_f"
             android:background="@android:color/white"
-            android:paddingLeft="40dp"
+            android:paddingLeft="@dimen/facinfo_data_pad_top"
             android:paddingRight="40dp"
-            android:paddingTop="80dp">
+            android:paddingTop="@dimen/facinfo_data_pad_top">
 
             <TextView
                 android:id="@+id/fac_email_info"
@@ -62,7 +56,7 @@
                 android:gravity="center"
                 android:text="sdsdsds@gmail.com"
                 android:textColor="#3E3E3E"
-                android:textSize="20sp" />
+                android:textSize="@dimen/timetable_rv_item_fonts" />
 
 
             <TextView
@@ -71,12 +65,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fac_email_info"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/facinfo_items_mtop"
                 android:drawableLeft="@drawable/school_icon"
                 android:drawablePadding="35dp"
                 android:text="SCSE"
                 android:textColor="#3E3E3E"
-                android:textSize="20sp" />
+                android:textSize="@dimen/timetable_rv_item_fonts" />
 
             <TextView
                 android:id="@+id/fac_room_info"
@@ -84,12 +78,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fac_school_info"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/facinfo_items_mtop"
                 android:drawableLeft="@drawable/room_icon"
                 android:drawablePadding="35dp"
                 android:text="SJT 515"
                 android:textColor="#3E3E3E"
-                android:textSize="20sp" />
+                android:textSize="@dimen/timetable_rv_item_fonts" />
 
             <TextView
                 android:id="@+id/fac_division"
@@ -97,11 +91,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fac_room_info"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/facinfo_items_mtop"
                 android:drawableLeft="@drawable/division_icon"
                 android:drawablePadding="35dp"
                 android:textColor="#3E3E3E"
-                android:textSize="20sp" />
+                android:textSize="@dimen/timetable_rv_item_fonts" />
 
             <TextView
                 android:id="@+id/fac_addrole"
@@ -109,11 +103,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fac_division"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/facinfo_items_mtop"
                 android:drawableLeft="@drawable/role_icon"
                 android:drawablePadding="35dp"
                 android:textColor="#3E3E3E"
-                android:textSize="20sp" />
+                android:textSize="@dimen/timetable_rv_item_fonts" />
 
             <TextView
                 android:id="@+id/fac_openhrs"
@@ -121,22 +115,23 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fac_addrole"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/facinfo_items_mtop"
                 android:drawableLeft="@drawable/hours_icon"
                 android:drawablePadding="35dp"
                 android:text="Open Hours"
                 android:textColor="#3E3E3E"
-                android:textSize="20sp" />
+                android:textSize="@dimen/timetable_rv_item_fonts" />
+            android:textSize="@dimen/timetable_rv_item_fonts" />
         </RelativeLayout>
     </ScrollView>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/fac_img"
-        android:layout_width="170dp"
-        android:layout_height="170dp"
+        android:layout_width="@dimen/facinfo_imagedimen"
+        android:layout_height="@dimen/facinfo_imagedimen"
         android:layout_alignParentRight="true"
         android:layout_marginRight="40dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="110dp"
         android:src="@drawable/header" />
 
 </RelativeLayout>

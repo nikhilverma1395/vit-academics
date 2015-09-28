@@ -28,6 +28,8 @@ import razor.nikhil.Fragments.FacultyAdvFrag;
 import razor.nikhil.Fragments.GetDetails;
 import razor.nikhil.Fragments.GradeFragment;
 import razor.nikhil.Fragments.LeaveRequest;
+import razor.nikhil.Fragments.MyTeachers;
+import razor.nikhil.Fragments.MyTeachersList;
 import razor.nikhil.Fragments.Slots;
 import razor.nikhil.Fragments.StudentLogin;
 import razor.nikhil.Fragments.TimeTableVP;
@@ -39,6 +41,7 @@ import razor.nikhil.database.CBL_Get_Set;
 import razor.nikhil.database.GradeGetSet;
 import razor.nikhil.database.IndivAttGetSet;
 import razor.nikhil.database.MTWTHgetset;
+import razor.nikhil.database.MyTeachGS;
 import razor.nikhil.database.PBL_Get_Set;
 import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.database.Slots_GetSet;
@@ -53,8 +56,7 @@ import razor.nikhil.model.detailattlist_subcode;
 
 public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.HeaderItemClicked {
 
-
-    String TITLES[] = {"Courses", "Photo Login", "Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "Cgpa Calculator", "Open Source"};
+    String TITLES[] = {"Courses", "Photo Login", "Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "Cgpa Calculator", "My Teachers"};
     int ICONS[] = {R.mipmap.user_icon,
             R.mipmap.assignment,
             R.mipmap.tick_icon,
@@ -92,6 +94,7 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
 
     ActionBarDrawerToggle mDrawerToggle;
     public static List<GradeModel> grades;
+    private String teacherNames[];
 
 
     @Override
@@ -141,8 +144,13 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
 
             int r = 0;
             //getting the name of individual attendance tables
-
-            for (Model_Slots ms : list) {
+            //teachernames
+            teacherNames = new String[list.size()];
+            //
+            for (int y = 0; y < list.size(); y++) {
+                Model_Slots ms = list.get(y);
+                //teachernames
+                teacherNames[y] = ms.getTeacher();
                 classnbrs[r++] = ms.getNumber().trim();
                 String n = ms.getSubject_name().trim();
                 if (!(ms.getSlot().trim().toLowerCase().contains("l")))//subnames for gpa calc, ignoring labs
@@ -287,6 +295,22 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
             case 8:
                 fragment = CgpaFragment.newInstance(subnames, cur_credits_sum);
                 break;
+            case 9:
+                //    fragment = TabMainDet.newInstance();
+                MyTeachGS sql = new MyTeachGS(getApplicationContext());
+                try {
+                    if (sql.getEntriesCount() == 0)
+                        fragment = MyTeachers.newInstance(teacherNames);
+                    else {
+                        fragment = new MyTeachersList(sql.getAllCredentials());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    displayView(1);
+                }
+
+                break;
+
             default:
                 displayView(1);
                 break;

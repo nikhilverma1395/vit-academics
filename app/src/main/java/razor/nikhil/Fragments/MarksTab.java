@@ -21,4 +21,8 @@ public class MarksTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.tab2_marks, container, false);
     }
+
+    public static MarksTab newInstance() {
+        return new MarksTab();
+    }
 }

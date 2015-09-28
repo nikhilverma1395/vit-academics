@@ -21,4 +21,8 @@ public class AttendanceTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.tab3_att, container, false);
     }
+
+    public static AttendanceTab newInstance() {
+        return new AttendanceTab();
+    }
 }
