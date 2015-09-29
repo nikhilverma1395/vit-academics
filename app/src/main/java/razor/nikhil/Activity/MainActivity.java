@@ -31,7 +31,7 @@ import razor.nikhil.Fragments.LeaveRequest;
 import razor.nikhil.Fragments.MyTeachers;
 import razor.nikhil.Fragments.MyTeachersList;
 import razor.nikhil.Fragments.Slots;
-import razor.nikhil.Fragments.StudentLogin;
+import razor.nikhil.Fragments.GetFacDataStudLogin;
 import razor.nikhil.Fragments.TimeTableVP;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
@@ -275,7 +275,7 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
                 }
                 break;
             case 2:
-                fragment = new StudentLogin();
+                fragment = new GetFacDataStudLogin();
                 break;
             case 3:
                 fragment = new GetDetails();

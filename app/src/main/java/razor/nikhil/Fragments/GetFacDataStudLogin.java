@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ import razor.nikhil.R;
 /**
  * Created by Nikhil Verma on 7/29/2015.
  */
-public class StudentLogin extends Fragment {
+public class GetFacDataStudLogin extends Fragment {
     private EditText captcha_edit_student, facname;
     private ProgressBarCircularIndeterminate pbar;
     private static HttpClient httpClient;
@@ -54,12 +55,12 @@ public class StudentLogin extends Fragment {
     private static String captchaText = "";
     private String FACULTY_INFO_pre = "https://academics.vit.ac.in/student/fac_profile.asp";
     private String FACULTY_INFO_LINK = "https://academics.vit.ac.in/student/getfacdet.asp?fac=";
-    private String fac_det_pre = "https://academics.vit.ac.in/student/";
-    private String employee_fac_pic = "https://academics.vit.ac.in/student/emp_photo.asp";
+    private static String fac_det_pre = "https://academics.vit.ac.in/student/";
+    public static String employee_fac_pic = "https://academics.vit.ac.in/student/emp_photo.asp";
+    private boolean isSingleEntry = false;
 
-    public StudentLogin() {
+    public GetFacDataStudLogin() {
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -139,7 +140,7 @@ public class StudentLogin extends Fragment {
         }
     }
 
-    public class bmparr {
+    public static class bmparr {
         String[] data;
         Bitmap bmp;
         List<OpenHours> open;
@@ -169,22 +170,55 @@ public class StudentLogin extends Fragment {
             Http.getData(FACULTY_INFO_pre, httpClient);//need to do this
             try {
                 final String facresp = Http.getData(FACULTY_INFO_LINK, httpClient);
-                if (!facresp.contains(facnamestr.toUpperCase())) {//names are in upper case
-                    int x = 1 % 0;//invalid statement to invoke catch block
+                Log.d("fACE", facresp);
+                if (!facresp.contains(facnamestr.toUpperCase())) {//names are in upper caseint x = 1 % 0;//invalid statement to invoke catch block
+                    int x = 1 % 0;
                 }
-                bmparr data = parsefacidlink(facresp);
-                try {
-                    final Bitmap fac_pic = BitmapUrlClient.getBitmapFromURL(employee_fac_pic, httpClient);
-                    if (fac_pic != null) {
-                        data.bmp = fac_pic;
-                    } else {
-                        data.bmp = null;
+                Elements faculties = Jsoup.parse(facresp).getElementsByTag("table").get(0)//table 1
+                        .getElementsByTag("tr");
+                String hrefTR1 = faculties.get(1).getElementsByTag("td").get(3).getElementsByTag("a").get(0).attr("href").trim();
+                faculties.remove(0);
+                if (faculties.size() > 1) {
+                    final List<MutlipleResultFac> mult = new ArrayList<>();
+                    for (Element r : faculties) {
+                        Log.d("namew", r.toString());
+                        MutlipleResultFac mod = new MutlipleResultFac();
+                        String name = r.getElementsByTag("td").get(0).getElementsByTag("font").get(0).html().trim();
+                        Log.d("name3", name);
+                        String school = r.getElementsByTag("td").get(2).getElementsByTag("font").get(0).html().trim();
+                        Log.d("name2", school);
+                        String href = r.getElementsByTag("td").get(3).getElementsByTag("a").get(0).attr("href").trim();
+                        Log.d("name1", href);
+                        mod.name = name;
+                        mod.school = school;
+                        mod.href = href;
+                        mult.add(mod);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_left_in, R.anim.push_left_out)
+                                    .add(R.id.fac_info_getdata_frame, new MultipleTeacherListFrag(mult))
+                                    .addToBackStack(null)
+                                    .commit();
+                        }
+                    });
+                    return null;
+                } else {
+                    bmparr data = parsefacidlink(hrefTR1);
+                    return data;
                 }
-                return data;
             } catch (Exception e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            new LoadCaptcha().execute();//reload captcha
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
                 e.printStackTrace();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -199,25 +233,22 @@ public class StudentLogin extends Fragment {
         @Override
         protected void onPostExecute(bmparr strings) {
             pbar.setVisibility(View.GONE);
-            try {
-                getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_left_in, R.anim.push_left_out)
-                        .add(R.id.fac_info_getdata_frame, new FacInfoFrag(strings))
-                        .addToBackStack(null)
-                        .commit();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (strings != null) {
+                try {
+                    getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.push_left_in, R.anim.push_left_out, R.anim.push_left_in, R.anim.push_left_out)
+                            .add(R.id.fac_info_getdata_frame, new FacInfoFrag(strings))
+                            .addToBackStack(null)
+                            .commit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
-    private bmparr parsefacidlink(String source) {
-        //Checked working for 1 returned query, gives the href
-        String href = Jsoup.parse(source).getElementsByTag("table").get(0)//table 1
-                .getElementsByTag("tr").get(1)//tr - 2
-                .getElementsByTag("td").get(3)//td- 4
-                .getElementsByTag("a").get(0).attr("href");//a - 1
-        fac_det_pre += href;
-        String content = Http.getData(fac_det_pre, httpClient);
+    public static bmparr parsefacidlink(String href) {
+
+        String content = Http.getData(fac_det_pre + href, httpClient);
         Elements data = Jsoup.parse(content).getElementsByTag("table").get(1).getElementsByTag("tr");
         data.remove(0);
         String pass[] = new String[8];
@@ -258,13 +289,30 @@ public class StudentLogin extends Fragment {
         bmparr beep = new bmparr();
         beep.open = open;
         beep.data = pass;
+        try {
+            final Bitmap fac_pic = BitmapUrlClient.getBitmapFromURL(employee_fac_pic, httpClient);
+            if (fac_pic != null) {
+                beep.bmp = fac_pic;
+            } else {
+                beep.bmp = null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return beep;
     }
 
-    class OpenHours {
+    static class OpenHours {
         String day;
         String from;
         String to;
+    }
+
+    class MutlipleResultFac {
+        String name;
+        String href;
+        String school;
     }
 }
 //Excluded Code

@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,12 +28,12 @@ public class FacInfoFrag extends Fragment {
     private Typeface roboto_light, regular;
     private ImageView dp;
     private TextView name, desig, room, school, email, addrole, divi, openhrs;
-    private List<StudentLogin.OpenHours> openhours;
+    private List<GetFacDataStudLogin.OpenHours> openhours;
 
     public FacInfoFrag() {
     }
 
-    public FacInfoFrag(StudentLogin.bmparr bmp) {
+    public FacInfoFrag(GetFacDataStudLogin.bmparr bmp) {
         this.data = bmp.data;
         this.image = bmp.bmp;
         this.openhours = bmp.open;
@@ -78,7 +77,7 @@ public class FacInfoFrag extends Fragment {
                 openhrs.setText(data[7]);
             else {
                 StringBuilder build = new StringBuilder();
-                for (StudentLogin.OpenHours op : openhours) {
+                for (GetFacDataStudLogin.OpenHours op : openhours) {
                     build.append(Html.fromHtml("<b>" + op.day.trim() + "</b>") + "\t\t\t" + op.from.trim() + "\t\t to \t\t" + op.to.trim() + "\t\t\n\n");
                 }
                 openhrs.setText(build.toString());

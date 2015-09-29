@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Fragments/GetFacDataStudLogin.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Fragments/MarksView.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Fragments/Slots.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Fragments/StudentLogin.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Http/Http.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/Listener/RecyclerItemClickListener.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/razor/nikhil/adapter/CoursesAdapter.java" charset="windows-1252" />

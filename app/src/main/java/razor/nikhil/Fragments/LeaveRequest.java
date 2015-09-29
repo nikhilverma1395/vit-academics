@@ -74,7 +74,7 @@ public class LeaveRequest extends Fragment {
         protected Void doInBackground(Void... voids) {
             Bitmap myBitmap = null;
             try {
-                myBitmap = new BitmapUrlClient().getBitmapFromURL(StudentLogin.student_Login_Captcha_Link, httpClient);
+                myBitmap = new BitmapUrlClient().getBitmapFromURL(GetFacDataStudLogin.student_Login_Captcha_Link, httpClient);
                 final Bitmap rma = myBitmap;
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -101,7 +101,7 @@ public class LeaveRequest extends Fragment {
             headers.put("passwd", "supermariogotze");
             headers.put("vrfcd", strings[0].trim());
             try {
-                Http.postMethod(StudentLogin.student_Login_Link, headers, httpClient);
+                Http.postMethod(GetFacDataStudLogin.student_Login_Link, headers, httpClient);
             } catch (HttpException e) {
                 e.printStackTrace();
             } catch (IOException e) {
