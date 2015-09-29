@@ -9,7 +9,7 @@
     <View
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="@dimen/facinfo_top_view_width"
         android:background="@android:color/holo_blue_dark" />
 
     <LinearLayout
@@ -18,16 +18,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
-        android:layout_marginTop="80dp"
-        android:paddingBottom="10dp"
+        android:layout_marginLeft="@dimen/facinfo_upview_marginleft"
+        android:layout_marginRight="@dimen/facinfo_upview_marginleft"
+        android:layout_marginTop="@dimen/fac_adv_mtop"
         android:background="@drawable/card"
         android:elevation="5dp"
         android:orientation="vertical"
-        android:paddingLeft="50dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="@dimen/facinfo_upview_marginleft"
         android:paddingRight="10dp"
-        android:paddingTop="100dp">
+        android:paddingTop="@dimen/facinfo_data_pad_top">
 
         <TextView
             android:id="@+id/fac_name"
@@ -38,7 +38,7 @@
             android:drawableLeft="@drawable/dot_name"
             android:drawablePadding="50dp"
             android:text="Robin Hood"
-            android:textSize="24sp" />
+            android:textSize="@dimen/timetable_rv_item_font_code" />
 
         <TextView
             android:id="@+id/fac_desig"
@@ -49,7 +49,7 @@
             android:drawableLeft="@drawable/division_icon"
             android:drawablePadding="50dp"
             android:text="Assistant Professor"
-            android:textSize="22sp" />
+            android:textSize="@dimen/timetable_rv_item_font_code" />
 
         <TextView
             android:id="@+id/fac_school"
@@ -60,13 +60,12 @@
             android:drawableLeft="@drawable/school_icon"
             android:drawablePadding="50dp"
             android:text="SCSE"
-            android:textSize="22sp" />
+            android:textSize="@dimen/timetable_rv_item_font_code" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginBottom="@dimen/texts_margin_bottom">
 
             <TextView
                 android:id="@+id/fac_mobile"
@@ -76,7 +75,7 @@
                 android:drawablePadding="50dp"
                 android:gravity="center"
                 android:text="9876567656"
-                android:textSize="20sp" />
+                android:textSize="@dimen/timetable_rv_item_font_code" />
 
             <com.gc.materialdesign.views.ButtonFloat
                 android:id="@+id/call_fac_butfloat"
@@ -84,7 +83,7 @@
                 android:layout_height="45dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginRight="110dp"
+                android:layout_marginRight="@dimen/facadv_fab_mar_right"
                 android:gravity="center"
                 materialdesign:iconDrawable="@drawable/call" />
         </RelativeLayout>
@@ -99,7 +98,7 @@
             android:drawablePadding="50dp"
             android:gravity="center"
             android:text="Email"
-            android:textSize="20sp" />
+            android:textSize="@dimen/timetable_rv_item_font_code" />
 
         <TextView
             android:id="@+id/fac_room"
@@ -110,17 +109,17 @@
             android:drawableLeft="@drawable/room_icon"
             android:drawablePadding="50dp"
             android:text="Room"
-            android:textSize="25sp" />
+            android:textSize="@dimen/timetable_rv_item_font_code" />
     </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/fac_img"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
+        android:layout_width="@dimen/facinfo_imagedimen"
+        android:layout_height="@dimen/facinfo_imagedimen"
         android:layout_alignBottom="@id/header"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="-110dp"
-        android:elevation="16dp"
+        android:layout_marginBottom="-50dp"
+        android:elevation="6dp"
         android:src="@drawable/header" />
 
 </RelativeLayout>

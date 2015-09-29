@@ -4,7 +4,7 @@
     android:id="@+id/card_view_daywise"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="5dp"
     android:clickable="true"
     android:focusable="true"
     card_view:cardCornerRadius="4dp">
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:padding="15dp">
+        android:padding="@dimen/grade_card_padding">
 
         <TextView
             android:id="@+id/header_name"
@@ -44,24 +44,26 @@
             android:textSize="19sp" />
 
         <View
-            android:layout_marginLeft="20dp"
             android:id="@+id/breakline"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="20dp"
-            android:layout_below="@id/header_program"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+            android:layout_below="@id/header_program"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/darker_gray" />
+
         <TextView
             android:id="@+id/reg_head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/breakline"
-            android:layout_marginLeft="20dp"
-            android:text="Credits Registered"
-            android:textSize="16sp" />
+            android:layout_marginLeft="10dp"
+            android:text="Credits Regis."
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/header_registr"
@@ -79,8 +81,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/breakline"
             android:layout_centerHorizontal="true"
-            android:text="Credits Earned"
-            android:textSize="16sp" />
+            android:text="   Credits Earned"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/header_earned"
@@ -99,9 +102,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@id/breakline"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="22dp"
             android:text="CGPA"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/header_gpa"

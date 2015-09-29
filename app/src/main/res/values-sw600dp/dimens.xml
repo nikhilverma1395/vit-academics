@@ -60,9 +60,23 @@
     <!-- facinfo -->
     <dimen name="facinfo_top_view_width">300dp</dimen>
     <dimen name="facinfo_name_marginTop">170dp</dimen>
-    <dimen name="facinfo_upview_marginleft">20dp</dimen>
+    <dimen name="facinfo_upview_marginleft">30dp</dimen>
     <dimen name="facinfo_imagedimen">170dp</dimen>
     <dimen name="facinfo_data_pad_top">80dp</dimen>
     <dimen name="facinfo_items_mtop">30dp</dimen>
-
+    <!--Faculty Adv-->
+    <dimen name="facadv_fab_mar_right">100dp</dimen>
+    <dimen name="fac_adv_mtop">50dp</dimen>
+    <dimen name="texts_margin_bottom">20dp</dimen>
+    <dimen name="grade_card_padding">8dp</dimen>
+    <dimen name="grade_row_font">19sp</dimen>
+    <dimen name="circle_font_size">29sp</dimen>
+    <dimen name="circle_dimen_grade">60sp</dimen>
+    <dimen name="grade_info_margin">60sp</dimen>
+    <dimen name="gradeinfo_mleft">30sp</dimen>
+    <dimen name="gradeinfo_mtop">50sp</dimen>
+    <dimen name="grade_info_name_font">27sp</dimen>
+    <dimen name="gradeinfocirclesize">75dp</dimen>
+    <dimen name="gradeinfocircle_mtop">45dp</dimen>
+    <dimen name="gradeinfo_dsize">410dp</dimen>
 </resources>
