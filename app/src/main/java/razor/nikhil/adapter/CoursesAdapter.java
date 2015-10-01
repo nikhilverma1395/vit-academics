@@ -24,18 +24,17 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CardView
     private List<AttendBrief> atteds;
     private Context context = null;
     private String Colors[] = {"#AB47BC", "#7986CB", "#00BCD4", "#FF8A65", "#66BB6A", "#FFD54F", "#FF8A65", "#78909C", "#EF5350"};
-    private Typeface light, bold, roboto_light, thinno, regular;
+    private Typeface thinItalic, bold, roboto_light, condensedLightItalic, regular;
 
     public CoursesAdapter(List<Model_Slots> list, List<AttendBrief> ll, Context context) {
         atteds = ll;
         this.cardList = list;
         this.context = context;
-        light = Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf");
+        thinItalic = Typeface.createFromAsset(context.getAssets(), "Roboto-ThinItalic.ttf");
         bold = Typeface.createFromAsset(context.getAssets(), "RobotoCondensed-Bold.ttf");
         roboto_light = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
-        thinno = Typeface.createFromAsset(context.getAssets(), "Roboto-Thin.ttf");
+        condensedLightItalic = Typeface.createFromAsset(context.getAssets(), "RobotoCondensed-LightItalic.ttf");
         regular = Typeface.createFromAsset(context.getAssets(), "Roboto-Regular.ttf");
-
     }
 
 

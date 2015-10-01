@@ -27,7 +27,7 @@
     <dimen name="navbar_item_margin">14dp</dimen>
 
     <dimen name="header_circle_image">80dp</dimen>
-    <dimen name="courses_card_main_padding_left_right">10dp</dimen>
+    <dimen name="courses_card_main_padding_left_right">5dp</dimen>
     <dimen name="slots_circle_branch">80dp</dimen>
     <dimen name="slots_item_margin_left">25dp</dimen>
     <dimen name="slots_circle_margin_bottom">18dp</dimen>
@@ -39,7 +39,7 @@
     <!-- Marks-->
     <dimen name="marks_grid_item_width">205dp</dimen>
     <dimen name="marks_grid_item_bigfont">33sp</dimen>
-    <dimen name="marks_grid_item_bigfont_less">32sp</dimen>
+    <dimen name="marks_grid_item_bigfont_less">27sp</dimen>
     <dimen name="marks_grid_item_present_block_width_height">37dp</dimen>
     <dimen name="marks_grid_item_paper_type_margin_left">30dp</dimen>
     <dimen name="marks_grid_item_totol_mark_height">40dp</dimen>
@@ -64,6 +64,8 @@
     <dimen name="facinfo_imagedimen">170dp</dimen>
     <dimen name="facinfo_data_pad_top">80dp</dimen>
     <dimen name="facinfo_items_mtop">30dp</dimen>
+    <dimen name="facinfo_data_pad_left">35dp</dimen>
+
     <!--Faculty Adv-->
     <dimen name="facadv_fab_mar_right">100dp</dimen>
     <dimen name="fac_adv_mtop">50dp</dimen>
@@ -79,4 +81,15 @@
     <dimen name="gradeinfocirclesize">75dp</dimen>
     <dimen name="gradeinfocircle_mtop">45dp</dimen>
     <dimen name="gradeinfo_dsize">410dp</dimen>
+    <!---->
+
+    <dimen name="fac_getdata_login_mleft">40dp</dimen>
+    <dimen name="fac_getdata_login_mright">40dp</dimen>
+    <dimen name="padding_facgetdata_login_in">40dp</dimen>
+    <!---->
+    <dimen name="login_ll_prog_dim">80dp</dimen>
+    <!---->
+    <dimen name="padding_myt_row">14dp</dimen>
+    <dimen name="textSize_myt_row">20sp</dimen>
 </resources>
+

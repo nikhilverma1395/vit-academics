@@ -12,10 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-import com.gc.materialdesign.views.ButtonRectangle;
 
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpClient;
@@ -43,8 +42,7 @@ public class MyTeachers extends Fragment {
     private EditText REGNO, PASS, CAPTXT;
     private ImageView CAPIMAG;
     private List<MyTeacherDet> list = new ArrayList<>();
-    private String reg, pass;
-    private ButtonRectangle button;
+    private Button button;
     private static HttpClient httpClient;
     public static String student_Login_Link = "https://academics.vit.ac.in/student/stud_login_submit.asp";
     public static String student_Login_Captcha_Link = "https://academics.vit.ac.in/student/captcha.asp";
@@ -261,7 +259,7 @@ public class MyTeachers extends Fragment {
         PASS = (EditText) view.findViewById(R.id.pass_studentlog_myt);
         CAPIMAG = (ImageView) view.findViewById(R.id.capImg_studentlog_myt);
         CAPTXT = (EditText) view.findViewById(R.id.capTxt_studentlog_myt);
-        button = (ButtonRectangle) view.findViewById(R.id.proceedBut_studentlog_myt);
+        button = (Button) view.findViewById(R.id.proceedBut_studentlog_myt);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

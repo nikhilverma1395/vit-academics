@@ -21,4 +21,7 @@ public class Config {
     public static final String FADV_EMAIL = "fadvemail";
     public static final String FADV_ROOM = "fadvroom";
     public static final String FADV_PIcKEY = "fadvpicpath";
+    public static final String APT_TOTAL_CLASSES = "aptclasses";
+    public static final String APT_ATTENDED = "aptatten";
+    public static final String APT_PERCENT = "aptPercent";
 }

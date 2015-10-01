@@ -37,6 +37,7 @@ public class MyTeacherAdap extends RecyclerView.Adapter<MyTeacherAdap.ViewHolder
     public void onBindViewHolder(MyTeacherAdap.ViewHolder holder, int position) {
         try {
             holder.tname.setText(lists.get(position).getNAME());
+            holder.myt_sub.setText(lists.get(position).getSCHOOL());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,11 +49,12 @@ public class MyTeacherAdap extends RecyclerView.Adapter<MyTeacherAdap.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tname;
+        TextView tname, myt_sub;
 
         public ViewHolder(View v) {
             super(v);
             tname = (TextView) v.findViewById(R.id.myt_name);
+            myt_sub = (TextView) v.findViewById(R.id.myt_sub);
             tname.setTypeface(regular);
         }
 

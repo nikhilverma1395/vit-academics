@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recyclerView_minfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff"
+        android:padding="3dp"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/getmsg_captcha"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:src="@drawable/captcha" />
+
+    <EditText
+        android:id="@+id/facmsg_et_cap"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/facmsg_process"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Process" />
+
+
+</LinearLayout>

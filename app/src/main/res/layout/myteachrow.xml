@@ -5,18 +5,35 @@
     android:id="@+id/card_view_daywise"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp"
+    android:layout_margin="6dp"
     android:clickable="true"
     android:focusable="true"
-    card_view:cardCornerRadius="4dp">
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="1dp">
 
-
-    <TextView
-        android:id="@+id/myt_name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:background="?android:attr/selectableItemBackground"
-        android:gravity="center"
-        android:text="n/a"
-        android:textSize="20sp" />
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/myt_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:padding="@dimen/padding_myt_row"
+            android:textSize="@dimen/textSize_myt_row" />
+
+        <TextView
+            android:id="@+id/myt_sub"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="left"
+            android:padding="@dimen/padding_myt_row"
+            android:textSize="@dimen/textSize_myt_row" />
+    </LinearLayout>
 </android.support.v7.widget.CardView>

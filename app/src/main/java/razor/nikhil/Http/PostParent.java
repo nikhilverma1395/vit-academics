@@ -5,22 +5,16 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
+import org.apache.http.HttpException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashMap;
 
 import razor.nikhil.Activity.MainActivity;
 import razor.nikhil.Config;
@@ -33,7 +27,7 @@ import razor.nikhil.database.StoreAndGetImage;
  */
 public class PostParent {
     private final String ATTENDANCE_URL = "https://academics.vit.ac.in/parent/attn_report.asp?sem=";
-    private final String PARENT_LOGIN_POST_URL = "https://academics.vit.ac.in/parent/parent_login_submit.asp";
+    public static final String PARENT_LOGIN_POST_URL = "https://academics.vit.ac.in/parent/parent_login_submit.asp";
     private final String TIMETABLE_URL = "https://academics.vit.ac.in/parent/timetable.asp?sem=";
     private final String MARKS_URL = "https://academics.vit.ac.in/parent/marks.asp?sem=";
     private final String GRADE_URL = "https://academics.vit.ac.in/parent/student_history.asp";
@@ -82,109 +76,95 @@ public class PostParent {
 
         @Override
         protected Void doInBackground(String... voids) {
-            // Create a new HttpClient and Post Header
-            HttpPost httppost = null;
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("wdregno", uname);
+            headers.put("wdpswd", dob);
+            headers.put("wdmobno", ward);
+            headers.put("vrfcd", captchatxt);
             try {
-                httppost = new HttpPost(voids[0]);
-                List<NameValuePair> nameValuePair = new ArrayList<>(4);
-
-                nameValuePair.add(new BasicNameValuePair("wdregno", uname));
-                nameValuePair.add(new BasicNameValuePair("wdpswd", dob));
-                nameValuePair.add(new BasicNameValuePair("wdmobno", ward));
-                nameValuePair.add(new BasicNameValuePair("vrfcd", captchatxt));
+                Http.postMethod(voids[0], headers, httpClient);
+            } catch (HttpException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                final String fadv = Http.getData(FACULTY_DETAILS, httpClient);
+                Bitmap facpic = null;
                 try {
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    HttpResponse response = httpClient.execute(httppost);
-                    final String op = EntityUtils.toString(response.getEntity(), "UTF-8");
-                    Log.d("Post in Parent", "Done");
-                    Log.d("PostData", op);
-                    try {
-                        final String fadv = Http.getData(FACULTY_DETAILS, httpClient);
-                        Bitmap facpic = null;
-                        try {
-                            facpic = BitmapUrlClient.getBitmapFromURL(FAC_PHOTO, httpClient);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        if (facpic == null) {
-                            Log.d("Null", "Faculty Adv Image is Null");
-                        }
-                        String storedpath = null;
-                        try {
-                            storedpath = new StoreAndGetImage(context).saveToInternalSorage(facpic, Config.FACULTY_IMAGE_NAME);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Log.d("Path", storedpath);
-                        new SharedPrefs(context).storeMsg(Config.FADV_PIcKEY, storedpath);
-                        parseFaculty(fadv);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        Runnable runnable = new Runnable() {
-                            public void run() {
-                                if (!(new GradeGetSet(context).getEntriesCount() == 0)) {
-                                    Log.d("Grades Data Already", "Done");
-                                    return;
-                                }
-                                final String grades = Http.getData(GRADE_URL, httpClient);
-                                new GradeParser(context).parser(grades);
-                            }
-                        };
-                        new Thread(runnable).start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-
-                    }
-
-
-                    try {
-                        new Thread(new Runnable() {
-                            public void run() {
-                                final String timetableHTML = Http.getData(TIMETABLE_URL + whichsem, httpClient);
-                                new ParseTimeTable(context).parser(timetableHTML);
-                                Log.d("parsett", "Done");
-                            }
-                        }).start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        new Thread(new Runnable() {
-                            public void run() {
-                                final String attendanceHTML = Http.getData(ATTENDANCE_URL + whichsem, httpClient);
-                                new AttendanceParser(context, httpClient).parse(attendanceHTML);
-                                Log.d("atten", "Done");
-                            }
-                        }).start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        new Thread(new Runnable() {
-                            public void run() {
-                                final String marksHTML = Http.getData(MARKS_URL + whichsem, httpClient);
-                                new MarksParser(context, marksHTML);
-                                Log.d("marks", "Done");
-                            }
-                        }).start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    facpic = BitmapUrlClient.getBitmapFromURL(FAC_PHOTO, httpClient);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                if (facpic == null) {
+                    Log.d("Null", "Faculty Adv Image is Null");
+                }
+                String storedpath = null;
+                try {
+                    storedpath = new StoreAndGetImage(context).saveToInternalSorage(facpic, Config.FACULTY_IMAGE_NAME);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.d("Path", storedpath);
+                new SharedPrefs(context).storeMsg(Config.FADV_PIcKEY, storedpath);
+                parseFaculty(fadv);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                Runnable runnable = new Runnable() {
+                    public void run() {
+                        if (!(new GradeGetSet(context).getEntriesCount() == 0)) {
+                            Log.d("Grades Data Already", "Done");
+                            return;
+                        }
+                        final String grades = Http.getData(GRADE_URL, httpClient);
+                        new GradeParser(context).parser(grades);
+                    }
+                };
+                new Thread(runnable).start();
+            } catch (Exception e) {
+                e.printStackTrace();
 
+            }
+
+
+            try {
+                new Thread(new Runnable() {
+                    public void run() {
+                        final String timetableHTML = Http.getData(TIMETABLE_URL + whichsem, httpClient);
+                        new ParseTimeTable(context).parser(timetableHTML);
+                        Log.d("parsett", "Done");
+                    }
+                }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                new Thread(new Runnable() {
+                    public void run() {
+                        final String attendanceHTML = Http.getData(ATTENDANCE_URL + whichsem, httpClient);
+                        new AttendanceParser(context, httpClient).parse(attendanceHTML);
+                        Log.d("atten", "Done");
+                    }
+                }).start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                new Thread(new Runnable() {
+                    public void run() {
+                        final String marksHTML = Http.getData(MARKS_URL + whichsem, httpClient);
+                        new MarksParser(context, marksHTML);
+                        Log.d("marks", "Done");
+                    }
+                }).start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
         }
+
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -201,6 +181,7 @@ public class PostParent {
                 }
             }
         }
+
     }
 
     private void parseFaculty(String fadv) {

@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/recyclerView_minfo"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    android:padding="3dp" />
+    android:clickable="true"
+    android:gravity="center"
+    android:orientation="vertical">
+    xmlns:android="http://schemas.android.com/apk/res/android" />
+
+    <TextView
+        android:id="@+id/nomsg_facmsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="Data Not Available!"
+        android:textSize="21sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_minfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="3dp" />
+</LinearLayout>

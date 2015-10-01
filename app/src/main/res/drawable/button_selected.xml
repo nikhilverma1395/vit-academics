@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/button_foc" android:state_focused="true" />
+    <item android:drawable="@color/button_press" android:state_pressed="true" />
+    <item android:drawable="@color/button_def" />
+</selector>

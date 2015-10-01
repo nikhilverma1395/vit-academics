@@ -60,4 +60,14 @@
     <dimen name="gradeinfocirclesize">55dp</dimen>
     <dimen name="gradeinfocircle_mtop">95dp</dimen>
     <dimen name="gradeinfo_dsize">370dp</dimen>
+    <!---->
+    <dimen name="fac_getdata_login_mleft">7dp</dimen>
+    <dimen name="fac_getdata_login_mright">7dp</dimen>
+    <dimen name="padding_facgetdata_login_in">12dp</dimen>
+
+    <dimen name="login_ll_prog_dim">30dp</dimen>
+    <!--Myteachers-->
+    <dimen name="padding_myt_row">3dp</dimen>
+
+    <dimen name="textSize_myt_row">12sp</dimen>
 </resources>

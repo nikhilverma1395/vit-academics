@@ -46,7 +46,6 @@ public class MyTeachersList extends Fragment {
         final LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
-        Log.d("list", list.size() + "");
         MyTeacherAdap adap = new MyTeacherAdap(getActivity(), list);
         recyclerView.setAdapter(adap);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {

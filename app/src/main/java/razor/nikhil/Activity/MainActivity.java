@@ -23,21 +23,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import razor.nikhil.Fragments.AptAtten;
+import razor.nikhil.Fragments.AptAttenList;
 import razor.nikhil.Fragments.CgpaFragment;
 import razor.nikhil.Fragments.FacultyAdvFrag;
 import razor.nikhil.Fragments.GetDetails;
+import razor.nikhil.Fragments.GetFacDataStudLogin;
+import razor.nikhil.Fragments.GetFacMessage;
+import razor.nikhil.Fragments.GetFacMsgList;
 import razor.nikhil.Fragments.GradeFragment;
 import razor.nikhil.Fragments.LeaveRequest;
 import razor.nikhil.Fragments.MyTeachers;
 import razor.nikhil.Fragments.MyTeachersList;
 import razor.nikhil.Fragments.Slots;
-import razor.nikhil.Fragments.GetFacDataStudLogin;
 import razor.nikhil.Fragments.TimeTableVP;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
 import razor.nikhil.adapter.NavBarRVAdapter;
+import razor.nikhil.database.APT_GS;
 import razor.nikhil.database.Attend_GetSet;
 import razor.nikhil.database.CBL_Get_Set;
+import razor.nikhil.database.FacMsgGS;
 import razor.nikhil.database.GradeGetSet;
 import razor.nikhil.database.IndivAttGetSet;
 import razor.nikhil.database.MTWTHgetset;
@@ -56,7 +62,7 @@ import razor.nikhil.model.detailattlist_subcode;
 
 public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.HeaderItemClicked {
 
-    String TITLES[] = {"Courses", "Photo Login", "Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "Cgpa Calculator", "My Teachers"};
+    String TITLES[] = {"Courses", "Faculty Info", "Enter Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "CGPA Calculator", "My Teachers", "Messages", "APT Attendance"};
     int ICONS[] = {R.mipmap.user_icon,
             R.mipmap.assignment,
             R.mipmap.tick_icon,
@@ -65,7 +71,11 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
             R.mipmap.bug_report,
             R.mipmap.explore,
             R.mipmap.ic_event,
-            R.mipmap.ic_language};
+            R.mipmap.ic_language,
+            R.mipmap.book,
+            R.mipmap.ic_dns,
+            R.mipmap.bug_report,
+    };
     public static List<Model_Slots> list;
     private static GetDetails gd;
     public static List<Model_Daywise> todayslist_m;
@@ -259,7 +269,6 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
 
     private void displayView(int position) {
         Fragment fragment = null;
-        Log.d("pos", position + "");
         switch (position) {
             case 1:
                 String s = getSharedPreferences("VitAcademics_sp", Context.MODE_PRIVATE).getString("slots_down", "no");
@@ -310,7 +319,18 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
                 }
 
                 break;
-
+            case 10:
+                FacMsgGS msgGS = new FacMsgGS(getApplicationContext());
+                if (msgGS.getEntriesCount() == 0)
+                    fragment = GetFacMessage.newInstance();
+                else fragment = GetFacMsgList.newInstance(msgGS.getAllCredentials());
+                break;
+            case 11:
+                APT_GS msg = new APT_GS(getApplicationContext());
+                if (msg.getEntriesCount() == 0)
+                    fragment = AptAtten.newInstance();
+                else fragment = AptAttenList.newInstance(msg.getAllCredentials());
+                break;
             default:
                 displayView(1);
                 break;

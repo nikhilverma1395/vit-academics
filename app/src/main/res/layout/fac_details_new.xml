@@ -9,11 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="40dp"
+        android:layout_marginLeft="@dimen/fac_getdata_login_mleft"
+        android:layout_marginRight="@dimen/fac_getdata_login_mright"
         android:background="@drawable/rounddraw"
         android:orientation="vertical"
-        android:padding="40dp">
+        android:padding="@dimen/padding_facgetdata_login_in">
 
         <EditText
             android:id="@+id/fac_info_name"
@@ -34,11 +34,11 @@
 
         <ImageView
             android:id="@+id/captcha_fac_info_iv"
-            android:layout_width="150dp"
-            android:scaleType="fitXY"
-            android:layout_height="35dp"
+            android:layout_width="135dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_marginBottom="15.0dp"
+            android:scaleType="fitXY"
             android:src="@drawable/captcha" />
 
 
@@ -50,8 +50,8 @@
             android:drawableLeft="@drawable/lock"
             android:drawablePadding="30.0dp"
             android:hint="Captcha"
-            android:maxLength="6"
             android:inputType="textCapCharacters"
+            android:maxLength="6"
             android:paddingBottom="25.0dp"
             android:paddingLeft="15.0dp"
             android:singleLine="true"
@@ -61,17 +61,17 @@
         <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
             android:id="@+id/progress_facinfo"
             android:layout_width="50dp"
-            android:visibility="gone"
             android:layout_height="50dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
 
-        <com.gc.materialdesign.views.ButtonRectangle
+        <Button
             android:id="@+id/fac_info_submit"
             android:layout_width="fill_parent"
-            android:layout_height="65dp"
-            android:background="#ffd24a58"
+            android:layout_height="50dp"
+            android:background="@drawable/button_selected"
             android:text="Submit"
             android:textColor="#ff2e2e2e"
-            android:textSize="8sp" />
+            android:textSize="14sp" />
     </LinearLayout>
 </FrameLayout>

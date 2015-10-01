@@ -23,7 +23,7 @@
     <dimen name="marks_grid_item_bigfont">23sp</dimen>
     <dimen name="marks_grid_item_bigfont_less">21sp</dimen>
     <dimen name="marks_grid_item_present_block_width_height">23dp</dimen>
-    <dimen name="marks_grid_item_paper_type_margin_left">9dp</dimen>
+    <dimen name="marks_grid_item_paper_type_margin_left">5dp</dimen>
     <dimen name="marks_grid_item_totol_mark_height">30dp</dimen>
     <dimen name="marks_grid_item_card_margin_left_right">2dp</dimen>
     <dimen name="marks_grid_item_title_font">16sp</dimen>
@@ -39,11 +39,12 @@
     <dimen name="cgpa_card_margin">2dp</dimen>
     <dimen name="cgpa_button_back_height">120dp</dimen>
     <!--Fac Info-->
-    <dimen name="facinfo_top_view_width">170dp</dimen>
-    <dimen name="facinfo_name_marginTop">115dp</dimen>
+    <dimen name="facinfo_top_view_width">150dp</dimen>
+    <dimen name="facinfo_name_marginTop">85dp</dimen>
     <dimen name="facinfo_upview_marginleft">20dp</dimen>
     <dimen name="facinfo_imagedimen">100dp</dimen>
-    <dimen name="facinfo_data_pad_top">20dp</dimen>
+    <dimen name="facinfo_data_pad_top">65dp</dimen>
+    <dimen name="facinfo_data_pad_left">25dp</dimen>
     <dimen name="facinfo_items_mtop">15dp</dimen>
     <!--Faculty Adv-->
     <dimen name="facadv_fab_mar_right">40dp</dimen>
@@ -61,5 +62,13 @@
     <dimen name="gradeinfocirclesize">60dp</dimen>
     <dimen name="gradeinfocircle_mtop">110dp</dimen>
     <dimen name="gradeinfo_dsize">390dp</dimen>
+    <!---->
+    <dimen name="fac_getdata_login_mleft">14dp</dimen>
+    <dimen name="fac_getdata_login_mright">14dp</dimen>
+    <dimen name="padding_facgetdata_login_in">20dp</dimen>
 
+    <dimen name="login_ll_prog_dim">50dp</dimen>
+    <!--Myteachers-->
+    <dimen name="padding_myt_row">8dp</dimen>
+    <dimen name="textSize_myt_row">16sp</dimen>
 </resources>
