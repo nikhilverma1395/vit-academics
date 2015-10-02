@@ -9,21 +9,19 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="45dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="125dp"
         android:src="@drawable/book" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="25.0dp"
-        android:layout_marginRight="25.0dp"
-        android:background="@drawable/rounddraw"
-        android:orientation="vertical"
-        android:padding="15dp">
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:orientation="vertical">
 
         <EditText
-            android:id="@+id/mainlogin_regno"
+            android:id="@+id/regno_studentlog_myt"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5.0dp"
@@ -37,51 +35,50 @@
             android:paddingLeft="15.0dp"
             android:paddingTop="15.0dp"
             android:singleLine="true"
+            android:text="13BCE0037"
             android:textColor="#ff79838f"
             android:textColorHint="#ffafbac6" />
 
         <EditText
-            android:id="@+id/mainlogin_mobile"
+            android:id="@+id/pass_studentlog_myt"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5.0dp"
-            android:drawableLeft="@drawable/mobile"
+            android:drawableLeft="@drawable/password"
             android:drawablePadding="30.0dp"
-            android:hint="Parent Mobile No."
-            android:inputType="phone"
+            android:hint="Password"
+            android:inputType="text"
             android:paddingBottom="25.0dp"
             android:paddingLeft="15.0dp"
             android:singleLine="true"
+            android:text="supermariogotze"
             android:textColor="#ff79838f"
             android:textColorHint="#ffafbac6" />
 
-        <EditText
-            android:id="@+id/mainlogin_dob"
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5.0dp"
-            android:drawableLeft="@drawable/cake"
-            android:drawablePadding="30.0dp"
-            android:hint="Date-Of-Birth(DDMMYYYY)"
-            android:inputType="date|numberPassword"
-            android:maxLength="8"
-            android:paddingBottom="25.0dp"
-            android:paddingLeft="15.0dp"
-            android:singleLine="true"
-            android:textColor="#ff79838f"
-            android:textColorHint="#ffafbac6" />
+            android:gravity="center"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/mainlogin_captcha_image"
-            android:layout_width="130dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="5.0dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/captcha" />
+            <ImageView
+                android:id="@+id/capImg_studentlog_myt"
+                android:layout_width="140dp"
+                android:layout_height="38dp"
+                android:layout_marginBottom="5.0dp"
+                android:layout_marginLeft="10dp"
+                android:scaleType="fitXY" />
+
+            <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+                android:layout_width="@dimen/login_ll_prog_dim"
+                android:visibility="invisible"
+                android:id="@+id/progress_ll_"
+                android:layout_height="@dimen/login_ll_prog_dim"
+                android:layout_gravity="right" />
+        </LinearLayout>
 
         <EditText
-            android:id="@+id/mainlogin_captcha_text"
+            android:id="@+id/capTxt_studentlog_myt"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20.0dp"
@@ -96,12 +93,12 @@
             android:textColorHint="#ffafbac6" />
 
         <Button
-            android:id="@+id/mainlogin_button"
+            android:id="@+id/proceedBut_studentlog_myt"
             android:layout_width="fill_parent"
             android:layout_height="60.0dp"
-            android:background="#ffd24a58"
+            android:background="@drawable/button_selected"
             android:text="Proceed"
             android:textColor="#ff2e2e2e"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 </LinearLayout>

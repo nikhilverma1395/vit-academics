@@ -49,7 +49,6 @@ import razor.nikhil.database.IndivAttGetSet;
 import razor.nikhil.database.MTWTHgetset;
 import razor.nikhil.database.MyTeachGS;
 import razor.nikhil.database.PBL_Get_Set;
-import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.database.Slots_GetSet;
 import razor.nikhil.model.AttendBrief;
 import razor.nikhil.model.DetailAtten;
@@ -78,11 +77,11 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
     };
     public static List<Model_Slots> list;
     private static GetDetails gd;
-    public static List<Model_Daywise> todayslist_m;
-    public static List<Model_Daywise> todayslist_t;
-    public static List<Model_Daywise> todayslist_w;
-    public static List<Model_Daywise> todayslist_th;
-    public static List<Model_Daywise> todayslist_fr;
+    public static List<Model_Daywise> todayslist_m = new ArrayList<>();
+    public static List<Model_Daywise> todayslist_t = new ArrayList<>();
+    public static List<Model_Daywise> todayslist_w = new ArrayList<>();
+    public static List<Model_Daywise> todayslist_th = new ArrayList<>();
+    public static List<Model_Daywise> todayslist_fr = new ArrayList<>();
     public static List<detailattlist_subcode> detail_att_all = new ArrayList<>();
     public static HashMap<String, List<DetailAtten>> hash = new HashMap<>();
     public static List<AttendBrief> attendBriefs = null;
@@ -117,24 +116,21 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
     }
 
     public void setMTWTFLists(final Context ctxt) {
-        String mark = new SharedPrefs(ctxt).getMsg("marksdone").trim();
-        String att = new SharedPrefs(ctxt).getMsg("ttdone").trim();
-        String tt = new SharedPrefs(ctxt).getMsg("attendone").trim();
-        if (mark.equals("y") && att.equals("y") && tt.equals("y")) {
-            try {
-                new Thread(new Runnable() {
-                    public void run() {
-                        todayslist_m = new MTWTHgetset(ctxt, "monday").getAllCredentials();
-                        todayslist_t = new MTWTHgetset(ctxt, "tuesday").getAllCredentials();
-                        todayslist_w = new MTWTHgetset(ctxt, "wednesday").getAllCredentials();
-                        todayslist_th = new MTWTHgetset(ctxt, "thursday").getAllCredentials();
-                        todayslist_fr = new MTWTHgetset(ctxt, "friday").getAllCredentials();
-                    }
-                }).start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            new Thread(new Runnable() {
+                public void run() {
+                    todayslist_m = new MTWTHgetset(ctxt, "monday").getAllCredentials();
+                    todayslist_t = new MTWTHgetset(ctxt, "tuesday").getAllCredentials();
+                    todayslist_w = new MTWTHgetset(ctxt, "wednesday").getAllCredentials();
+                    todayslist_th = new MTWTHgetset(ctxt, "thursday").getAllCredentials();
+                    todayslist_fr = new MTWTHgetset(ctxt, "friday").getAllCredentials();
+                    Log.d("Done", "Yeahtt th");
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     @Override

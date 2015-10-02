@@ -1,8 +1,6 @@
 package razor.nikhil.Http;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -20,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import razor.nikhil.database.IndivAttGetSet;
-import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.model.AttenDetail;
 import razor.nikhil.model.DetailAtten;
 import razor.nikhil.model.Query_TableName;
@@ -41,49 +38,47 @@ public class FullAttendParseStore {
         this.context = context;
         this.httpClient = clien;
         this.dates_sem_codes = dates_sem_codes;
-        new IndivAtt().execute(dates_sem_codes);
+        doInBackground(dates_sem_codes);
 
     }
 
-    private class IndivAtt extends AsyncTask<List<AttenDetail>, Void, Void> {
-        @Override
-        protected Void doInBackground(List<AttenDetail>... lists) {
-            HttpPost httppost = null;
+    protected Void doInBackground(List<AttenDetail>... lists) {
+        HttpPost httppost = null;
 
-            all_sub_detail = new ArrayList<>();
-            for (int rt = 0; rt < lists[0].size(); rt++) {
+        all_sub_detail = new ArrayList<>();
+        for (int rt = 0; rt < lists[0].size(); rt++) {
+            try {
+                httppost = new HttpPost(DETAIL_ATTENDANCE_POST_URL);
+                List<NameValuePair> nameValuePair = new ArrayList<>(4);
+                nameValuePair.add(new BasicNameValuePair("semcode", lists[0].get(rt).getSemcode()));
+                nameValuePair.add(new BasicNameValuePair("classnbr", lists[0].get(rt).getClass_number()));
+                nameValuePair.add(new BasicNameValuePair("from_date", lists[0].get(rt).getFrom_date()));
+                nameValuePair.add(new BasicNameValuePair("to_date", lists[0].get(rt).getTo_date()));
                 try {
-                    httppost = new HttpPost(DETAIL_ATTENDANCE_POST_URL);
-                    List<NameValuePair> nameValuePair = new ArrayList<>(4);
-                    nameValuePair.add(new BasicNameValuePair("semcode", lists[0].get(rt).getSemcode()));
-                    nameValuePair.add(new BasicNameValuePair("classnbr", lists[0].get(rt).getClass_number()));
-                    nameValuePair.add(new BasicNameValuePair("from_date", lists[0].get(rt).getFrom_date()));
-                    nameValuePair.add(new BasicNameValuePair("to_date", lists[0].get(rt).getTo_date()));
-                    try {
-                        httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        HttpResponse response = httpClient.execute(httppost);
-                        final String op = EntityUtils.toString(response.getEntity(), "UTF-8");
-                        final List<DetailAtten> jack = parseAtt(op);
-                        detailattlist_subcode x = new detailattlist_subcode();
-                        x.setList(jack);
-                        x.setSubcode(lists[0].get(rt).getClass_number());
-                        all_sub_detail.add(x);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
+                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    HttpResponse response = httpClient.execute(httppost);
+                    final String op = EntityUtils.toString(response.getEntity(), "UTF-8");
+                    final List<DetailAtten> jack = parseAtt(op);
+                    detailattlist_subcode x = new detailattlist_subcode();
+                    x.setList(jack);
+                    x.setSubcode(lists[0].get(rt).getClass_number());
+                    all_sub_detail.add(x);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            insertIndivAttIntoDBS(all_sub_detail);
-            return null;
         }
+        insertIndivAttIntoDBS(all_sub_detail);
+        return null;
     }
+
 
     private List<DetailAtten> parseAtt(String op) {
         Document dr = Jsoup.parse(op);
@@ -125,19 +120,12 @@ public class FullAttendParseStore {
             qt.setTname(all_sub_detail.get(i).getSubcode().trim());
             table_queries.add(qt);
         }
-        new Thread(new Runnable() {
-            public void run() {
-                for (int i = 0; i < all_sub_detail.size(); i++) {
-                    IndivAttGetSet wif = new IndivAttGetSet(context, "table_of_" + all_sub_detail.get(i).getSubcode());//subcode-is classnbr
-                    for (int j = 0; j < all_sub_detail.get(i).getList().size(); j++) {
-                        wif.create(all_sub_detail.get(i).getList().get(j));
-                    }
-                }
-                Log.d("Full Attendance Insert", "Done");
-                new SharedPrefs(context).storeMsg("attendone", "y");
-
+        for (int i = 0; i < all_sub_detail.size(); i++) {
+            IndivAttGetSet wif = new IndivAttGetSet(context, "table_of_" + all_sub_detail.get(i).getSubcode());//subcode-is classnbr
+            for (int j = 0; j < all_sub_detail.get(i).getList().size(); j++) {
+                wif.create(all_sub_detail.get(i).getList().get(j));
             }
-        }).start();
+        }
     }
 
 

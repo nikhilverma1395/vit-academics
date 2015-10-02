@@ -64,7 +64,7 @@ public class MyTeachers extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         httpClient = MySSLSocketFactory.getNewHttpClient();
-        return inflater.inflate(R.layout.login_layout, container, false);
+        return inflater.inflate(R.layout.login_layout_stud, container, false);
     }
 
     public String getwithPERCname(String name) {
@@ -89,12 +89,16 @@ public class MyTeachers extends Fragment {
             @Override
             protected Void doInBackground(Void... params) {
                 final Bitmap bmp = BitmapUrlClient.getBitmapFromURL(student_Login_Captcha_Link, httpClient);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        CAPIMAG.setImageBitmap(bmp);
-                    }
-                });
+                try {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            CAPIMAG.setImageBitmap(bmp);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return null;
 
             }

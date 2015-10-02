@@ -13,7 +13,6 @@ import java.util.List;
 
 import razor.nikhil.database.CBL_Get_Set;
 import razor.nikhil.database.PBL_Get_Set;
-import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.model.Marks_Model;
 import razor.nikhil.model.PBL_Model;
 
@@ -158,16 +157,12 @@ public class MarksParser {
         try {
             final PBL_Get_Set PGS = new PBL_Get_Set(context);
             if (PGS.getEntriesCount() == 0)
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (lo != null) {
-                            for (PBL_Model pm : lo) {
-                                PGS.create(pm);
-                            }
-                        }
+                if (lo != null) {
+                    for (PBL_Model pm : lo) {
+                        PGS.create(pm);
+
                     }
-                }).start();
+                }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -230,22 +225,11 @@ public class MarksParser {
         final CBL_Get_Set wer = new CBL_Get_Set(context);
 
         if (wer.getEntriesCount() == 0) {
-            new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        for (Marks_Model mm : marks_det) {
-                            wer.create(mm);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
+            for (Marks_Model mm : marks_det) {
+                wer.create(mm);
+            }
         }
-        Log.d("Marks Inserted in DBS", "Done");
-        new SharedPrefs(context).storeMsg("marksdone", "y");
     }
-
 
     private List<PBL_Model> parseandPutPBL(List<List<Elements>> pbldeta) {
         List<PBL_Model> lis = new ArrayList<>();

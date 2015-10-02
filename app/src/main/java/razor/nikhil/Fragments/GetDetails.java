@@ -1,5 +1,6 @@
 package razor.nikhil.Fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,12 +10,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-import com.gc.materialdesign.views.ButtonRectangle;
-import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
-import com.github.florent37.materialtextfield.MaterialTextField;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
@@ -23,7 +21,6 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
 
 import razor.nikhil.Http.BitmapUrlClient;
-import razor.nikhil.Http.MySSLSocketFactory;
 import razor.nikhil.Http.PostParent;
 import razor.nikhil.R;
 import razor.nikhil.database.SharedPrefs;
@@ -38,13 +35,11 @@ public class GetDetails extends Fragment {
     private static final String PARENT_POST_URL = "https://academics.vit.ac.in/parent/parent_login_submit.asp";
     private static HttpClient globalClient;
     //Views
-    private EditText regno, dob, parentcell, captcha;
     private ImageView captchaIV;
     private boolean enableit = false;
-    private ButtonRectangle proceed;
-    private ProgressBarCircularIndeterminate progress_bar;
+    private Button proceed;
     private String regno_str = "", dob_str = "", parentcell_str = "", captcha_str = "";
-    private MaterialTextField mtf_reg, mtf_parcell, mtf_dob, mtf_cap;
+    private EditText mtf_reg, mtf_parcell, mtf_dob, mtf_cap;
     private GetDetails gd = null;
 
     public GetDetails() {
@@ -67,38 +62,33 @@ public class GetDetails extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup vg = (ViewGroup) inflater.inflate(R.layout.get_details, container, false);
+        ViewGroup vg = (ViewGroup) inflater.inflate(R.layout.login_layout, container, false);
         return vg;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mtf_reg = (MaterialTextField) view.findViewById(R.id.regno_parent);
-        mtf_parcell = (MaterialTextField) view.findViewById(R.id.parentcell_parent);
-        mtf_dob = (MaterialTextField) view.findViewById(R.id.dob_parent);
-        mtf_cap = (MaterialTextField) view.findViewById(R.id.captcha_parent);
-        regno = (EditText) view.findViewById(R.id.regno_getdet);
-        dob = (EditText) view.findViewById(R.id.dob_getdet);
-        parentcell = (EditText) view.findViewById(R.id.parentcellno_getdet);
-        captcha = (EditText) view.findViewById(R.id.captcha_getdet);
-        proceed = (ButtonRectangle) view.findViewById(R.id.proceed_getdet);
+        mtf_reg = (EditText) view.findViewById(R.id.mainlogin_regno);
+        mtf_parcell = (EditText) view.findViewById(R.id.mainlogin_mobile);
+        mtf_dob = (EditText) view.findViewById(R.id.mainlogin_dob);
+        mtf_cap = (EditText) view.findViewById(R.id.mainlogin_captcha_text);
+        proceed = (Button) view.findViewById(R.id.mainlogin_button);
         proceed.setEnabled(false);
-        captchaIV = (ImageView) view.findViewById(R.id.get_details_captcha_iv);
+        captchaIV = (ImageView) view.findViewById(R.id.mainlogin_captcha_image);
         //Setting up HttpClient
-        globalClient = MySSLSocketFactory.getNewHttpClient();
+        globalClient = getThreadSafeClient();
         //Get Bitmap for captcha
         try {
             new SetCaptcha().execute();//Setting up Captcha is new AsyncTask()
         } catch (Exception e) {
             e.printStackTrace();
         }
-        progress_bar = (ProgressBarCircularIndeterminate) view.findViewById(R.id.progress_getdet);
         SharedPrefs pref = new SharedPrefs(getActivity());
-        setText(regno, pref.getMsg(SharedPrefs.PREFIX_REGNO));
-        setText(dob, pref.getMsg(SharedPrefs.PREFIX_DOB));
-        setText(parentcell, pref.getMsg(SharedPrefs.PREFIX_PARENTCELL));
-        setText(captcha, "");
-        regno.addTextChangedListener(new TextWatcher() {
+        setText(mtf_reg, pref.getMsg(SharedPrefs.PREFIX_REGNO));
+        setText(mtf_dob, pref.getMsg(SharedPrefs.PREFIX_DOB));
+        setText(mtf_parcell, pref.getMsg(SharedPrefs.PREFIX_PARENTCELL));
+        setText(mtf_cap, "");
+        mtf_reg.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -107,10 +97,12 @@ public class GetDetails extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String str = charSequence.toString();
-                if (str != "")
+                if (str != "" && str.length() == 9)
                     enableit = true;
-                else
+                else {
                     enableit = false;
+                    mtf_reg.setError("Invalid Reg.No. Format(must be 9 letters)!");
+                }
             }
 
             @Override
@@ -118,7 +110,7 @@ public class GetDetails extends Fragment {
 
             }
         });
-        dob.addTextChangedListener(new TextWatcher() {
+        mtf_dob.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -127,10 +119,12 @@ public class GetDetails extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String str = charSequence.toString();
-                if (str != "")
+                if (str != "" && str.length() == 8)
                     enableit = true;
-                else
+                else {
                     enableit = false;
+                    mtf_dob.setError("Invalid DOB Format(ex: ddmmyyyy - 16111994)!");
+                }
             }
 
             @Override
@@ -138,7 +132,7 @@ public class GetDetails extends Fragment {
 
             }
         });
-        parentcell.addTextChangedListener(new TextWatcher() {
+        mtf_parcell.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -149,15 +143,16 @@ public class GetDetails extends Fragment {
                 String str = charSequence.toString();
                 if (str != "")
                     enableit = true;
-                else
+                else {
                     enableit = false;
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
             }
         });
-        captcha.addTextChangedListener(new TextWatcher() {
+        mtf_cap.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -166,10 +161,12 @@ public class GetDetails extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String str = charSequence.toString();
-                if (str != "")
+                if (str != "" && str.length() == 6)
                     enableit = true;
-                else
+                else {
                     enableit = false;
+                    mtf_cap.setError("Invalid Captcha Format(must be 6 letters)!");
+                }
                 if (enableit) {
                     proceed.setEnabled(true);
                 } else {
@@ -179,31 +176,24 @@ public class GetDetails extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ProgressDialog dialog = ProgressDialog.show(getActivity(), "Getting Data",
+                        "Wait", true);
                 storeAndPOST();
-                new PostParent(regno_str, dob_str, parentcell_str, captcha_str, globalClient, getActivity());
-                new GetReturn().execute();
+                new PostParent(regno_str, dob_str, parentcell_str, captcha_str, globalClient, getActivity(), gd, dialog);
             }
         });
     }
 
     private void storeAndPOST() {
-        regno_str = regno.getText().toString().trim();
-        dob_str = dob.getText().toString().trim();
-        parentcell_str = parentcell.getText().toString().trim();
-        captcha_str = captcha.getText().toString().trim();
-        mtf_dob.setVisibility(View.GONE);
-        mtf_parcell.setVisibility(View.GONE);
-        mtf_reg.setVisibility(View.GONE);
-        mtf_cap.setVisibility(View.GONE);
-        captchaIV.setVisibility(View.GONE);
-        proceed.setVisibility(View.GONE);
-        progress_bar.setVisibility(View.VISIBLE);
+        regno_str = mtf_reg.getText().toString().trim();
+        dob_str = mtf_dob.getText().toString().trim();
+        parentcell_str = mtf_parcell.getText().toString().trim();
+        captcha_str = mtf_cap.getText().toString().trim();
         SharedPrefs spref = new SharedPrefs(getActivity());
         spref.storeMsg(SharedPrefs.PREFIX_REGNO, regno_str);
         spref.storeMsg(SharedPrefs.PREFIX_DOB, dob_str);
@@ -238,29 +228,5 @@ public class GetDetails extends Fragment {
             }
             return null;
         }
-    }
-
-    private class GetReturn extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            while (true) {
-                String mark = new SharedPrefs(getActivity()).getMsg("marksdone");
-                String att = new SharedPrefs(getActivity()).getMsg("ttdone");
-                String tt = new SharedPrefs(getActivity()).getMsg("attendone");
-                if ((mark == "y" && att == "y" && tt == "y") || (mark.equals("y") && att.equals("y") && tt.equals("y"))) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress_bar.setVisibility(View.GONE);
-                            if (gd.isAdded() && gd != null)
-                                getActivity().getSupportFragmentManager()
-                                        .beginTransaction().remove(gd).commit();
-                        }
-                    });
-                }
-                return null;
-            }
-        }
-
     }
 }

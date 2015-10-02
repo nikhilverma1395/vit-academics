@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.TreeMap;
 
 import razor.nikhil.database.MTWTHgetset;
-import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.model.Model_Daywise;
 
 /**
@@ -28,7 +27,6 @@ public class StoreTimeTable {
             for (int u = 0; u < alldayslist.get(r).size(); u++) {
                 Model_Daywise day = alldayslist.get(r).get(u);
                 String timef = day.getSubtimings().trim().toLowerCase();
-                Log.d("time", timef);
                 String time = timef.substring(0, 2);
                 if (time.contains(":"))
                     time = time.substring(0, 1);
@@ -40,7 +38,6 @@ public class StoreTimeTable {
                         hk.put(tim, day);//as if its 12:00 pm
                     else hk.put(tim + 20, day);// just a basic counter 20 for pm
                 } else {
-                    Log.d(" Not possible\t", timef);
                 }
             }
             List<Model_Daywise> val = new ArrayList<>(hk.values());
@@ -84,10 +81,9 @@ public class StoreTimeTable {
                     }
 
                 }
+                Log.d("TR","sdddddddddd");
             }
         }
-        Log.d("Sorted TT In Database", "Done");
-        new SharedPrefs(context).storeMsg("ttdone", "y");
     }
 
 

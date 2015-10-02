@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ public class TimeTableVP extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.mvp_layout, container, false);
-
     }
 
     @Override
@@ -40,16 +40,22 @@ public class TimeTableVP extends Fragment {
             public Fragment getItem(int position) {
                 switch (position) {
                     case 0:
+                        Log.d("Size 0", MainActivity.todayslist_m.size() + "");
                         return new TimeTableRV(MainActivity.todayslist_m);
                     case 1:
+                        Log.d("Size 1", MainActivity.todayslist_t.size() + "");
                         return new TimeTableRV(MainActivity.todayslist_t);
                     case 2:
+                        Log.d("Size 2", MainActivity.todayslist_w.size() + "");
                         return new TimeTableRV(MainActivity.todayslist_w);
                     case 3:
+                        Log.d("Size 3", MainActivity.todayslist_th.size() + "");
                         return new TimeTableRV(MainActivity.todayslist_th);
                     case 4:
+                        Log.d("Size 4", MainActivity.todayslist_fr.size() + "");
                         return new TimeTableRV(MainActivity.todayslist_fr);
                     default:
+                        Log.d("Size def", MainActivity.todayslist_m.size() + "");
                         return new TimeTableRV(MainActivity.todayslist_m);
                 }
             }

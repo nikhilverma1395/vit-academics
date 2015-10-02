@@ -1,8 +1,9 @@
 package razor.nikhil.Http;
 
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import org.apache.http.HttpException;
@@ -16,8 +17,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import razor.nikhil.Activity.MainActivity;
 import razor.nikhil.Config;
+import razor.nikhil.Fragments.GetDetails;
 import razor.nikhil.database.GradeGetSet;
 import razor.nikhil.database.SharedPrefs;
 import razor.nikhil.database.StoreAndGetImage;
@@ -37,12 +38,18 @@ public class PostParent {
     private final String fall_sem = "FS";//July-Nov
     private final String summer_sem = "SS";//June
     private final String tri_sem = "TS";//Dec
+    private final ProgressDialog dialog;
+    private final GetDetails frag;
     private String whichsem = "";
     private String uname, dob, ward, captchatxt;
     private HttpClient httpClient;
-    private Context context;
+    private FragmentActivity context;
+    Thread[] threads;
 
-    public PostParent(String reg, String dob, String cell, String capt, HttpClient htp, Context ctxt) {
+    public PostParent(String reg, String dob, String cell, String capt, HttpClient htp, FragmentActivity ctxt, GetDetails frag, ProgressDialog dialog) {
+        threads = new Thread[5];
+        this.dialog = dialog;
+        this.frag = frag;
         this.captchatxt = capt;
         this.dob = dob;
         this.httpClient = htp;
@@ -87,32 +94,42 @@ public class PostParent {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }//FacAdv Thread
             try {
-                final String fadv = Http.getData(FACULTY_DETAILS, httpClient);
-                Bitmap facpic = null;
-                try {
-                    facpic = BitmapUrlClient.getBitmapFromURL(FAC_PHOTO, httpClient);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                if (facpic == null) {
-                    Log.d("Null", "Faculty Adv Image is Null");
-                }
-                String storedpath = null;
-                try {
-                    storedpath = new StoreAndGetImage(context).saveToInternalSorage(facpic, Config.FACULTY_IMAGE_NAME);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.d("Path", storedpath);
-                new SharedPrefs(context).storeMsg(Config.FADV_PIcKEY, storedpath);
-                parseFaculty(fadv);
+                Runnable r1 = new Runnable() {
+                    public void run() {
+                        final String fadv = Http.getData(FACULTY_DETAILS, httpClient);
+                        Bitmap facpic = null;
+                        try {
+                            facpic = BitmapUrlClient.getBitmapFromURL(FAC_PHOTO, httpClient);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (facpic == null) {
+                            Log.d("Null", "Faculty Adv Image is Null");
+                        }
+                        String storedpath = null;
+                        try {
+                            storedpath = new StoreAndGetImage(context).saveToInternalSorage(facpic, Config.FACULTY_IMAGE_NAME);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        new SharedPrefs(context).storeMsg(Config.FADV_PIcKEY, storedpath);
+                        try {
+                            parseFaculty(fadv);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                threads[0] = new Thread(r1);
+                threads[0].start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            //Grades Thread
             try {
-                Runnable runnable = new Runnable() {
+                Runnable r2 = new Runnable() {
                     public void run() {
                         if (!(new GradeGetSet(context).getEntriesCount() == 0)) {
                             Log.d("Grades Data Already", "Done");
@@ -122,45 +139,54 @@ public class PostParent {
                         new GradeParser(context).parser(grades);
                     }
                 };
-                new Thread(runnable).start();
+                threads[1] = new Thread(r2);
+                threads[1].start();
             } catch (Exception e) {
                 e.printStackTrace();
 
             }
-
-
+            //TT Thread
             try {
-                new Thread(new Runnable() {
+                threads[2] = new Thread(new Runnable() {
                     public void run() {
                         final String timetableHTML = Http.getData(TIMETABLE_URL + whichsem, httpClient);
                         new ParseTimeTable(context).parser(timetableHTML);
-                        Log.d("parsett", "Done");
                     }
-                }).start();
+                });
+                threads[2].start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            //Attendance Thread
             try {
-                new Thread(new Runnable() {
+                threads[3] = new Thread(new Runnable() {
                     public void run() {
                         final String attendanceHTML = Http.getData(ATTENDANCE_URL + whichsem, httpClient);
                         new AttendanceParser(context, httpClient).parse(attendanceHTML);
-                        Log.d("atten", "Done");
                     }
-                }).start();
+                });
+                threads[3].start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            //Marks Thread
             try {
-                new Thread(new Runnable() {
+                threads[4] = new Thread(new Runnable() {
                     public void run() {
                         final String marksHTML = Http.getData(MARKS_URL + whichsem, httpClient);
                         new MarksParser(context, marksHTML);
-                        Log.d("marks", "Done");
                     }
-                }).start();
+                });
+                threads[4].start();
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+            for (Thread th : threads) {
+                try {
+                    th.join();//waits fot thread to exit
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             return null;
         }
@@ -168,18 +194,15 @@ public class PostParent {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            while (true) {
-                String mark = new SharedPrefs(context).getMsg("marksdone");
-                String att = new SharedPrefs(context).getMsg("ttdone");
-                String tt = new SharedPrefs(context).getMsg("attendone");
-                if (mark == "y" && att == "y" && tt == "y") {
-                    Log.d("Yepp", "Done");
-                    MainActivity ob = new MainActivity();
-                    ob.setMTWTFLists(context);
-                    //    ob.removeFrag(context);
-                    return;
-                }
+            Log.d("Done Now", "Done");
+            dialog.setMessage("Finished");
+            dialog.dismiss();
+            try {
+                context.getSupportFragmentManager().beginTransaction().remove(frag);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         }
 
     }
