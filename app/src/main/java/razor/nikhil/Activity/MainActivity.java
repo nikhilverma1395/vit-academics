@@ -26,12 +26,14 @@ import java.util.Map;
 import razor.nikhil.Fragments.AptAtten;
 import razor.nikhil.Fragments.AptAttenList;
 import razor.nikhil.Fragments.CgpaFragment;
+import razor.nikhil.Fragments.CoursePage;
 import razor.nikhil.Fragments.FacultyAdvFrag;
 import razor.nikhil.Fragments.GetDetails;
 import razor.nikhil.Fragments.GetFacDataStudLogin;
 import razor.nikhil.Fragments.GetFacMessage;
 import razor.nikhil.Fragments.GetFacMsgList;
 import razor.nikhil.Fragments.GradeFragment;
+import razor.nikhil.Fragments.LeavePre;
 import razor.nikhil.Fragments.LeaveRequest;
 import razor.nikhil.Fragments.MyTeachers;
 import razor.nikhil.Fragments.MyTeachersList;
@@ -61,7 +63,7 @@ import razor.nikhil.model.detailattlist_subcode;
 
 public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.HeaderItemClicked {
 
-    String TITLES[] = {"Courses", "Faculty Info", "Enter Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "CGPA Calculator", "My Teachers", "Messages", "APT Attendance"};
+    String TITLES[] = {"Courses", "Faculty Info", "Enter Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "CGPA Calculator", "My Teachers", "Messages", "APT Attendance", "Course Page", "Leave Request Pre"};
     int ICONS[] = {R.mipmap.user_icon,
             R.mipmap.assignment,
             R.mipmap.tick_icon,
@@ -74,6 +76,9 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
             R.mipmap.book,
             R.mipmap.ic_dns,
             R.mipmap.bug_report,
+            R.mipmap.ic_language,
+            R.mipmap.book,
+            R.mipmap.ic_dns,
     };
     public static List<Model_Slots> list;
     private static GetDetails gd;
@@ -327,6 +332,13 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
                     fragment = AptAtten.newInstance();
                 else fragment = AptAttenList.newInstance(msg.getAllCredentials());
                 break;
+            case 12:
+                fragment = CoursePage.newInstance();
+                break;
+            case 13:
+                fragment = LeavePre.newInstance();
+                break;
+
             default:
                 displayView(1);
                 break;

@@ -29,7 +29,6 @@ import java.util.List;
 
 import razor.nikhil.Http.BitmapUrlClient;
 import razor.nikhil.Http.Http;
-import razor.nikhil.Http.MySSLSocketFactory;
 import razor.nikhil.Http.ParseTimeTable;
 import razor.nikhil.R;
 import razor.nikhil.database.MyTeachGS;
@@ -63,11 +62,11 @@ public class MyTeachers extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        httpClient = MySSLSocketFactory.getNewHttpClient();
+        httpClient = GetDetails.getThreadSafeClient();
         return inflater.inflate(R.layout.login_layout_stud, container, false);
     }
 
-    public String getwithPERCname(String name) {
+    public static String getwithPERCname(String name) {
         char cr[] = name.toCharArray();
         name = "";
         for (char a : cr) {
@@ -88,12 +87,18 @@ public class MyTeachers extends Fragment {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                final Bitmap bmp = BitmapUrlClient.getBitmapFromURL(student_Login_Captcha_Link, httpClient);
+                Bitmap bmp = null;
+                try {
+                    bmp = BitmapUrlClient.getBitmapFromURL(student_Login_Captcha_Link, httpClient);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                final Bitmap bmpq = bmp;
                 try {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            CAPIMAG.setImageBitmap(bmp);
+                            CAPIMAG.setImageBitmap(bmpq);
                         }
                     });
                 } catch (Exception e) {

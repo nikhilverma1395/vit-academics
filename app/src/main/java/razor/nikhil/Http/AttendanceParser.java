@@ -20,7 +20,7 @@ import razor.nikhil.model.AttendBrief;
 public class AttendanceParser {
     private Context context;
     private static List<AttenDetail> dates_sem_codes;
-    private HttpClient httpClient;
+    private static HttpClient httpClient;
 
     public AttendanceParser(Context ctxt, HttpClient http) {
         this.context = ctxt;
@@ -35,11 +35,11 @@ public class AttendanceParser {
         for (int t = 1; t < subs.size(); t++) {
             final Elements al = subs.get(t).getElementsByTag("td");
             AttendBrief ab = new AttendBrief();
-            ab.setSubcode(al.get(1).html().toString());
-            ab.setAttended(al.get(6).html().toString());
-            ab.setTotal(al.get(7).html().toString());
-            ab.setPercent(al.get(8).html().toString());
-            ab.setSubtype(al.get(3).html().toString());
+            ab.setSubcode(al.get(1).html().trim());
+            ab.setAttended(al.get(6).html().trim());
+            ab.setTotal(al.get(7).html().trim());
+            ab.setPercent(al.get(8).html().trim());
+            ab.setSubtype(al.get(3).html().trim());
             new Attend_GetSet(context).create(ab);
             Elements dates = al.get(9).getElementsByTag("input");
             AttenDetail dd = new AttenDetail();

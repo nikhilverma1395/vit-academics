@@ -6,22 +6,23 @@ import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-import org.apache.http.HttpException;
 import org.apache.http.client.HttpClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.List;
 
 import razor.nikhil.Config;
 import razor.nikhil.Fragments.GetDetails;
+import razor.nikhil.R;
 import razor.nikhil.database.GradeGetSet;
 import razor.nikhil.database.SharedPrefs;
+import razor.nikhil.database.Slots_GetSet;
 import razor.nikhil.database.StoreAndGetImage;
+import razor.nikhil.model.Model_Slots;
 
 /**
  * Created by Nikhil Verma on 9/12/2015.
@@ -34,28 +35,20 @@ public class PostParent {
     private final String GRADE_URL = "https://academics.vit.ac.in/parent/student_history.asp";
     private final String FAC_PHOTO = "https://academics.vit.ac.in/parent/emp_photo.asp";
     private final String FACULTY_DETAILS = "https://academics.vit.ac.in/parent/fa_view.asp";
-    private final String winter_sem = "WS";//Jan-May
-    private final String fall_sem = "FS";//July-Nov
-    private final String summer_sem = "SS";//June
-    private final String tri_sem = "TS";//Dec
+    private static final String winter_sem = "WS";//Jan-May
+    private static final String fall_sem = "FS";//July-Nov
+    private static final String summer_sem = "SS";//June
+    private static final String tri_sem = "TS";//Dec
     private final ProgressDialog dialog;
     private final GetDetails frag;
-    private String whichsem = "";
+    private static String whichsem = "";
     private String uname, dob, ward, captchatxt;
     private HttpClient httpClient;
     private FragmentActivity context;
     Thread[] threads;
+    public String[] TNAMES;
 
-    public PostParent(String reg, String dob, String cell, String capt, HttpClient htp, FragmentActivity ctxt, GetDetails frag, ProgressDialog dialog) {
-        threads = new Thread[5];
-        this.dialog = dialog;
-        this.frag = frag;
-        this.captchatxt = capt;
-        this.dob = dob;
-        this.httpClient = htp;
-        this.uname = reg;
-        this.ward = cell;
-        context = ctxt;
+    public static String getSem() {
         //To get Sem-code
         Calendar c = Calendar.getInstance();
         int month = c.get(Calendar.MONTH);
@@ -74,27 +67,30 @@ public class PostParent {
         if (month >= 6 && month <= 10) {
             whichsem = fall_sem;
         }
+        return whichsem;
+    }
 
+    public PostParent(String reg, String dob, String cell, String capt, HttpClient htp, FragmentActivity ctxt, GetDetails frag, ProgressDialog dialog) {
+        threads = new Thread[5];
+        this.dialog = dialog;
+        this.frag = frag;
+        this.captchatxt = capt;
+        this.dob = dob;
+        this.httpClient = htp;
+        this.uname = reg;
+        this.ward = cell;
+        context = ctxt;
+        getSem();
         new ParentLoginPost().execute(PARENT_LOGIN_POST_URL);
     }
 
 
-    private class ParentLoginPost extends AsyncTask<String, Void, Void> {
+    private class ParentLoginPost extends AsyncTask<String, String[], String[]> {
 
         @Override
-        protected Void doInBackground(String... voids) {
-            HashMap<String, String> headers = new HashMap<>();
-            headers.put("wdregno", uname);
-            headers.put("wdpswd", dob);
-            headers.put("wdmobno", ward);
-            headers.put("vrfcd", captchatxt);
-            try {
-                Http.postMethod(voids[0], headers, httpClient);
-            } catch (HttpException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }//FacAdv Thread
+        protected String[] doInBackground(String... voids) {
+            Logins.ParentLogin(httpClient, uname, dob, ward, captchatxt);
+            //FacAdv Thread
             try {
                 Runnable r1 = new Runnable() {
                     public void run() {
@@ -162,7 +158,11 @@ public class PostParent {
                 threads[3] = new Thread(new Runnable() {
                     public void run() {
                         final String attendanceHTML = Http.getData(ATTENDANCE_URL + whichsem, httpClient);
-                        new AttendanceParser(context, httpClient).parse(attendanceHTML);
+                        try {
+                            new AttendanceParser(context, httpClient).parse(attendanceHTML);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 threads[3].start();
@@ -174,7 +174,11 @@ public class PostParent {
                 threads[4] = new Thread(new Runnable() {
                     public void run() {
                         final String marksHTML = Http.getData(MARKS_URL + whichsem, httpClient);
-                        new MarksParser(context, marksHTML);
+                        try {
+                            new MarksParser(context, marksHTML);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 threads[4].start();
@@ -183,28 +187,40 @@ public class PostParent {
             }
             for (Thread th : threads) {
                 try {
-                    th.join();//waits fot thread to exit
+                    if (th != null)
+                        th.join();//waits fot thread to exit
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            return null;
+            TNAMES = tnames();
+            return TNAMES;
         }
 
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(String[] aVoid) {
             Log.d("Done Now", "Done");
             dialog.setMessage("Finished");
             dialog.dismiss();
             try {
-                context.getSupportFragmentManager().beginTransaction().remove(frag);
+                context.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, PostStudFragPre.newInstance(aVoid)).commit();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
 
+    }
+
+    public String[] tnames() {
+        List<Model_Slots> mo = new Slots_GetSet(context).getAllCredentials();
+        String[] tnames = new String[mo.size()];
+        int y = 0;
+        for (Model_Slots ms : mo) {
+            tnames[y++] = ms.getTeacher();
+        }
+        return tnames;
     }
 
     private void parseFaculty(String fadv) {

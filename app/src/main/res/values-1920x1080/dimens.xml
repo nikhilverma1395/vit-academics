@@ -71,4 +71,9 @@
     <!--Myteachers-->
     <dimen name="padding_myt_row">8dp</dimen>
     <dimen name="textSize_myt_row">16sp</dimen>
+    <!--Leave-->
+    <dimen name="leave_pre_button_width">200dp</dimen>
+    <dimen name="leave_pre_button_height">60dp</dimen>
+    <dimen name="leave_pre_textSize_Button">5sp</dimen>
+    <dimen name="spinner_width_leave_apply">200dp</dimen>
 </resources>

@@ -37,5 +37,9 @@ public class APThelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+
+    public String getTABLE_CREATE() {
+        return TABLE_CREATE;
+    }
 }
 

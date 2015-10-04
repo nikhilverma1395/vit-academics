@@ -47,7 +47,7 @@
             android:drawableLeft="@drawable/password"
             android:drawablePadding="30.0dp"
             android:hint="Password"
-            android:inputType="text"
+            android:inputType="textPassword"
             android:paddingBottom="25.0dp"
             android:paddingLeft="15.0dp"
             android:singleLine="true"

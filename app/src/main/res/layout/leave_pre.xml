@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff2b2941"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/view_leave_req"
+        style="@style/MyButton"
+        android:layout_width="@dimen/leave_pre_button_width"
+        android:layout_height="@dimen/leave_pre_button_height"
+        android:layout_margin="10dp"
+        android:text="View Leave Requests"
+        android:textColor="#ff2e2e2e" />
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/apply_leave"
+        style="@style/MyButton"
+        android:layout_width="@dimen/leave_pre_button_width"
+        android:layout_height="@dimen/leave_pre_button_height"
+        android:layout_margin="10dp"
+        android:text="Apply for Leave"
+        android:textColor="#ff2e2e2e" />
+
+</LinearLayout>

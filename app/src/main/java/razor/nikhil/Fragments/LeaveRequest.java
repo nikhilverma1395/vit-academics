@@ -3,6 +3,7 @@ package razor.nikhil.Fragments;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,7 +18,10 @@ import android.widget.TextView;
 import org.apache.http.HttpException;
 import org.apache.http.client.HttpClient;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 import razor.nikhil.Http.BitmapUrlClient;
@@ -30,6 +34,8 @@ import razor.nikhil.R;
  */
 public class LeaveRequest extends Fragment {
     private String POST_LINK_PRE = "https://academics.vit.ac.in/student/leave_request.asp";
+    private String GET_SYLL = "https://academics.vit.ac.in/student/syllabus_view.asp?shby=0&crcd=BIF304";
+    private String POST_SYLL = "https://academics.vit.ac.in/student/syllabus_file.asp";
     private String MAIN_POST_LINK = "https://academics.vit.ac.in/student/leave_request_submit.asp";
     private ImageView cap;
     private EditText et;
@@ -111,43 +117,74 @@ public class LeaveRequest extends Fragment {
             map.put("apply", "11934\\FA");
             map.put("lvtype", "EY");
             //ot
-            map.put("exitdate", "24-Sep-2015");
+            map.put("exitdate", "24-Oct-2015");
 //            map.put("exitdate", "21-Sep-2015");
             map.put("sttime_hh", "2");//After 7am defore 6pm , ,max diff 6 hrs
             map.put("sttime_mm", "30");
             map.put("frm_timetype", "PM");
-            map.put("reentry_date", "26-Sep-2015");
+            map.put("reentry_date", "26-Oct-2015");
             map.put("endtime_hh", "4");
             map.put("endtime_mm", "30");
             map.put("to_timetype", "PM");
 
             map.put("place", "Vellore ");
             map.put("reason", "Birthay ");
-            String data = "";
+            //Corrected the error
+            map.put("requestcmd", "Apply");//requires this Also , as the name for submit is changed
 
-            String huy = "";
             try {
                 Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//need this as a pre-req
-                Http.getData("https://academics.vit.ac.in/student/student_leave_report.asp", httpClient);//3nd pre-reqr
                 final String weq = Http.getData("https://academics.vit.ac.in/student/leave_apply_dt.asp?x=%20&lvtyp=EY", httpClient);//2nd pre-req
                 final String we = Http.getData(POST_LINK_PRE, httpClient);//3nd pre-reqr
                 Http.getData("https://academics.vit.ac.in/student/leave_apply_dt.asp?x=%20&lvtyp=EY", httpClient);//2nd pre-req
                 Http.getData(POST_LINK_PRE, httpClient);
-                data = Http.postMethod(MAIN_POST_LINK, map, httpClient);
-                final String finalData = data;
+                final String data = Http.postMethod(MAIN_POST_LINK, map, httpClient);
+                //final String finalData = Http.getData(GET_SYLL, httpClient);
+//                map = new HashMap<>();//cleared
+//                map.put("crscd", "BIF304");
+//                map.put("crstp", "TH");
+//                map.put("version", "1");
+//                map.put("sybcmd", "Download");
+//                final InputStream stream = Http.postMethodStream(POST_SYLL, map, httpClient);
+                // saveFile(stream);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        log.setText(we + "\n\n" + weq + "\n\n\n" + finalData);
+                        //          Toast.makeText(getActivity(), "File Saved in Root Directory as\t" + "BIF304_Syllabus.pdf", Toast.LENGTH_SHORT).show();
                     }
                 });
-            } catch (HttpException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        log.setText(we + "\n\n" + weq + "\n\n\n" + data);
+                    }
+                });
+            } catch (Exception e) {
+                Log.d("Exception", e.toString());
                 e.printStackTrace();
             }
-            Log.d("Data", data);
             return null;
+        }
+    }
+
+    private void saveFile(InputStream is) {
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(new File(Environment.getExternalStorageDirectory(), "BIF304_Syllabus.pdf"));
+            int read = 0;
+            byte[] buffer = new byte[32768];
+            while ((read = is.read(buffer)) > 0) {
+                fos.write(buffer, 0, read);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            fos.close();
+            is.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

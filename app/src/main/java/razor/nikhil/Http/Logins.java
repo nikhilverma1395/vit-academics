@@ -17,7 +17,10 @@ import razor.nikhil.database.SharedPrefs;
  */
 
 public class Logins {
-    public static HttpClient ParentLogin(String captchaText, HttpClient httpClient, String uname, String dob, String ward, String captcha) {
+    public static String isStudLogin = null;
+    public static String isParLogin = null;
+
+    public static HttpClient ParentLogin( HttpClient httpClient, String uname, String dob, String ward, String captcha) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("wdregno", uname);
         headers.put("wdpswd", dob);
@@ -31,16 +34,18 @@ public class Logins {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (dat.contains("Logout"))
+        if (dat.contains("Logout")) {
+            isParLogin = "y";
             Log.d("Parent Login", "Success");
-        else Log.d("ParentLogErr-PostData", dat);
+        } else Log.d("ParentLogErr-PostData", dat);
         return httpClient;
     }
 
-    public static HttpClient StudentLogin(String captchaText, HttpClient httpClient) {
+    public static HttpClient StudentLogin(String reg, String pass, String captchaText, HttpClient httpClient) {
         HashMap<String, String> headers = new HashMap<>();
-        headers.put("regno", "13BCE0037");
-        headers.put("passwd", "supermariogotze");
+        Log.d("Cred", reg + "\t" + pass + "\t" + captchaText);
+        headers.put("regno", reg);
+        headers.put("passwd", pass);
         headers.put("vrfcd", captchaText);
         String dat = "";
         try {
@@ -50,9 +55,13 @@ public class Logins {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (dat.contains("Welcome"))
+        if (dat.contains("Welcome")) {
+            isStudLogin = "y";
             Log.d("Student Login", "Success");
-        else Log.d("StudentLogErr-PostData", dat);
+        } else {
+            Log.d("StudentLogErr-PostData", dat);
+            isStudLogin = "n";
+        }
         return httpClient;
     }
 

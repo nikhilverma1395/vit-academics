@@ -17,9 +17,16 @@
         <item name="android:navigationBarColor" tools:targetApi="21">@color/navigationBarColor
         </item>
     </style>
+
     <style name="facinfodialog">
         <item name="android:windowEnterAnimation">@anim/snackbar_show_animation</item>
         <item name="android:windowExitAnimation">@anim/snackbar_hide_animation</item>
+    </style>
+
+    <style name="MyButton">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">@dimen/leave_pre_textSize_Button</item>
+        <item name="android:background">@color/button_def</item>
     </style>
 
 </resources>

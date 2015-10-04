@@ -70,20 +70,27 @@ public class IndivAttGetSet {
     }
 
 
-    public void create(DetailAtten model) {
+    public void create(List<DetailAtten> LIST) {
         open();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DetailAttenColumnNames.sno, model.getNo());
-        contentValues.put(DetailAttenColumnNames.date, model.getDay());
-        contentValues.put(DetailAttenColumnNames.unit, model.getAttend_unit());
-        long id = sqLiteDatabase.insert(TABLE, null, contentValues);
-        model.setId(id);
+        for (DetailAtten model : LIST) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DetailAttenColumnNames.sno, model.getNo());
+            contentValues.put(DetailAttenColumnNames.date, model.getDay());
+            contentValues.put(DetailAttenColumnNames.unit, model.getAttend_unit());
+            long id = sqLiteDatabase.insert(TABLE, null, contentValues);
+            model.setId(id);
+        }
         close();
     }
 
     public void close() {
         Log.i(LOG_CAT, "Database closed");
-        sqLiteOpenHelper.close();
+        try {
+            if (sqLiteDatabase.isOpen())
+                sqLiteDatabase.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

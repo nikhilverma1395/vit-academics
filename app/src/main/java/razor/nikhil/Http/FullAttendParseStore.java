@@ -1,6 +1,7 @@
 package razor.nikhil.Http;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -42,41 +43,71 @@ public class FullAttendParseStore {
 
     }
 
-    protected Void doInBackground(List<AttenDetail>... lists) {
-        HttpPost httppost = null;
-
+    protected Void doInBackground(final List<AttenDetail> lists) {
+        createTables(lists);
+        final HttpPost httppost = null;
+        Thread threads[] = new Thread[lists.size()];
         all_sub_detail = new ArrayList<>();
-        for (int rt = 0; rt < lists[0].size(); rt++) {
-            try {
-                httppost = new HttpPost(DETAIL_ATTENDANCE_POST_URL);
-                List<NameValuePair> nameValuePair = new ArrayList<>(4);
-                nameValuePair.add(new BasicNameValuePair("semcode", lists[0].get(rt).getSemcode()));
-                nameValuePair.add(new BasicNameValuePair("classnbr", lists[0].get(rt).getClass_number()));
-                nameValuePair.add(new BasicNameValuePair("from_date", lists[0].get(rt).getFrom_date()));
-                nameValuePair.add(new BasicNameValuePair("to_date", lists[0].get(rt).getTo_date()));
-                try {
-                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+        for (int t = 0; t < lists.size(); t++) {
+            final int rt = t;
+            threads[rt] = new Thread(new Runnable() {
+                public void run() {
+                    getIndivAttinDiffThreads(lists.get(rt), httppost);
                 }
+            });
+            threads[rt].start();
+        }
+        for (Thread der : threads) {
+            if (der != null)
                 try {
-                    HttpResponse response = httpClient.execute(httppost);
-                    final String op = EntityUtils.toString(response.getEntity(), "UTF-8");
-                    final List<DetailAtten> jack = parseAtt(op);
-                    detailattlist_subcode x = new detailattlist_subcode();
-                    x.setList(jack);
-                    x.setSubcode(lists[0].get(rt).getClass_number());
-                    all_sub_detail.add(x);
+                    der.join();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+        }
+        return null;
+    }
 
+    private void createTables(List<AttenDetail> lists) {
+        for (int i = 0; i < lists.size(); i++) {
+            String cnum = lists.get(i).getClass_number().trim();
+            final String TABLE_Create = "CREATE TABLE " + " table_of_" + cnum + " (" +
+                    "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "sno" + " TEXT, " +
+                    "date" + " TEXT, " +
+                    "unit" + " TEXT " + ");";
+            Query_TableName qt = new Query_TableName();
+            qt.setQuery(TABLE_Create);
+            qt.setTname(cnum);
+            table_queries.add(qt);
+        }
+    }
+
+    private void getIndivAttinDiffThreads(AttenDetail lists, HttpPost httppost) {
+        try {
+            httppost = new HttpPost(DETAIL_ATTENDANCE_POST_URL);
+            List<NameValuePair> nameValuePair = new ArrayList<>(4);
+            nameValuePair.add(new BasicNameValuePair("semcode", lists.getSemcode()));
+            nameValuePair.add(new BasicNameValuePair("classnbr", lists.getClass_number()));
+            nameValuePair.add(new BasicNameValuePair("from_date", lists.getFrom_date()));
+            nameValuePair.add(new BasicNameValuePair("to_date", lists.getTo_date()));
+            try {
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            try {
+                HttpResponse response = httpClient.execute(httppost);
+                final String op = EntityUtils.toString(response.getEntity(), "UTF-8");
+                final List<DetailAtten> jack = parseAtt(op);
+                insertIndivAttIntoDBS(jack, lists.getClass_number());
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        insertIndivAttIntoDBS(all_sub_detail);
-        return null;
     }
 
 
@@ -108,25 +139,9 @@ public class FullAttendParseStore {
     }
 
 
-    private void insertIndivAttIntoDBS(final List<detailattlist_subcode> all_sub_detail) {
-        for (int i = 0; i < all_sub_detail.size(); i++) {
-            final String TABLE_Create = "CREATE TABLE " + " table_of_" + all_sub_detail.get(i).getSubcode().trim() + " (" +
-                    "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "sno" + " TEXT, " +
-                    "date" + " TEXT, " +
-                    "unit" + " TEXT " + ");";
-            Query_TableName qt = new Query_TableName();
-            qt.setQuery(TABLE_Create);
-            qt.setTname(all_sub_detail.get(i).getSubcode().trim());
-            table_queries.add(qt);
-        }
-        for (int i = 0; i < all_sub_detail.size(); i++) {
-            IndivAttGetSet wif = new IndivAttGetSet(context, "table_of_" + all_sub_detail.get(i).getSubcode());//subcode-is classnbr
-            for (int j = 0; j < all_sub_detail.get(i).getList().size(); j++) {
-                wif.create(all_sub_detail.get(i).getList().get(j));
-            }
-        }
+    private void insertIndivAttIntoDBS(final List<DetailAtten> all_sub_detail, String cnum) {
+        IndivAttGetSet wif = new IndivAttGetSet(context, "table_of_" + cnum);//subcode-is classnbr
+        wif.create(all_sub_detail);
+        Log.e("Done For ", cnum);
     }
-
-
 }

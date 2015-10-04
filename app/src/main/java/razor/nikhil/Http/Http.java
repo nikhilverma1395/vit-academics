@@ -29,6 +29,8 @@ import java.util.Map;
 
 
 public class Http {
+    public static String CRED_ERR = "credErr";
+    public static String NET_ERR = "NETErr";
 
     public static String getData(String url, HttpClient client) {
         HttpGet request = new HttpGet(url);
@@ -77,11 +79,43 @@ public class Http {
                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
+                return NET_ERR;
+            }
+            String op = "";
+            try {
+                HttpResponse response = client.execute(httppost);
+                op = EntityUtils.toString(response.getEntity());
+                if (op.contains("Welcome")) {
+                    return op;
+                } else return CRED_ERR;
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("Data", op);
+                return NET_ERR;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return NET_ERR;
+        }
+    }
+
+    public static InputStream postMethodStream(String url, HashMap<String, String> headers, HttpClient client) throws HttpException, IOException {
+        HttpPost httppost = null;
+        try {
+            httppost = new HttpPost(url);
+            List<NameValuePair> nameValuePair = new ArrayList<>(headers.size());
+            for (Map.Entry entry : headers.entrySet()) {
+                nameValuePair.add(new BasicNameValuePair(entry.getKey().toString(), entry.getValue().toString()));
+            }
+            try {
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePair));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
             try {
                 HttpResponse response = client.execute(httppost);
-                final String op = EntityUtils.toString(response.getEntity(), "UTF-8");
-                Log.d("HTTPPOST RESPONSE", op);
+                final InputStream op = response.getEntity().getContent();
                 return op;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -92,7 +126,7 @@ public class Http {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d("POST ERROR", "Error in Http.java");
-        return "";
+        Log.d("POST ERROR", "Error in Http.java Stream");
+        return null;
     }
 }

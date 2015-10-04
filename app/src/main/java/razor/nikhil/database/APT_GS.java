@@ -15,6 +15,14 @@ import razor.nikhil.model.AptModel;
  * Created by Nikhil Verma on 10/1/2015.
  */
 public class APT_GS {
+    public void Delete() {
+        open();
+        sqLiteDatabase.execSQL(" DROP TABLE " + APThelper.TABLE_NAME);
+        sqLiteDatabase.execSQL(sqLiteOpenHelper.getTABLE_CREATE());
+        close();
+    }
+
+
     private static final String LOG_CAT = "Sqlite.Grades";
     private static APThelper sqLiteOpenHelper;
     public SQLiteDatabase sqLiteDatabase;

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,6 +101,7 @@ public class GetFacMessage extends Fragment {
     private void mysync() {
         new AsyncTask<Void, Void, Void>() {
             String cap = "";
+            String reg, pass;
 
             @Override
             protected void onPreExecute() {
@@ -109,14 +109,14 @@ public class GetFacMessage extends Fragment {
                 button.setEnabled(false);
                 progress_ll_.setVisibility(View.VISIBLE);
                 cap = CAPTXT.getText().toString();
-
+                reg = REGNO.getText().toString();
+                pass = PASS.getText().toString();
             }
 
             @Override
             protected Void doInBackground(Void... params) {
-                httpClient = Logins.StudentLogin(cap, httpClient);
+                httpClient = Logins.StudentLogin(reg, pass, cap, httpClient);
                 String data = Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//does the job
-                Log.d("data", data);
                 final List<FacMsgModel> listFac = parse(data);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override

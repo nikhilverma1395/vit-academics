@@ -5,14 +5,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 
@@ -21,31 +20,31 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import razor.nikhil.Config;
 import razor.nikhil.Http.BitmapUrlClient;
 import razor.nikhil.Http.Http;
 import razor.nikhil.Http.Logins;
+import razor.nikhil.Http.PostParent;
 import razor.nikhil.R;
-import razor.nikhil.database.APT_GS;
-import razor.nikhil.database.SharedPrefs;
-import razor.nikhil.model.AptModel;
+import razor.nikhil.model.FacMsgModel;
 
 /**
- * Created by Nikhil Verma on 10/1/2015.
+ * Created by Nikhil Verma on 10/2/2015.
  */
-public class AptAtten extends Fragment {
-    private HttpClient httpClient;
-    private RecyclerView recyclerView;
+public class CoursePage extends Fragment {
+    private static HttpClient httpClient;
+    private static String CoursePage = "https://academics.vit.ac.in/student/coursepage_view.asp?sem=";
+    private static String CoursePagePost = "https://academics.vit.ac.in/student/coursepage_view3.asp";
     private EditText REGNO, PASS, CAPTXT;
     private ImageView CAPIMAG;
     private Button button;
     private ProgressBarCircularIndeterminate progress_ll_;
+    private String SEM;
 
-    public static AptAtten newInstance() {
-        AptAtten fragment = new AptAtten();
+    public static CoursePage newInstance() {
+        CoursePage fragment = new CoursePage();
         return fragment;
     }
 
@@ -70,6 +69,8 @@ public class AptAtten extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SEM = PostParent.getSem();
+        CoursePage += (SEM + "&crs=CSE327&slt=B1+TB1&fac=");
         return inflater.inflate(R.layout.login_layout_stud, container, false);
     }
 
@@ -100,7 +101,6 @@ public class AptAtten extends Fragment {
         });
     }
 
-
     private void mysync() {
         new AsyncTask<Void, Void, Void>() {
             String cap = "";
@@ -118,22 +118,33 @@ public class AptAtten extends Fragment {
 
             @Override
             protected Void doInBackground(Void... params) {
-                httpClient = Logins.StudentLogin(reg, pass, cap, httpClient);
-                Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//does the job
-                String data = Http.getData("https://academics.vit.ac.in/student/apt_attendance.asp", httpClient);
-                final List<AptModel> listFac = parse(data);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (listFac != null) {
-                            progress_ll_.setVisibility(View.INVISIBLE);
-                            calLFrag(listFac);
-                        } else {
-                            Toast.makeText(getActivity(), "Username or Password or Captcha is Incorrect , Try Again", Toast.LENGTH_SHORT).show();
-                            new LoadCaptcha().execute();
-                        }
+                try {
+                    httpClient = Logins.StudentLogin(reg, pass, cap, httpClient);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//pre
+                final String DATA = Http.getData(CoursePage, httpClient);
+                Elements tRs = Jsoup.parse(DATA).getElementsByTag("table")
+                        .get(2).getElementsByTag("tr");
+                tRs.remove(0);//headers
+                Log.d("Data", DATA);
+                for (Element el : tRs)
+                    try {
+                        Element td = el.getElementsByTag("td").last();
+                        Elements inputs = td.getElementsByTag("input");
+                        String sem = inputs.get(0).attr("value").trim();
+                        String plancode = inputs.get(1).attr("value").trim();
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("sem", sem);
+                        map.put("crsplancode", plancode);
+                        map.put("crpnvwcmd", "View");
+                        Log.d("SEM+Cplan", sem + "\t" + plancode);
+                        String DAT = Http.postMethod(CoursePagePost, map, httpClient);//correct Data
+                        parseCP(DAT);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                });
                 return null;
             }
 
@@ -145,47 +156,15 @@ public class AptAtten extends Fragment {
         }.execute();
     }
 
-    private List<AptModel> parse(String data) {
-        List<AptModel> list = new ArrayList<>();
-        try {
-            Element table = Jsoup.parse(data).getElementsByTag("table").get(3);
-            Elements trS = table.getElementsByTag("tr");
-            trS.remove(0);//Titles
-            for (int r = 0; r < trS.size(); r++) {
-                AptModel model = new AptModel();
-                Element ment = trS.get(r);
-                Elements tdS = ment.getElementsByTag("td");
-                if (tdS.size() == 4) {
-                    model.setDate(tdS.get(0).getElementsByTag("font").get(0).html().trim());
-                    model.setSession(tdS.get(1).getElementsByTag("font").get(0).html().trim());
-                    model.setUnits(tdS.get(3).getElementsByTag("font").get(0).html().trim());
-                    list.add(model);
-                } else if (tdS.size() == 2) {
-                    SharedPrefs pref = new SharedPrefs(getActivity());
-                    if (r == trS.size() - 3)
-                        pref.storeMsg(Config.APT_TOTAL_CLASSES, tdS.get(1).html());
-                    if (r == trS.size() - 2)
-                        pref.storeMsg(Config.APT_ATTENDED, tdS.get(1).html());
-                    if (r == trS.size() - 1)
-                        pref.storeMsg(Config.APT_PERCENT, tdS.get(1).html());
-                }
-
-            }
-            try {
-                new APT_GS(getActivity()).createList(list);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    private void parseCP(String source) {
+        Element TextRefMat = Jsoup.parse(source).getElementsByTag("table").get(2);//Text/Reference Material
+        //      Element syllabus
     }
 
-    private void calLFrag(List<AptModel> list) {
+
+    private void calLFrag(List<FacMsgModel> list) {
         button.setEnabled(true);
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, AptAttenList.newInstance(list)).commit();
+        //    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, ).commit();
     }
 
 }
