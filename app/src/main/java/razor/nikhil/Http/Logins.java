@@ -20,7 +20,7 @@ public class Logins {
     public static String isStudLogin = null;
     public static String isParLogin = null;
 
-    public static HttpClient ParentLogin( HttpClient httpClient, String uname, String dob, String ward, String captcha) {
+    public static HttpClient ParentLogin(HttpClient httpClient, String uname, String dob, String ward, String captcha) {
         HashMap<String, String> headers = new HashMap<>();
         headers.put("wdregno", uname);
         headers.put("wdpswd", dob);
@@ -28,7 +28,7 @@ public class Logins {
         headers.put("vrfcd", captcha);
         String dat = "";
         try {
-            dat = Http.postMethod(PostParent.PARENT_LOGIN_POST_URL, headers, httpClient);
+            dat = Http.postMethod("https://academics.vit.ac.in/student/stud_login_submit.asp", headers, httpClient);
         } catch (HttpException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -43,7 +43,6 @@ public class Logins {
 
     public static HttpClient StudentLogin(String reg, String pass, String captchaText, HttpClient httpClient) {
         HashMap<String, String> headers = new HashMap<>();
-        Log.d("Cred", reg + "\t" + pass + "\t" + captchaText);
         headers.put("regno", reg);
         headers.put("passwd", pass);
         headers.put("vrfcd", captchaText);

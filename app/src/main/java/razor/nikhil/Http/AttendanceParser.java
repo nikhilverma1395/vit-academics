@@ -30,7 +30,7 @@ public class AttendanceParser {
     public void parse(String rawData) {
         Document doc = Jsoup.parse(rawData);
         Elements ele = doc.getElementsByTag("table");
-        Elements subs = ele.get(2).getElementsByTag("tr");
+        Elements subs = ele.get(3).getElementsByTag("tr");
         dates_sem_codes = new ArrayList<>();
         for (int t = 1; t < subs.size(); t++) {
             final Elements al = subs.get(t).getElementsByTag("td");
@@ -41,7 +41,7 @@ public class AttendanceParser {
             ab.setPercent(al.get(8).html().trim());
             ab.setSubtype(al.get(3).html().trim());
             new Attend_GetSet(context).create(ab);
-            Elements dates = al.get(9).getElementsByTag("input");
+            Elements dates = subs.get(t).getElementsByTag("input");
             AttenDetail dd = new AttenDetail();
             dd.setSemcode(dates.get(0).attr("value"));
             dd.setClass_number(dates.get(1).attr("value"));

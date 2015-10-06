@@ -25,6 +25,8 @@ public class Config {
     public static final String APT_ATTENDED = "aptatten";
     public static final String APT_PERCENT = "aptPercent";
     public static final String FADV_NAME_CODE_LEAVE = "FADV_na";
+    public static final String FADV_NAME_CODE_LEAVE_VALUE = "FADV_na_v";
     public static final String PM_NAME_CODE_LEAVE = "pm_nam";
+    public static final String PM_NAME_CODE_LEAVE_VALUE = "pm_nam_v";
 
 }

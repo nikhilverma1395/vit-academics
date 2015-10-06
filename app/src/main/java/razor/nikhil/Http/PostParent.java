@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.apache.http.client.HttpClient;
 import org.jsoup.Jsoup;
@@ -12,41 +13,42 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import razor.nikhil.Config;
 import razor.nikhil.Fragments.GetDetails;
-import razor.nikhil.R;
 import razor.nikhil.database.GradeGetSet;
 import razor.nikhil.database.SharedPrefs;
-import razor.nikhil.database.Slots_GetSet;
 import razor.nikhil.database.StoreAndGetImage;
-import razor.nikhil.model.Model_Slots;
+import razor.nikhil.model.AptModel;
 
 /**
  * Created by Nikhil Verma on 9/12/2015.
  */
 public class PostParent {
-    private final String ATTENDANCE_URL = "https://academics.vit.ac.in/parent/attn_report.asp?sem=";
-    public static final String PARENT_LOGIN_POST_URL = "https://academics.vit.ac.in/parent/parent_login_submit.asp";
-    private final String TIMETABLE_URL = "https://academics.vit.ac.in/parent/timetable.asp?sem=";
-    private final String MARKS_URL = "https://academics.vit.ac.in/parent/marks.asp?sem=";
-    private final String GRADE_URL = "https://academics.vit.ac.in/parent/student_history.asp";
-    private final String FAC_PHOTO = "https://academics.vit.ac.in/parent/emp_photo.asp";
-    private final String FACULTY_DETAILS = "https://academics.vit.ac.in/parent/fa_view.asp";
+    private final String ATTENDANCE_URL = "https://academics.vit.ac.in/student/attn_report.asp?sem=";
+    private final String TIMETABLE_URL = "https://academics.vit.ac.in/student/timetable_";
+    private final String MARKS_URL = "https://academics.vit.ac.in/student/marks.asp?sem=";
+    private final String GRADE_URL = "https://academics.vit.ac.in/student/student_history.asp";
+    private final String FAC_PHOTO = "https://academics.vit.ac.in/student/emp_photo.asp";
+    private final String FACULTY_DETAILS = "https://academics.vit.ac.in/student/faculty_advisor_view.asp";
     private static final String winter_sem = "WS";//Jan-May
     private static final String fall_sem = "FS";//July-Nov
     private static final String summer_sem = "SS";//June
     private static final String tri_sem = "TS";//Dec
     private final ProgressDialog dialog;
-    private final GetDetails frag;
     private static String whichsem = "";
-    private String uname, dob, ward, captchatxt;
+    private String uname, pass, captchatxt;
     private HttpClient httpClient;
     private FragmentActivity context;
     Thread[] threads;
     public String[] TNAMES;
+    String todayDate = "";
+    private long in, out;
 
     public static String getSem() {
         //To get Sem-code
@@ -70,27 +72,46 @@ public class PostParent {
         return whichsem;
     }
 
-    public PostParent(String reg, String dob, String cell, String capt, HttpClient htp, FragmentActivity ctxt, GetDetails frag, ProgressDialog dialog) {
-        threads = new Thread[5];
+    public PostParent(String reg, String pass, String capt, HttpClient htp, FragmentActivity ctxt, ProgressDialog dialog) {
+        threads = new Thread[8];
         this.dialog = dialog;
-        this.frag = frag;
         this.captchatxt = capt;
-        this.dob = dob;
+        this.pass = pass;
         this.httpClient = htp;
         this.uname = reg;
-        this.ward = cell;
         context = ctxt;
         getSem();
-        new ParentLoginPost().execute(PARENT_LOGIN_POST_URL);
+        todayDate = new SimpleDateFormat("dd-MMM-yyyy", Locale.UK).format(new Date());
+        in = System.nanoTime();
+        new ParentLoginPost().execute();
     }
 
 
-    private class ParentLoginPost extends AsyncTask<String, String[], String[]> {
+    private class ParentLoginPost extends AsyncTask<Void, String[], Void> {
 
         @Override
-        protected String[] doInBackground(String... voids) {
-            Logins.ParentLogin(httpClient, uname, dob, ward, captchatxt);
+        protected Void doInBackground(Void... voids) {
+            final String credMes = "Something went wrong, Check your Credentials and Connection!";
+            httpClient = Logins.StudentLogin(uname, pass, captchatxt, httpClient);
+            if (Logins.isStudLogin.equals("n")) {
+                context.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        Toast.makeText(context, credMes, Toast.LENGTH_SHORT).show();
+                        new GetDetails().reloadCaptcha();
+                    }
+                });
+                return null;
+            }
+
+            String facdata = "";
             //FacAdv Thread
+            try {
+                facdata = Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//pre for most
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             try {
                 Runnable r1 = new Runnable() {
                     public void run() {
@@ -145,8 +166,9 @@ public class PostParent {
             try {
                 threads[2] = new Thread(new Runnable() {
                     public void run() {
-                        final String timetableHTML = Http.getData(TIMETABLE_URL + whichsem, httpClient);
-                        new ParseTimeTable(context).parser(timetableHTML);
+                        final String timetableHTML = Http.getData(TIMETABLE_URL + whichsem.toLowerCase() + ".asp", httpClient);
+                        Log.d("data", timetableHTML);
+                        new ParseTimeTable(context, httpClient).parser(timetableHTML);
                     }
                 });
                 threads[2].start();
@@ -157,7 +179,10 @@ public class PostParent {
             try {
                 threads[3] = new Thread(new Runnable() {
                     public void run() {
-                        final String attendanceHTML = Http.getData(ATTENDANCE_URL + whichsem, httpClient);
+                        String dataq = Http.getData("https://academics.vit.ac.in/student/attn_report.asp?sem=" + whichsem, httpClient);
+                        String from_date = Jsoup.parse(dataq).getElementsByTag("table").get(1)
+                                .getElementsByTag("tr").get(2).getElementsByTag("input").get(0).attr("value");
+                        final String attendanceHTML = Http.getData(ATTENDANCE_URL + whichsem + "&fmdt=" + from_date + "&todt=" + todayDate, httpClient);
                         try {
                             new AttendanceParser(context, httpClient).parse(attendanceHTML);
                         } catch (Exception e) {
@@ -185,6 +210,51 @@ public class PostParent {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            try {
+                threads[5] = new Thread(new Runnable() {
+                    public void run() {
+                        String data = Http.getData("https://academics.vit.ac.in/student/apt_attendance.asp", httpClient);
+                        final List<AptModel> listFac = new PostStudFragPre(context, httpClient).parse(data);
+                    }
+                });
+                threads[5].start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //Apt Data up
+            //MyTeach down
+            try {
+                final String fda = facdata;
+                threads[6] = new Thread(new Runnable() {
+                    public void run() {
+                        new PostStudFragPre(context, httpClient).parseFacMsg(fda);
+                    }
+                });
+                threads[6].start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                final SharedPrefs prefs = new SharedPrefs(context);
+                threads[7] = new Thread(new Runnable() {
+                    public void run() {
+                        String DATA = Http.getData("https://academics.vit.ac.in/student/leave_request.asp", httpClient);
+                        Elements names = Jsoup.parse(DATA).getElementsByTag("table").get(1)
+                                .getElementsByTag("tr").get(1).getElementsByTag("td").get(1).getElementsByTag("option");
+                        String facadv = names.get(1).html();
+                        String pm = names.get(2).html();
+                        Log.d("facadv", facadv);
+                        Log.d("ProgramM", pm);
+                        prefs.storeMsg(Config.PM_NAME_CODE_LEAVE_VALUE, names.get(2).attr("value"));
+                        prefs.storeMsg(Config.FADV_NAME_CODE_LEAVE_VALUE, names.get(1).attr("value"));
+                        prefs.storeMsg(Config.PM_NAME_CODE_LEAVE, pm);
+                        prefs.storeMsg(Config.FADV_NAME_CODE_LEAVE, facadv);
+                    }
+                });
+                threads[7].start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             for (Thread th : threads) {
                 try {
                     if (th != null)
@@ -193,34 +263,19 @@ public class PostParent {
                     e.printStackTrace();
                 }
             }
-            TNAMES = tnames();
-            return TNAMES;
+            out = System.nanoTime();
+            Log.d("TimeTaken", (out - in) / 1000000 + "\tmillisec");
+            return null;
         }
 
 
         @Override
-        protected void onPostExecute(String[] aVoid) {
+        protected void onPostExecute(Void aVoid) {
             Log.d("Done Now", "Done");
             dialog.setMessage("Finished");
             dialog.dismiss();
-            try {
-                context.getSupportFragmentManager().beginTransaction().replace(R.id.container_main, PostStudFragPre.newInstance(aVoid)).commit();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
         }
 
-    }
-
-    public String[] tnames() {
-        List<Model_Slots> mo = new Slots_GetSet(context).getAllCredentials();
-        String[] tnames = new String[mo.size()];
-        int y = 0;
-        for (Model_Slots ms : mo) {
-            tnames[y++] = ms.getTeacher();
-        }
-        return tnames;
     }
 
     private void parseFaculty(String fadv) {
@@ -236,7 +291,7 @@ public class PostParent {
         String mobile = Jsoup.parse(ele.get(4).getElementsByTag("td").get(1).html()).getElementsByTag("font").first().html();
         String email = Jsoup.parse(ele.get(5).getElementsByTag("td").get(1).html()).getElementsByTag("font").first().html();
         String room = Jsoup.parse(ele.get(6).getElementsByTag("td").get(1).html()).getElementsByTag("font").first().html();
-        pref.storeMsg(Config.FADV_NAME, new ParseTimeTable().FirstCharCap(name));
+        pref.storeMsg(Config.FADV_NAME, new ParseTimeTable(null, null).FirstCharCap(name));
         pref.storeMsg(Config.FADV_DESIGNATION, designation);
         pref.storeMsg(Config.FADV_SCHOOL, school);
         pref.storeMsg(Config.FADV_MOBILE, mobile);

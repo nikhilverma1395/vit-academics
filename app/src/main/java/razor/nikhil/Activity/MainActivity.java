@@ -110,16 +110,6 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
     public static List<GradeModel> grades;
     private String teacherNames[];
 
-
-    @Override
-    public void onBackPressed() {
-        if (gd.isAdded())
-            getSupportFragmentManager()
-                    .beginTransaction().remove(gd).commit();
-        else super.onBackPressed();
-
-    }
-
     public void setMTWTFLists(final Context ctxt) {
         try {
             new Thread(new Runnable() {
@@ -129,7 +119,6 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
                     todayslist_w = new MTWTHgetset(ctxt, "wednesday").getAllCredentials();
                     todayslist_th = new MTWTHgetset(ctxt, "thursday").getAllCredentials();
                     todayslist_fr = new MTWTHgetset(ctxt, "friday").getAllCredentials();
-                    Log.d("Done", "Yeahtt th");
                 }
             }).start();
         } catch (Exception e) {
@@ -143,10 +132,6 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mai);
         context = getApplicationContext();
-        gd = new GetDetails(gd);
-        if (savedInstanceState == null) {
-            //    getSupportFragmentManager().beginTransaction().add(R.id.container_main, gd).commit();
-        }
         try {
             //Getting the list of slots
             list = new Slots_GetSet(this).getAllCredentials();
@@ -171,10 +156,8 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
                 }
                 String credstr = ms.getLTPJC().trim();
                 int cred = Integer.parseInt(credstr.charAt(credstr.length() - 1) + "");
-                Log.d(n, cred + "");
                 if (mapsubcred.get(n) == null) {
                     mapsubcred.put(n, cred);
-                    Log.d(n, cred + "");
                 } else {
                     mapsubcred.put(n, mapsubcred.get(n) + cred);
                 }//adding lab credits

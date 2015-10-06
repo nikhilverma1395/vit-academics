@@ -30,10 +30,13 @@ import razor.nikhil.model.detailattlist_subcode;
 public class FullAttendParseStore {
     private Context context;
     private HttpClient httpClient;
-    private final String DETAIL_ATTENDANCE_POST_URL = "https://academics.vit.ac.in/parent/attn_report_details.asp";
+    private final String DETAIL_ATTENDANCE_POST_URL = "https://academics.vit.ac.in/student/attn_report_details.asp";
     private List<detailattlist_subcode> all_sub_detail;
     public static List<Query_TableName> table_queries = new ArrayList<>();
     private static List<AttenDetail> dates_sem_codes;
+    IndivAttGetSet indivDB;
+    List<List<DetailAtten>> mylist = new ArrayList<>();
+    long in, out;
 
     public FullAttendParseStore(Context context, HttpClient clien, List<AttenDetail> dates_sem_codes) {
         this.context = context;
@@ -46,24 +49,28 @@ public class FullAttendParseStore {
     protected Void doInBackground(final List<AttenDetail> lists) {
         createTables(lists);
         final HttpPost httppost = null;
-        Thread threads[] = new Thread[lists.size()];
         all_sub_detail = new ArrayList<>();
+        Thread thread[] = new Thread[lists.size()];
         for (int t = 0; t < lists.size(); t++) {
-            final int rt = t;
-            threads[rt] = new Thread(new Runnable() {
+            final int ft = t;
+            Runnable runnable = new Runnable() {
                 public void run() {
-                    getIndivAttinDiffThreads(lists.get(rt), httppost);
+                    getIndivAttinDiffThreads(lists.get(ft), httppost);
                 }
-            });
-            threads[rt].start();
+            };
+            thread[ft] = new Thread(runnable);
+            thread[ft].start();
         }
-        for (Thread der : threads) {
-            if (der != null)
+        for (Thread rr : thread) {
+            if (rr != null)
                 try {
-                    der.join();
-                } catch (Exception e) {
+                    rr.join();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+        }
+        for (int y = 0; y < mylist.size(); y++) {
+            insertIndivAttIntoDBS(mylist.get(y), lists.get(y).getClass_number().trim());
         }
         return null;
     }
@@ -100,7 +107,7 @@ public class FullAttendParseStore {
                 HttpResponse response = httpClient.execute(httppost);
                 final String op = EntityUtils.toString(response.getEntity(), "UTF-8");
                 final List<DetailAtten> jack = parseAtt(op);
-                insertIndivAttIntoDBS(jack, lists.getClass_number());
+                mylist.add(jack);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -140,8 +147,8 @@ public class FullAttendParseStore {
 
 
     private void insertIndivAttIntoDBS(final List<DetailAtten> all_sub_detail, String cnum) {
-        IndivAttGetSet wif = new IndivAttGetSet(context, "table_of_" + cnum);//subcode-is classnbr
-        wif.create(all_sub_detail);
+        indivDB = new IndivAttGetSet(context, "table_of_" + cnum);
+        indivDB.create(all_sub_detail);
         Log.e("Done For ", cnum);
     }
 }

@@ -19,10 +19,12 @@ import razor.nikhil.model.DetailAttenColumnNames;
 public class IndivAttGetSet {
     private static final String LOG_CAT = "Academics.IndivAtt";
     private static SQLiteOpenHelper sqLiteOpenHelper;
+    private final Context context;
     public SQLiteDatabase sqLiteDatabase;
     private String TABLE = "";
 
     public IndivAttGetSet(Context context, String tname) {
+        this.context = context;
         sqLiteOpenHelper = new IndivAttHelper(context);
         this.TABLE = tname;
     }
@@ -30,7 +32,6 @@ public class IndivAttGetSet {
     public void open() {
         Log.i(LOG_CAT, "Database opened");
         sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
-
     }
 
     public int getEntriesCount() {
@@ -85,12 +86,7 @@ public class IndivAttGetSet {
 
     public void close() {
         Log.i(LOG_CAT, "Database closed");
-        try {
-            if (sqLiteDatabase.isOpen())
-                sqLiteDatabase.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        sqLiteOpenHelper.close();
     }
 
 }

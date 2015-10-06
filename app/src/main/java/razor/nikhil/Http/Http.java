@@ -85,9 +85,7 @@ public class Http {
             try {
                 HttpResponse response = client.execute(httppost);
                 op = EntityUtils.toString(response.getEntity());
-                if (op.contains("Welcome")) {
-                    return op;
-                } else return CRED_ERR;
+                return op;
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.d("Data", op);

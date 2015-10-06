@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -67,6 +68,7 @@ public class AptAttenList extends Fragment {
     private class AptAdap extends RecyclerView.Adapter<AptAdap.ViewHolder> {
         private Typeface thin, bold, roboto_light, condensedLightItalic, regular;
         private Context context;
+        private int lastPosition = -1;
 
         public AptAdap() {
             context = getActivity();
@@ -84,8 +86,8 @@ public class AptAttenList extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, final int position) {
-            if (position != 0) {
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            if (position > 0) {
                 AptModel model = list.get(position - 1);
                 int val = Integer.parseInt(model.getUnits());
                 if (val > 0) {
@@ -97,6 +99,9 @@ public class AptAttenList extends Fragment {
                 }
                 holder.session.setText(model.getSession());
                 holder.date.setText(model.getDate());
+                holder.date.setTypeface(roboto_light);
+                holder.session.setTypeface(regular);
+                holder.unit.setTypeface(regular);
             } else if (position == 0) {
                 SharedPrefs spref = new SharedPrefs(context);
                 holder.date.setText("Attendance\t:\n\t" + spref.getMsg(Config.APT_PERCENT).replaceAll("&nbsp;", ""));
@@ -105,6 +110,7 @@ public class AptAttenList extends Fragment {
                 holder.date.setTypeface(bold);
                 holder.session.setTypeface(bold);
                 holder.unit.setTypeface(bold);
+                holder.unit.setTextColor(holder.session.getCurrentTextColor());
             }
         }
 
@@ -115,9 +121,11 @@ public class AptAttenList extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             private TextView date, session, unit;
+            private CardView cardView;
 
             public ViewHolder(View itemView) {
                 super(itemView);
+                cardView = (CardView) itemView.findViewById(R.id.card_view_daywise_);
                 date = (TextView) itemView.findViewById(R.id.date_apt);
                 session = (TextView) itemView.findViewById(R.id.session_apt);
                 unit = (TextView) itemView.findViewById(R.id.present_apt);

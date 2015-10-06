@@ -9,8 +9,7 @@ import android.content.SharedPreferences;
 public class SharedPrefs {
 
     public static final String PREFIX_REGNO = "regno_sf";
-    public static final String PREFIX_DOB = "dob_sf";
-    public static final String PREFIX_PARENTCELL = "parentcell_sf";
+    public static final String PREFIX_PASS = "pass_sf";
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
@@ -20,7 +19,7 @@ public class SharedPrefs {
     }
 
     public void storeMsg(String key, String value) {
-        editor.putString(key, value).commit();
+        editor.putString(key, value.trim()).commit();
     }
 
     public String getMsg(String prefix) {

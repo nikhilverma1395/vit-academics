@@ -2,6 +2,7 @@ package razor.nikhil.Http;
 
 import android.content.Context;
 
+import org.apache.http.client.HttpClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,14 +20,17 @@ import razor.nikhil.model.Slots_Timings;
  * Created by Nikhil Verma on 9/12/2015.
  */
 public class ParseTimeTable {
-    private Context context;
+    private final HttpClient client;
+    private final Context context;
+    private List<Model_Slots> list_slots;
 
-    public ParseTimeTable(Context ctxt) {
+    private Thread th[] = new Thread[2];
+
+    public ParseTimeTable(Context ctxt, HttpClient client) {
+        this.client = client;
         this.context = ctxt;
     }
 
-    public ParseTimeTable() {
-    }
 
     public static String FirstCharCap(String source) {
         if (source.trim().equals("") || source == "" || source == null || source.equalsIgnoreCase("N/A")) {
@@ -45,54 +49,49 @@ public class ParseTimeTable {
 
     public void parser(String tt) {
         Document document = Jsoup.parse(tt);
-        Elements el = document.getElementsByTag("table");
-
-        Element eel = el.get(0).getElementsByTag("table").get(1);//.getElementsByTag("table").get(0).getElementsByTag("tr");
-        Elements dd = eel.getElementsByTag("tr");
+        Element el = document.getElementsByTag("table").get(1);
+        Elements dd = el.getElementsByTag("tr");
         dd.remove(0);
         dd.remove(dd.size() - 1);
-        List<Model_Slots> list_slots = new ArrayList<>();
+        dd.remove(dd.size() - 1);
+        list_slots = new ArrayList<>();
         for (int t = 0; t < dd.size(); t++) {
             Element one = dd.get(t);
             Elements ui = one.getElementsByTag("td");
             Model_Slots mmodel = new Model_Slots();
-            if (ui.size() != 8) {
+            if (ui.size() != 10) {
                 for (int i = 0; i < ui.size(); i++) {
-                    String d = ui.get(i).getElementsByTag("font").get(0).html().toString().trim();
-                    if (i == 0) mmodel.setNumber(d);
-                    if (i == 1) mmodel.setCode(d);
-                    if (i == 2) mmodel.setSubject_name(d);
-                    if (i == 3) mmodel.setClass_number(d);
-                    if (i == 4) mmodel.setCourse_type(d);
-                    if (i == 5) mmodel.setLTPJC(d);
-                    if (i == 6) mmodel.setCourse_mode(d);
-                    if (i == 7) mmodel.setCourse_option(d);
-                    if (i == 8) mmodel.setSlot(d);
-                    if (i == 9) mmodel.setVenue(d);
-                    if (i == 10) mmodel.setTeacher(FirstCharCap(d));
-                    if (i == 11) mmodel.setStatus(d);
+                    if (i == 0) continue;
+                    String d = ui.get(i).getElementsByTag("font").get(0).html().trim();
+                    if (i == 1) mmodel.setNumber(d);
+                    if (i == 2) mmodel.setClass_number(d);
+                    if (i == 3) mmodel.setCode(d);
+                    if (i == 4) mmodel.setSubject_name(d);
+                    if (i == 5) mmodel.setCourse_type(d);
+                    if (i == 6) mmodel.setLTPJC(d);
+                    if (i == 7) mmodel.setCourse_mode(d);
+                    if (i == 8) mmodel.setCourse_option(d);
+                    if (i == 9) mmodel.setSlot(d);
+                    if (i == 10) mmodel.setVenue(d);
+                    if (i == 11) mmodel.setTeacher(FirstCharCap(d));
+                    if (i == 12) mmodel.setStatus(d);
                 }
                 list_slots.add(mmodel);
             } else {
-
                 for (int i = 0; i < ui.size(); i++) {
-                    String d = ui.get(i).getElementsByTag("font").get(0).html().toString().trim();
+                    String d = ui.get(i).getElementsByTag("font").get(0).html().trim();
                     if (i == 0) mmodel.setClass_number(d);
-                    if (i == 1) mmodel.setCourse_type(d);
-                    if (i == 2) mmodel.setLTPJC(d);
-                    if (i == 3) mmodel.setCourse_mode(d);
-                    if (i == 4) mmodel.setCourse_option(d);
-                    if (i == 5) mmodel.setSlot(d);
-                    if (i == 6) mmodel.setVenue(d);
-                    if (i == 7) {
-                        mmodel.setTeacher(FirstCharCap(d));
-                        if (t != 0)
-                            mmodel.setSubject_name(list_slots.get(t - 1).getSubject_name());
-                        else mmodel.setSubject_name("Lab");
-                        mmodel.setNumber("Lab");
-                        mmodel.setCode("Lab");
-                        mmodel.setStatus("Lab");
-                    }
+                    if (i == 1) mmodel.setCode(d);
+                    if (i == 2) mmodel.setSubject_name(d);
+                    if (i == 3) mmodel.setCourse_type(d);
+                    if (i == 4) mmodel.setLTPJC(d);
+                    if (i == 5) mmodel.setCourse_mode(d);
+                    if (i == 6) mmodel.setCourse_option(d);
+                    if (i == 7) mmodel.setSlot(d);
+                    if (i == 8) mmodel.setVenue(d);
+                    if (i == 9) mmodel.setTeacher(FirstCharCap(d));
+                    mmodel.setNumber("Lab");
+                    mmodel.setStatus("Lab");
                 }
                 list_slots.add(mmodel);
             }
@@ -109,13 +108,20 @@ public class ParseTimeTable {
             } else {
                 context.getSharedPreferences("VitAcademics_sp", Context.MODE_PRIVATE).edit().putString("slots_down", "already").commit();
             }
+            List<Model_Slots> ms = list_slots;
+            th[0] = new Thread(new Runnable() {
+                public void run() {
+                    new PostStudFragPre(context, client).MYT(tnames(list_slots));
+                }
+            });
+               th[0].start();
         } catch (Exception e) {
             e.printStackTrace();
             context.getSharedPreferences("VitAcademics_sp", Context.MODE_PRIVATE).edit().putString("slots_down", "no").commit();
         }
 
         String[] days = {"mon", "tue", "wed", "thur", "fri"};
-        List<List<Model_Daywise>> alldayslist = new ArrayList<>();
+        final List<List<Model_Daywise>> alldayslist = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
             List<Model_Daywise> daywiseList = new ArrayList<>();
@@ -141,9 +147,31 @@ public class ParseTimeTable {
             }
             alldayslist.add(daywiseList);
         }
-        new StoreTimeTable(context).insertMTWTFinDB(alldayslist);
+        th[1] = new Thread(new Runnable() {
+            public void run() {
+                new StoreTimeTable(context).insertMTWTFinDB(alldayslist);
+            }
+        });
+        th[1].start();
+        for (Thread thw : th) {
+            try {
+                if (thw != null)
+                    thw.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 
+    public String[] tnames(List<Model_Slots> mo) {
+        String[] tnames = new String[mo.size()];
+        int y = 0;
+        for (Model_Slots ms : mo) {
+            tnames[y++] = ms.getTeacher();
+        }
+        return tnames;
+    }
 
 }

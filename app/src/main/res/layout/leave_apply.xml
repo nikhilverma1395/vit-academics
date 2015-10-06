@@ -10,9 +10,10 @@
     <fr.ganfra.materialspinner.MaterialSpinner
         android:id="@+id/approv_auth"
         android:layout_width="@dimen/spinner_width_leave_apply"
-        android:layout_height="wrap_content"
+        android:layout_height="85dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="35dp"
         android:layout_marginTop="25dp"
         android:background="?attr/selectableItemBackground"
@@ -24,19 +25,18 @@
         app:ms_floatingLabelColor="@color/button_press"
         app:ms_floatingLabelText="Approving Authority"
         app:ms_highlightColor="@color/button_def"
-        app:ms_hint="Faculty Adviser"
+        app:ms_hint="Approving Authority"
         app:ms_multiline="false"
         app:ms_thickness="1dp"
-        android:layout_marginBottom="5dp"
         app:ms_typeface="Roboto-Thin.ttf" />
 
     <fr.ganfra.materialspinner.MaterialSpinner
         android:id="@+id/leave_type"
-        android:layout_marginBottom="5dp"
         android:layout_width="@dimen/spinner_width_leave_apply"
-        android:layout_height="wrap_content"
+        android:layout_height="85dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="35dp"
         android:background="?attr/selectableItemBackground"
         app:ms_alignLabels="false"
@@ -45,7 +45,7 @@
         app:ms_baseColor="@color/button_foc"
         app:ms_errorColor="@color/red"
         app:ms_floatingLabelColor="@color/button_press"
-        app:ms_floatingLabelText="Approving Authority"
+        app:ms_floatingLabelText="Leave Type"
         app:ms_highlightColor="@color/button_def"
         app:ms_hint="Leave Type"
         app:ms_multiline="false"
@@ -54,15 +54,15 @@
 
     <TextView
         android:id="@+id/exit_date"
-        android:layout_marginBottom="5dp"
         android:layout_width="140dp"
         android:layout_height="45dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="35dp"
         android:background="?attr/selectableItemBackground"
         android:drawableRight="@drawable/cal_32px"
         android:gravity="center"
         android:hint="Exit Date"
-        android:textColor="#00FF00" />
+        android:textColor="#885a605a" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
         <fr.ganfra.materialspinner.MaterialSpinner
             android:id="@+id/exit_hr"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="85dp"
             android:layout_gravity="right"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -84,9 +84,9 @@
             app:ms_baseColor="@color/button_foc"
             app:ms_errorColor="@color/red"
             app:ms_floatingLabelColor="@color/button_press"
-            app:ms_floatingLabelText="Approving Authority"
-                 app:ms_highlightColor="@color/button_def"    
-            app:ms_hint="Hr."
+            app:ms_floatingLabelText="Exit Hr."
+            app:ms_highlightColor="@color/button_def"
+            app:ms_hint="Exit Hr."
             app:ms_multiline="false"
             app:ms_thickness="1dp"
             app:ms_typeface="Roboto-Thin.ttf" />
@@ -94,7 +94,7 @@
         <fr.ganfra.materialspinner.MaterialSpinner
             android:id="@+id/exit_min"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="85dp"
             android:layout_gravity="right"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -106,9 +106,9 @@
             app:ms_baseColor="@color/button_foc"
             app:ms_errorColor="@color/red"
             app:ms_floatingLabelColor="@color/button_press"
-            app:ms_floatingLabelText="Approving Authority"
-                 app:ms_highlightColor="@color/button_def"    
-            app:ms_hint="Min."
+            app:ms_floatingLabelText="Exit Min."
+            app:ms_highlightColor="@color/button_def"
+            app:ms_hint="Exit Min."
             app:ms_multiline="false"
             app:ms_thickness="1dp"
             app:ms_typeface="Roboto-Thin.ttf" />
@@ -116,7 +116,7 @@
         <fr.ganfra.materialspinner.MaterialSpinner
             android:id="@+id/Am_pm_exit"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="85dp"
             android:layout_gravity="right"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -128,9 +128,9 @@
             app:ms_baseColor="@color/button_foc"
             app:ms_errorColor="@color/red"
             app:ms_floatingLabelColor="@color/button_press"
-            app:ms_floatingLabelText="Approving Authority"
-                 app:ms_highlightColor="@color/button_def"    
-            app:ms_hint="AM-PM"
+            app:ms_floatingLabelText="Entry Period"
+            app:ms_highlightColor="@color/button_def"
+            app:ms_hint="Period"
             app:ms_multiline="false"
             app:ms_thickness="1dp"
             app:ms_typeface="Roboto-Thin.ttf" />
@@ -138,16 +138,16 @@
 
     <TextView
         android:id="@+id/entry_date"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
         android:layout_width="140dp"
         android:layout_height="45dp"
-
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="10dp"
         android:background="?attr/selectableItemBackground"
         android:drawableRight="@drawable/cal_32px"
         android:gravity="center"
         android:hint="Entry Date"
-        android:textColor="#00FF00" />
+        android:textColor="#885a605a" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -157,7 +157,7 @@
         <fr.ganfra.materialspinner.MaterialSpinner
             android:id="@+id/entry_hr"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="85dp"
             android:layout_gravity="right"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -169,9 +169,9 @@
             app:ms_baseColor="@color/button_foc"
             app:ms_errorColor="@color/red"
             app:ms_floatingLabelColor="@color/button_press"
-            app:ms_floatingLabelText="Approving Authority"
-                 app:ms_highlightColor="@color/button_def"    
-            app:ms_hint="Hr."
+            app:ms_floatingLabelText="Entry Hr."
+            app:ms_highlightColor="@color/button_def"
+            app:ms_hint="Entry Hr."
             app:ms_multiline="false"
             app:ms_thickness="1dp"
             app:ms_typeface="Roboto-Thin.ttf" />
@@ -179,7 +179,7 @@
         <fr.ganfra.materialspinner.MaterialSpinner
             android:id="@+id/entry_min"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="85dp"
             android:layout_gravity="right"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -191,9 +191,9 @@
             app:ms_baseColor="@color/button_foc"
             app:ms_errorColor="@color/red"
             app:ms_floatingLabelColor="@color/button_press"
-            app:ms_floatingLabelText="Approving Authority"
-                 app:ms_highlightColor="@color/button_def"    
-            app:ms_hint="Min."
+            app:ms_floatingLabelText="Entry Min."
+            app:ms_highlightColor="@color/button_def"
+            app:ms_hint="Entry Min."
             app:ms_multiline="false"
             app:ms_thickness="1dp"
             app:ms_typeface="Roboto-Thin.ttf" />
@@ -201,7 +201,7 @@
         <fr.ganfra.materialspinner.MaterialSpinner
             android:id="@+id/Am_pm_entry"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="85dp"
             android:layout_gravity="right"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
@@ -213,18 +213,18 @@
             app:ms_baseColor="@color/button_foc"
             app:ms_errorColor="@color/red"
             app:ms_floatingLabelColor="@color/button_press"
-            app:ms_floatingLabelText="Approving Authority"
-                 app:ms_highlightColor="@color/button_def"    
-            app:ms_hint="AM-PM"
+            app:ms_floatingLabelText="Period"
+            app:ms_highlightColor="@color/button_def"
+            app:ms_hint="Period"
             app:ms_multiline="false"
             app:ms_thickness="1dp"
             app:ms_typeface="Roboto-Thin.ttf" />
     </LinearLayout>
 
     <com.gc.materialdesign.views.ButtonRectangle
-        android:layout_width="120dp"
         android:id="@+id/leave_apply_button"
-        android:layout_marginLeft="35dp"
+        android:layout_width="120dp"
         android:layout_height="55dp"
-        android:text="Apply" />
+        android:layout_gravity="center"
+        android:text="Proceed" />
 </LinearLayout>

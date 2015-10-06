@@ -46,7 +46,7 @@ public class LeaveRequest extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.leave, container, false);
+        return inflater.inflate(R.layout.login_layout_stud, container, false);
     }
 
     @Override
@@ -73,6 +73,10 @@ public class LeaveRequest extends Fragment {
                 new Post().execute(captext);
             }
         });
+    }
+
+    public static LeaveRequest newInstance() {
+        return new LeaveRequest();
     }
 
     private class SetCaptcha extends AsyncTask<Void, Void, Void> {
@@ -118,7 +122,7 @@ public class LeaveRequest extends Fragment {
             map.put("lvtype", "EY");
             //ot
             map.put("exitdate", "24-Oct-2015");
-//            map.put("exitdate", "21-Sep-2015");
+//            mapLTYPE.put("exitdate", "21-Sep-2015");
             map.put("sttime_hh", "2");//After 7am defore 6pm , ,max diff 6 hrs
             map.put("sttime_mm", "30");
             map.put("frm_timetype", "PM");
@@ -140,12 +144,12 @@ public class LeaveRequest extends Fragment {
                 Http.getData(POST_LINK_PRE, httpClient);
                 final String data = Http.postMethod(MAIN_POST_LINK, map, httpClient);
                 //final String finalData = Http.getData(GET_SYLL, httpClient);
-//                map = new HashMap<>();//cleared
-//                map.put("crscd", "BIF304");
-//                map.put("crstp", "TH");
-//                map.put("version", "1");
-//                map.put("sybcmd", "Download");
-//                final InputStream stream = Http.postMethodStream(POST_SYLL, map, httpClient);
+//                mapLTYPE = new HashMap<>();//cleared
+//                mapLTYPE.put("crscd", "BIF304");
+//                mapLTYPE.put("crstp", "TH");
+//                mapLTYPE.put("version", "1");
+//                mapLTYPE.put("sybcmd", "Download");
+//                final InputStream stream = Http.postMethodStream(POST_SYLL, mapLTYPE, httpClient);
                 // saveFile(stream);
                 getActivity().runOnUiThread(new Runnable() {
                     @Override

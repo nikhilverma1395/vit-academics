@@ -265,7 +265,7 @@ public class GetFacDataStudLogin extends Fragment {
         Elements data = Jsoup.parse(content).getElementsByTag("table").get(1).getElementsByTag("tr");
         data.remove(0);
         String pass[] = new String[8];
-        pass[0] = new ParseTimeTable().FirstCharCap(data.get(0).getElementsByTag("td").get(1).html().trim());
+        pass[0] = new ParseTimeTable(null, null).FirstCharCap(data.get(0).getElementsByTag("td").get(1).html().trim());
         String school = data.get(1).getElementsByTag("td").get(1).html().trim();
         pass[1] = school.replaceAll("amp;", "");
         pass[2] = data.get(2).getElementsByTag("td").get(1).html().trim();
