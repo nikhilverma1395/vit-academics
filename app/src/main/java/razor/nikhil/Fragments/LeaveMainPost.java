@@ -1,5 +1,6 @@
 package razor.nikhil.Fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,7 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+
+import com.gc.materialdesign.widgets.SnackBar;
 
 import org.apache.http.client.HttpClient;
 import org.jsoup.Jsoup;
@@ -36,7 +38,7 @@ import razor.nikhil.model.FacMsgModel;
 /**
  * Created by Nikhil Verma on 10/2/2015.
  */
-public class PreStudentLogFrag extends Fragment {
+public class LeaveMainPost extends Fragment {
     private static HttpClient httpClient;
     private EditText REGNO, PASS, CAPTXT;
     private ImageView CAPIMAG;
@@ -44,8 +46,8 @@ public class PreStudentLogFrag extends Fragment {
     private String POST_LINK_PRE = "https://academics.vit.ac.in/student/leave_request.asp";
     private String MAIN_POST_LINK = "https://academics.vit.ac.in/student/leave_request_submit.asp";
 
-    public static PreStudentLogFrag newInstance() {
-        PreStudentLogFrag fragment = new PreStudentLogFrag();
+    public static LeaveMainPost newInstance() {
+        LeaveMainPost fragment = new LeaveMainPost();
         return fragment;
     }
 
@@ -100,7 +102,7 @@ public class PreStudentLogFrag extends Fragment {
     }
 
     private void mysync() {
-        new AsyncTask<Void, Void, Void>() {
+        new AsyncTask<Void, String, String>() {
             String uname = "", pass = "", cap = "";
             String appprovAuth = "", ltype = "", exitD = "", exitHr = "", exitMin = "", exitPeriod = "", entryD = "", entryHr = "", entryMin = "", entryPeriod = "", place = "", reason = "";
 
@@ -129,7 +131,6 @@ public class PreStudentLogFrag extends Fragment {
                 entryPeriod = LeaveApply.entry_am_pm.getSelectedItem().toString();
                 place = LeaveReason.place.getText().toString();
                 reason = LeaveReason.reason.getText().toString();
-                Log.d("dskjdbsd", entryD + "\t" + exitD);
             }
 
             private String changeDateFormat(String ip) throws ParseException {
@@ -140,9 +141,13 @@ public class PreStudentLogFrag extends Fragment {
                 return sdf.format(date);
             }
 
+            ProgressDialog dialog;
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                dialog = ProgressDialog.show(getActivity(), "Applying for Leave",
+                        "Wait", true);
                 button.setEnabled(false);
                 cap = CAPTXT.getText().toString();
                 uname = REGNO.getText().toString();
@@ -150,12 +155,24 @@ public class PreStudentLogFrag extends Fragment {
                 setParams();
             }
 
+            @Override
+            protected void onProgressUpdate(String... values) {
+                super.onProgressUpdate(values);
+                dialog.setMessage(values[0]);
+            }
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected String doInBackground(Void... params) {
                 try {
                     httpClient = Logins.StudentLogin(uname, pass, cap, httpClient);
+                    if (Logins.isStudLogin.equals("y"))
+                        publishProgress("Logged In");
+                    else {
+                        publishProgress("Error in Logging In!");
+                        return null;
+                    }
                 } catch (Exception e) {
+                    publishProgress("Error in Logging In!");
                     e.printStackTrace();
                 }
                 HashMap<String, String> map = new HashMap<>();
@@ -181,17 +198,11 @@ public class PreStudentLogFrag extends Fragment {
                     Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//need this as a pre-req
                     Http.getData(POST_LINK_PRE, httpClient);//3nd pre-reqr
                     Http.getData("https://academics.vit.ac.in/student/leave_apply_dt.asp?x=%20&lvtyp=" + ltype, httpClient);//2nd pre-req
+                    publishProgress("Applying For Leave..");
                     final String data = Http.postMethod(MAIN_POST_LINK, map, httpClient);
+                    publishProgress("Success");
                     Log.d("Data", data);
-                    getActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (data.contains("Sucessfully")) {
-                                                            Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    }
-                                                }
-                    );
+                    return data;
                     //final String finalData = Http.getData(GET_SYLL, httpClient);
 //                mapLTYPE = new HashMap<>();//cleared
 //                mapLTYPE.put("crscd", "BIF304");
@@ -200,18 +211,18 @@ public class PreStudentLogFrag extends Fragment {
 //                mapLTYPE.put("sybcmd", "Download");
 //                final InputStream stream = Http.postMethodStream(POST_SYLL, mapLTYPE, httpClient);
                     // saveFile(stream);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //          Toast.makeText(getActivity(), "File Saved in Root Directory as\t" + "BIF304_Syllabus.pdf", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //          log.setText(we + "\n\n" + weq + "\n\n\n" + data);
-                        }
-                    });
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            //          Toast.makeText(getActivity(), "File Saved in Root Directory as\t" + "BIF304_Syllabus.pdf", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            //          log.setText(we + "\n\n" + weq + "\n\n\n" + data);
+//                        }
+//                    });
                 } catch (Exception e) {
                     Log.d("Exception", e.toString());
                     e.printStackTrace();
@@ -221,8 +232,16 @@ public class PreStudentLogFrag extends Fragment {
             }
 
             @Override
-            protected void onPostExecute(Void aVoid) {
+            protected void onPostExecute(String aVoid) {
                 super.onPostExecute(aVoid);
+                dialog.dismiss();
+                String no = "Error in Applying Leave!";
+                String yes = "Leave Applied Successfully";
+                String param = no;
+                if (aVoid.contains("Apply Id"))
+                    param = yes;
+                SnackBar snackbar = new SnackBar(getActivity(), param, null, null);
+                snackbar.show();
             }
         }.execute();
     }

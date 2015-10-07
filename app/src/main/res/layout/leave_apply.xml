@@ -61,6 +61,7 @@
         android:background="?attr/selectableItemBackground"
         android:drawableRight="@drawable/cal_32px"
         android:gravity="center"
+        android:textSize="16sp"
         android:hint="Exit Date"
         android:textColor="#885a605a" />
 
@@ -89,7 +90,7 @@
             app:ms_hint="Exit Hr."
             app:ms_multiline="false"
             app:ms_thickness="1dp"
-            app:ms_typeface="Roboto-Thin.ttf" />
+            app:ms_typeface="Roboto-Regular.ttf" />
 
         <fr.ganfra.materialspinner.MaterialSpinner
             android:id="@+id/exit_min"
@@ -128,7 +129,7 @@
             app:ms_baseColor="@color/button_foc"
             app:ms_errorColor="@color/red"
             app:ms_floatingLabelColor="@color/button_press"
-            app:ms_floatingLabelText="Entry Period"
+            app:ms_floatingLabelText="Period"
             app:ms_highlightColor="@color/button_def"
             app:ms_hint="Period"
             app:ms_multiline="false"
@@ -146,6 +147,7 @@
         android:background="?attr/selectableItemBackground"
         android:drawableRight="@drawable/cal_32px"
         android:gravity="center"
+        android:textSize="16sp"
         android:hint="Entry Date"
         android:textColor="#885a605a" />
 

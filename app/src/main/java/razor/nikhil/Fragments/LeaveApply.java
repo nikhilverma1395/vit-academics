@@ -32,6 +32,10 @@ public class LeaveApply extends Fragment implements DatePickerDialog.OnDateSetLi
     public static HashMap<String, String> mapApprov = new HashMap<>();
     ButtonRectangle proceed;
     boolean one = false, two = false;
+    String appprovAuth = "", ltype = "", exitD = "", exitHr = "", exitMin = "", exitPeriod = "", entryD = "", entryHr = "", entryMin = "", entryPeriod = "", place = "", reason = "";
+    String appprovAuthHint = "Approving Authority", ltypeHint = "Leave Type", exitHrHint = "Exit Hr.", exitMinHint = "Exit Min.", exitPeriodHint = "Period",
+            entryHrHint = "Entry Hr.",
+            entryMinHint = "Entry Min.";
 
     public static LeaveApply newInstance() {
         LeaveApply fragment = new LeaveApply();
@@ -66,11 +70,70 @@ public class LeaveApply extends Fragment implements DatePickerDialog.OnDateSetLi
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container_main, LeaveReason.newInstance()).addToBackStack(null).commit();
+                if (checkFields())
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .add(R.id.container_main, LeaveReason.newInstance()).addToBackStack(null).commit();
             }
         });
     }
+
+    private boolean checkFields() {
+        boolean valid = true;
+        appprovAuth = approvAuth.getSelectedItem().toString();
+        if (appprovAuth.equals(appprovAuthHint)) {
+            valid = false;
+            approvAuth.setError("Select one field!");
+        }
+        appprovAuth = LeaveApply.mapApprov.get(appprovAuth);
+        ltype = LeaveType.getSelectedItem().toString();
+        if (ltype.equals(ltypeHint)) {
+            valid = false;
+            LeaveType.setError("Select one field!");
+        }
+        //   ltype = mapLTYPE.get(ltype);
+        exitD = exitDate.getText().toString();
+        if (exitD.equals("") || exitD.equals(null)) {
+            valid = false;
+            exitDate.setError("Select Exit Date");
+        }
+        exitHr = exit_hr.getSelectedItem().toString();
+        if (exitHr.equals(exitHrHint)) {
+            valid = false;
+            exit_hr.setError("Select exit hour!");
+        }
+        exitMin = exit_min.getSelectedItem().toString();
+        if (exitMin.equals(exitMinHint)) {
+            valid = false;
+            exit_min.setError("Select exit minutes!");
+        }
+        exitPeriod = exit_am_pm.getSelectedItem().toString();
+        if (exitPeriod.equals(exitPeriodHint)) {
+            valid = false;
+            exit_am_pm.setError("Select exit Period!");
+        }
+        entryD = entryDate.getText().toString();
+        if (entryD.equals("") || entryD.equals(null)) {
+            valid = false;
+            entryDate.setError("Select return Date");
+        }
+        entryHr = entry_hr.getSelectedItem().toString();
+        if (entryHr.equals(entryHrHint)) {
+            valid = false;
+            entry_hr.setError("Select entry Hour");
+        }
+        entryMin = entry_min.getSelectedItem().toString();
+        if (entryMin.equals(entryMinHint)) {
+            valid = false;
+            entry_min.setError("Select entry minutes!");
+        }
+        entryPeriod = entry_am_pm.getSelectedItem().toString();
+        if (entryPeriod.equals(exitPeriodHint)) {
+            valid = false;
+            entry_am_pm.setError("Select entry Period!");
+        }
+        return valid;
+    }
+
 
     public void setAdapter(String[] type, MaterialSpinner mp) {
         ArrayAdapter<String> LTYPES = new ArrayAdapter<>(getActivity(), R.layout.leave_spinner_ror, type);
@@ -108,6 +171,7 @@ public class LeaveApply extends Fragment implements DatePickerDialog.OnDateSetLi
         exitDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exitDate.setError(null);
                 one = true;
                 two = false;
                 Calendar now = Calendar.getInstance();
@@ -123,6 +187,7 @@ public class LeaveApply extends Fragment implements DatePickerDialog.OnDateSetLi
         entryDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                entryDate.setError(null);
                 one = false;
                 two = true;
                 Calendar now = Calendar.getInstance();

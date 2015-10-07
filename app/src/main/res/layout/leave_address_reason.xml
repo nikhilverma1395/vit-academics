@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ff2b2941"
+    android:clickable="true"
     android:orientation="vertical"
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
@@ -15,8 +16,7 @@
         android:layout_marginBottom="20dp"
         android:hint="Place and Address"
         android:maxLength="100"
-        android:paddingBottom="35dp"
-        android:text="" />
+        android:paddingBottom="35dp" />
 
     <EditText
         android:id="@+id/leave_reason"
@@ -32,5 +32,5 @@
         android:layout_width="140dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:text="Apply" />
+        android:text="Proceed" />
 </LinearLayout>

@@ -2,8 +2,6 @@ package razor.nikhil.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,56 +38,38 @@ public class LeaveReason extends android.support.v4.app.Fragment {
     private void init(View view) {
         place = (EditText) view.findViewById(R.id.leave_place);
         reason = (EditText) view.findViewById(R.id.leave_reason);
-        watchers();
         rectangle = (ButtonRectangle) view.findViewById(R.id.leave_reasonfrag_button);
         rectangle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, PreStudentLogFrag.newInstance()).addToBackStack(null).commit();
+                if (valid())
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, LeaveMainPost.newInstance()).addToBackStack(null).commit();
             }
         });
     }
 
-    private void watchers() {
-        place.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String sw = s.toString();
-                if (sw.length() <= 5) {
-                    place.setError("Length should be greater than 5!");
-                    rectangle.setEnabled(false);
-                } else rectangle.setEnabled(true);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        reason.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String sw = s.toString();
-                if (sw.length() <= 5) {
-                    reason.setError("Length should be greater than 5!");
-                    rectangle.setEnabled(false);
-                } else rectangle.setEnabled(true);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+    private boolean valid() {
+        String o = place.getText().toString();
+        String m = reason.getText().toString();
+        if (o.equals("")
+                || o.equals(null) || o.equals("Place")) {//|| m.equals("") || m.equals(null)) {
+            place.setError("Place cannot be blank!");
+            return false;
+        }
+        if (o.length() <= 5) {
+            place.setError("Place should be greater than 5 chars!");
+            return false;
+        }
+        if (m.equals("")
+                || m.equals(null) || m.equals("Reason")) {//|| m.equals("") || m.equals(null)) {
+            reason.setError("Reason cannot be blank!");
+            return false;
+        }
+        if (m.length() <= 5) {
+            reason.setError("Reason should be greater than 5 chars!");
+            return false;
+        }
+        return true;
     }
 }
+
