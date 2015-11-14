@@ -7,8 +7,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rview_cgpa"
         android:layout_width="match_parent"
+        android:paddingTop="?attr/actionBarSize"
+        android:clipToPadding="false"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:scrollbarSize="2dp"
         android:scrollbars="vertical" />
 

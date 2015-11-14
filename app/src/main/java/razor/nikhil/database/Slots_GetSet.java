@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,11 +16,18 @@ import razor.nikhil.model.Model_Slots;
  */
 public class Slots_GetSet {
     private static final String LOG_CAT = "Sqlite.Slots";
-    private static SQLiteOpenHelper sqLiteOpenHelper;
+    private static MySqlHelper_Slots sqLiteOpenHelper;
     public SQLiteDatabase sqLiteDatabase;
 
     public Slots_GetSet(Context context) {
         sqLiteOpenHelper = new MySqlHelper_Slots(context);
+    }
+
+    public void Delete() {
+        open();
+        sqLiteDatabase.execSQL(" DROP TABLE " + MySqlHelper_Slots.TABLE_NAME);
+        sqLiteDatabase.execSQL(sqLiteOpenHelper.getTABLE_CREATE());
+        close();
     }
 
     public void open() {

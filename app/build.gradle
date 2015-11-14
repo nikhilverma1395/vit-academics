@@ -24,6 +24,7 @@ dependencies {
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 android {
     compileSdkVersion 23

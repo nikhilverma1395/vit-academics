@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_daywise"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:focusable="true"
+    card_view:cardCornerRadius="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:id="@+id/ll_leae"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="7">
+
+            <TextView
+                android:id="@+id/leave_pend_sname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="3"
+                android:text="Nikhil Verma"
+                android:textColor="#313030"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/leave_pend_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Emergency Leave"
+                android:textSize="19sp" />
+
+            <com.gc.materialdesign.views.ButtonFloat
+                android:id="@+id/fac_pend_cancelbutfloat"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                materialdesign:iconDrawable="@drawable/cross" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/leave_pend_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ll_leae"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="14dp"
+            android:layout_marginTop="10dp"
+            android:text="Not Approved"
+            android:textColor="#3e3d3d"
+            android:textSize="23sp" />
+
+        <TextView
+            android:id="@+id/leave_pend_from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/leave_pend_status"
+            android:layout_marginLeft="10dp"
+            android:text="21-OCT-2015"
+            android:textSize="19sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/leave_pend_to_t"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/leave_pend_status"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:text="to"
+            android:textColor="#515050"
+            android:textSize="21sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/leave_pend_to"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/leave_pend_status"
+            android:layout_marginRight="10dp"
+            android:text="29-OCT-2015"
+            android:textColor="#515050"
+            android:textSize="19sp"
+            android:textStyle="italic" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+

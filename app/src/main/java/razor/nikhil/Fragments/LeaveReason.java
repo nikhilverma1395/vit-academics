@@ -43,7 +43,7 @@ public class LeaveReason extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 if (valid())
-                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, LeaveMainPost.newInstance()).addToBackStack(null).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, LeaveMainPost.newInstance(true)).addToBackStack(null).commit();
             }
         });
     }

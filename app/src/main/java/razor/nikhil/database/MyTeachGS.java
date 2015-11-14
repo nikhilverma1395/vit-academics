@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,11 +16,18 @@ import razor.nikhil.model.MyTeacherDet;
  */
 public class MyTeachGS {
     private static final String LOG_CAT = "Sqlite.myt";
-    private static SQLiteOpenHelper sqLiteOpenHelper;
+    private static MyTeacherHelper sqLiteOpenHelper;
     public SQLiteDatabase sqLiteDatabase;
 
     public MyTeachGS(Context context) {
         sqLiteOpenHelper = new MyTeacherHelper(context);
+    }
+
+    public void Delete() {
+        open();
+        sqLiteDatabase.execSQL(" DROP TABLE " + MyTeacherHelper.TABLE_NAME);
+        sqLiteDatabase.execSQL(sqLiteOpenHelper.getTABLE_CREATE());
+        close();
     }
 
     public void open() {

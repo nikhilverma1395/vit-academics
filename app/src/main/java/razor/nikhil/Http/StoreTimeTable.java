@@ -49,12 +49,14 @@ public class StoreTimeTable {
 
                 if (i == 0) {
                     MTWTHgetset mod = new MTWTHgetset(context, "monday");
+                    mod.Delete();
                     for (Model_Daywise md : alldayssortedtt.get(0)) {
                         mod.create(md);
                     }
                 }
                 if (i == 1) {
                     MTWTHgetset mod = new MTWTHgetset(context, "tuesday");
+                    mod.Delete();
                     for (Model_Daywise md : alldayssortedtt.get(1)) {
                         mod.create(md);
                     }
@@ -62,6 +64,7 @@ public class StoreTimeTable {
                 }
                 if (i == 2) {
                     MTWTHgetset mod = new MTWTHgetset(context, "wednesday");
+                    mod.Delete();
                     for (Model_Daywise md : alldayssortedtt.get(2)) {
                         mod.create(md);
                     }
@@ -69,6 +72,7 @@ public class StoreTimeTable {
                 }
                 if (i == 3) {
                     MTWTHgetset mod = new MTWTHgetset(context, "thursday");
+                    mod.Delete();
                     for (Model_Daywise md : alldayssortedtt.get(3)) {
                         mod.create(md);
                     }
@@ -76,12 +80,13 @@ public class StoreTimeTable {
                 }
                 if (i == 4) {
                     MTWTHgetset mod = new MTWTHgetset(context, "friday");
+                    mod.Delete();
                     for (Model_Daywise md : alldayssortedtt.get(4)) {
                         mod.create(md);
                     }
 
                 }
-                Log.d("TR","sdddddddddd");
+                Log.d("TR", "sdddddddddd");
             }
         }
     }

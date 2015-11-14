@@ -33,6 +33,9 @@ public class MyTeacherHelper extends SQLiteOpenHelper {
     //Database Version
     private static final int DATABASE_VERSION = 1;
 
+    public String getTABLE_CREATE() {
+        return TABLE_CREATE;
+    }
 
     public MyTeacherHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

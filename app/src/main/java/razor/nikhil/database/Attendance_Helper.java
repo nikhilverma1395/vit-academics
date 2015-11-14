@@ -16,6 +16,10 @@ public class Attendance_Helper extends SQLiteOpenHelper {
     public static final String COLUMN_ATTEND_PERCENT = "percent_";
     public static final String COLUMN_subtype = "subtype_";
 
+    public String getTABLE_CREATE() {
+        return TABLE_CREATE;
+    }
+
     private final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
             _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_SUBJECT_CODE + " TEXT, " +

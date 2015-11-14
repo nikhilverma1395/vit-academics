@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
-    android:padding="10dp">
+    android:background="#fff">
 
     <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
         android:id="@+id/progress_multi_teach"
@@ -11,10 +10,35 @@
         android:layout_height="80dp"
         android:layout_centerInParent="true"
         android:background="#36b484"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
-    <android.support.v7.widget.RecyclerView
+    <ImageButton
+        android:id="@+id/refresh_ib_"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerInParent="true"
+        android:background="?attr/selectableItemBackground"
+        android:elevation="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/refresh"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/no_data_rv_syll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="No Results Available!"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="27sp"
+        android:visibility="gone" />
+
+    <com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView
         android:id="@+id/recyclerView_multi_teach"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:clipToPadding="false"
+        android:paddingTop="?attr/actionBarSize" />
 </RelativeLayout>

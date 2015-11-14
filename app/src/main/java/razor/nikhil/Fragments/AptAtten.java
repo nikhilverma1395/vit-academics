@@ -86,7 +86,7 @@ public class AptAtten extends Fragment {
     }
 
     private void init(View view) {
-        progress_ll_ = (ProgressBarCircularIndeterminate) view.findViewById(R.id.progress_ll_);
+        progress_ll_ = (ProgressBarCircularIndeterminate) view.findViewById(R.id.progress_ll_log_dialog);
         REGNO = (EditText) view.findViewById(R.id.regno_studentlog_myt);
         PASS = (EditText) view.findViewById(R.id.pass_studentlog_myt);
         CAPIMAG = (ImageView) view.findViewById(R.id.capImg_studentlog_myt);

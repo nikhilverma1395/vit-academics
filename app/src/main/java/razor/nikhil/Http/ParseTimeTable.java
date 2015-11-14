@@ -100,12 +100,16 @@ public class ParseTimeTable {
         try {
             Slots_GetSet mes = new Slots_GetSet(context);
             if (mes.getEntriesCount() == 0) {
-
+                mes.Delete();
                 for (Model_Slots ms : list_slots) {
                     mes.create(ms);
                 }
                 context.getSharedPreferences("VitAcademics_sp", Context.MODE_PRIVATE).edit().putString("slots_down", "yes").commit();
             } else {
+                mes.Delete();
+                for (Model_Slots ms : list_slots) {
+                    mes.create(ms);
+                }
                 context.getSharedPreferences("VitAcademics_sp", Context.MODE_PRIVATE).edit().putString("slots_down", "already").commit();
             }
             List<Model_Slots> ms = list_slots;
@@ -114,7 +118,7 @@ public class ParseTimeTable {
                     new PostStudFragPre(context, client).MYT(tnames(list_slots));
                 }
             });
-               th[0].start();
+            th[0].start();
         } catch (Exception e) {
             e.printStackTrace();
             context.getSharedPreferences("VitAcademics_sp", Context.MODE_PRIVATE).edit().putString("slots_down", "no").commit();

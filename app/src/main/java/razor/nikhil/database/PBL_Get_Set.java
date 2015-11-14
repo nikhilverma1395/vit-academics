@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import razor.nikhil.model.PBL_Model;
  */
 public class PBL_Get_Set {
     private static final String LOG_CAT = "Academics.Marks.Pbl";
-    private static SQLiteOpenHelper sqLiteOpenHelper;
+    private static PBL_Helper sqLiteOpenHelper;
     public SQLiteDatabase sqLiteDatabase;
 
     public PBL_Get_Set(Context context) {
@@ -28,6 +27,13 @@ public class PBL_Get_Set {
         Log.i(LOG_CAT, "Database opened");
         sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
 
+    }
+
+    public void Delete() {
+        open();
+        sqLiteDatabase.execSQL(" DROP TABLE " + PBL_Helper.TABLE_NAME);
+        sqLiteDatabase.execSQL(sqLiteOpenHelper.getTABLE_CREATE());
+        close();
     }
 
     public int getEntriesCount() {
@@ -42,7 +48,7 @@ public class PBL_Get_Set {
 
     public List<PBL_Model> getAllCredentials() {
         List<PBL_Model> list = new ArrayList<>();
-        String Query = "SELECT  * FROM " +PBL_Helper.TABLE_NAME;
+        String Query = "SELECT  * FROM " + PBL_Helper.TABLE_NAME;
         open();
         Cursor cursor = sqLiteDatabase.rawQuery(Query, null);
         if (cursor.moveToFirst()) {
@@ -109,56 +115,58 @@ public class PBL_Get_Set {
     }
 
 
-    public void create(PBL_Model model) {
+    public void create(List<PBL_Model> list) {
         open();
-        ContentValues contentValues = new ContentValues();
+        for (PBL_Model model : list) {
+            ContentValues contentValues = new ContentValues();
 
-        contentValues.put(PBL_Helper.course_code, model.getCourse_code());
-        contentValues.put(PBL_Helper.clas_nbr, model.getClas_nbr());
+            contentValues.put(PBL_Helper.course_code, model.getCourse_code());
+            contentValues.put(PBL_Helper.clas_nbr, model.getClas_nbr());
 
-        contentValues.put(PBL_Helper.Option1_Title, model.getOption1_Title());
-        contentValues.put(PBL_Helper.Option2_Title, model.getOption2_Title());
-        contentValues.put(PBL_Helper.Option3_Title, model.getOption3_Title());
-        contentValues.put(PBL_Helper.Option4_Title, model.getOption4_Title());
-        contentValues.put(PBL_Helper.Option5_Title, model.getOption5_Title());
+            contentValues.put(PBL_Helper.Option1_Title, model.getOption1_Title());
+            contentValues.put(PBL_Helper.Option2_Title, model.getOption2_Title());
+            contentValues.put(PBL_Helper.Option3_Title, model.getOption3_Title());
+            contentValues.put(PBL_Helper.Option4_Title, model.getOption4_Title());
+            contentValues.put(PBL_Helper.Option5_Title, model.getOption5_Title());
 
-        contentValues.put(PBL_Helper.Option1_Max_Mark, model.getOption1_Max_Mark());
-        contentValues.put(PBL_Helper.Option2_Max_Mark, model.getOption2_Max_Mark());
-        contentValues.put(PBL_Helper.Option3_Max_Mark, model.getOption3_Max_Mark());
-        contentValues.put(PBL_Helper.Option4_Max_Mark, model.getOption4_Max_Mark());
-        contentValues.put(PBL_Helper.Option5__Max_Mark, model.getOption5__Max_Mark());
+            contentValues.put(PBL_Helper.Option1_Max_Mark, model.getOption1_Max_Mark());
+            contentValues.put(PBL_Helper.Option2_Max_Mark, model.getOption2_Max_Mark());
+            contentValues.put(PBL_Helper.Option3_Max_Mark, model.getOption3_Max_Mark());
+            contentValues.put(PBL_Helper.Option4_Max_Mark, model.getOption4_Max_Mark());
+            contentValues.put(PBL_Helper.Option5__Max_Mark, model.getOption5__Max_Mark());
 
-        contentValues.put(PBL_Helper.Option1_Weightage, model.getOption1_Weightage());
-        contentValues.put(PBL_Helper.Option2_Weightage, model.getOption2_Weightage());
-        contentValues.put(PBL_Helper.Option3_Weightage, model.getOption3_Weightage());
-        contentValues.put(PBL_Helper.Option4_Weightage, model.getOption4_Weightage());
-        contentValues.put(PBL_Helper.Option5_Weightage, model.getOption5_Weightage());
+            contentValues.put(PBL_Helper.Option1_Weightage, model.getOption1_Weightage());
+            contentValues.put(PBL_Helper.Option2_Weightage, model.getOption2_Weightage());
+            contentValues.put(PBL_Helper.Option3_Weightage, model.getOption3_Weightage());
+            contentValues.put(PBL_Helper.Option4_Weightage, model.getOption4_Weightage());
+            contentValues.put(PBL_Helper.Option5_Weightage, model.getOption5_Weightage());
 
-        contentValues.put(PBL_Helper.Option1_Date, model.getOption1_Date());
-        contentValues.put(PBL_Helper.Option2_Date, model.getOption2_Date());
-        contentValues.put(PBL_Helper.Option3_Date, model.getOption3_Date());
-        contentValues.put(PBL_Helper.Option4_Date, model.getOption4_Date());
-        contentValues.put(PBL_Helper.Option5_Date, model.getOption5_Date());
+            contentValues.put(PBL_Helper.Option1_Date, model.getOption1_Date());
+            contentValues.put(PBL_Helper.Option2_Date, model.getOption2_Date());
+            contentValues.put(PBL_Helper.Option3_Date, model.getOption3_Date());
+            contentValues.put(PBL_Helper.Option4_Date, model.getOption4_Date());
+            contentValues.put(PBL_Helper.Option5_Date, model.getOption5_Date());
 
-        contentValues.put(PBL_Helper.Option1_Attend, model.getOption1_Attend());
-        contentValues.put(PBL_Helper.Option2_Attend, model.getOption2_Attend());
-        contentValues.put(PBL_Helper.Option3_Attend, model.getOption3_Attend());
-        contentValues.put(PBL_Helper.Option4_Attend, model.getOption4_Attend());
-        contentValues.put(PBL_Helper.Option5_Attend, model.getOption5_Attend());
+            contentValues.put(PBL_Helper.Option1_Attend, model.getOption1_Attend());
+            contentValues.put(PBL_Helper.Option2_Attend, model.getOption2_Attend());
+            contentValues.put(PBL_Helper.Option3_Attend, model.getOption3_Attend());
+            contentValues.put(PBL_Helper.Option4_Attend, model.getOption4_Attend());
+            contentValues.put(PBL_Helper.Option5_Attend, model.getOption5_Attend());
 
-        contentValues.put(PBL_Helper.Option1_Scored, model.getOption1_Scored());
-        contentValues.put(PBL_Helper.Option2_Scored, model.getOption2_Scored());
-        contentValues.put(PBL_Helper.Option3_Scored, model.getOption3_Scored());
-        contentValues.put(PBL_Helper.Option4_Scored, model.getOption4_Scored());
-        contentValues.put(PBL_Helper.Option5_Scored, model.getOption5_Scored());
+            contentValues.put(PBL_Helper.Option1_Scored, model.getOption1_Scored());
+            contentValues.put(PBL_Helper.Option2_Scored, model.getOption2_Scored());
+            contentValues.put(PBL_Helper.Option3_Scored, model.getOption3_Scored());
+            contentValues.put(PBL_Helper.Option4_Scored, model.getOption4_Scored());
+            contentValues.put(PBL_Helper.Option5_Scored, model.getOption5_Scored());
 
-        contentValues.put(PBL_Helper.Option1_Scored_Percent, model.getOption1_Scored_Percent());
-        contentValues.put(PBL_Helper.Option2_Scored_Percent, model.getOption2_Scored_Percent());
-        contentValues.put(PBL_Helper.Option3_Scored_Percent, model.getOption3_Scored_Percent());
-        contentValues.put(PBL_Helper.Option4_Scored_Percent, model.getOption4_Scored_Percent());
-        contentValues.put(PBL_Helper.Option5_Scored_Percent, model.getOption5_Scored_Percent());
-        long id = sqLiteDatabase.insert(PBL_Helper.TABLE_NAME, null, contentValues);
-        model.set_id(id);
+            contentValues.put(PBL_Helper.Option1_Scored_Percent, model.getOption1_Scored_Percent());
+            contentValues.put(PBL_Helper.Option2_Scored_Percent, model.getOption2_Scored_Percent());
+            contentValues.put(PBL_Helper.Option3_Scored_Percent, model.getOption3_Scored_Percent());
+            contentValues.put(PBL_Helper.Option4_Scored_Percent, model.getOption4_Scored_Percent());
+            contentValues.put(PBL_Helper.Option5_Scored_Percent, model.getOption5_Scored_Percent());
+            long id = sqLiteDatabase.insert(PBL_Helper.TABLE_NAME, null, contentValues);
+            model.set_id(id);
+        }
         close();
     }
 

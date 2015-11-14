@@ -4,12 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import razor.nikhil.Http.FullAttendParseStore;
 import razor.nikhil.model.DetailAtten;
 import razor.nikhil.model.DetailAttenColumnNames;
 
@@ -18,7 +18,7 @@ import razor.nikhil.model.DetailAttenColumnNames;
  */
 public class IndivAttGetSet {
     private static final String LOG_CAT = "Academics.IndivAtt";
-    private static SQLiteOpenHelper sqLiteOpenHelper;
+    private static IndivAttHelper sqLiteOpenHelper;
     private final Context context;
     public SQLiteDatabase sqLiteDatabase;
     private String TABLE = "";
@@ -26,7 +26,14 @@ public class IndivAttGetSet {
     public IndivAttGetSet(Context context, String tname) {
         this.context = context;
         sqLiteOpenHelper = new IndivAttHelper(context);
-        this.TABLE = tname;
+        this.TABLE = tname.trim();
+    }
+
+    public void Delete(String code) {
+        open();
+        sqLiteDatabase.execSQL(" DROP TABLE " + TABLE);
+        sqLiteDatabase.execSQL(FullAttendParseStore.getFullAttTableName(code));
+        close();
     }
 
     public void open() {

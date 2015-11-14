@@ -12,6 +12,8 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/cview" />
             <option value="$PROJECT_DIR$/myapplication" />
+            <option value="$PROJECT_DIR$/ornew" />
+            <option value="$PROJECT_DIR$/orproj" />
           </set>
         </option>
       </GradleProjectSettings>

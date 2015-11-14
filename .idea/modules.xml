@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/cview/cview.iml" filepath="$PROJECT_DIR$/cview/cview.iml" />
       <module fileurl="file://$PROJECT_DIR$/myapplication/myapplication.iml" filepath="$PROJECT_DIR$/myapplication/myapplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ornew/ornew.iml" filepath="$PROJECT_DIR$/ornew/ornew.iml" />
+      <module fileurl="file://$PROJECT_DIR$/orproj/orproj.iml" filepath="$PROJECT_DIR$/orproj/orproj.iml" />
     </modules>
   </component>
 </project>

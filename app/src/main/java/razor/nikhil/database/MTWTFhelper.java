@@ -20,16 +20,20 @@ public class MTWTFhelper extends SQLiteOpenHelper {
     public MTWTFhelper(Context context) {
         super(context, "MTWTF", null, 1);
         for (int r = 0; r < 5; r++) {
-            String st = "CREATE TABLE " + table[r] + " (" +
-                    "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    COLUMN_SUBJECT_NAME + " TEXT, " +
-                    COLUMN_SUBJECT_CODE + " TEXT, " +
-                    COLUMN_SUBJECT_TYPE + " TEXT, " +
-                    COLUMN_SUBJECT_VENUE + " TEXT, " +
-                    COLUMN_TIMINGS       + " TEXT, " +
-                    COLUMN_SLOT       + " TEXT " + ");";
-            Queries[r] = st;
+            Queries[r] = getQueryByTable(table[r]);
         }
+    }
+
+    public String getQueryByTable(String TABLE) {
+        String st = "CREATE TABLE " + TABLE + " (" +
+                "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_SUBJECT_NAME + " TEXT, " +
+                COLUMN_SUBJECT_CODE + " TEXT, " +
+                COLUMN_SUBJECT_TYPE + " TEXT, " +
+                COLUMN_SUBJECT_VENUE + " TEXT, " +
+                COLUMN_TIMINGS + " TEXT, " +
+                COLUMN_SLOT + " TEXT " + ");";
+        return st;
     }
 
     @Override

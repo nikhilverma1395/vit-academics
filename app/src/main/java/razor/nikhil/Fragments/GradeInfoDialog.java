@@ -26,7 +26,6 @@ public class GradeInfoDialog extends DialogFragment {
     }
 
     public GradeInfoDialog() {
-        // Empty constructor required for DialogFragment
     }
 
     public static GradeInfoDialog newInstance(GradeModel mod) {

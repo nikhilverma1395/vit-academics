@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,11 +16,18 @@ import razor.nikhil.model.AttendBrief;
  */
 public class Attend_GetSet {
     private static final String LOG_CAT = "Sqlite.Attend_getset";
-    private static SQLiteOpenHelper sqLiteOpenHelper;
+    private static Attendance_Helper sqLiteOpenHelper;
     public SQLiteDatabase sqLiteDatabase;
 
     public Attend_GetSet(Context context) {
         sqLiteOpenHelper = new Attendance_Helper(context);
+    }
+
+    public void Delete() {
+        open();
+        sqLiteDatabase.execSQL(" DROP TABLE " + Attendance_Helper.TABLE_NAME);
+        sqLiteDatabase.execSQL(sqLiteOpenHelper.getTABLE_CREATE());
+        close();
     }
 
     public void open() {

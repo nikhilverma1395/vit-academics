@@ -17,6 +17,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +39,10 @@ import razor.nikhil.Fragments.GetFacMessage;
 import razor.nikhil.Fragments.GetFacMsgList;
 import razor.nikhil.Fragments.GradeFragment;
 import razor.nikhil.Fragments.LeavePre;
-import razor.nikhil.Fragments.LeaveRequest;
 import razor.nikhil.Fragments.MyTeachers;
 import razor.nikhil.Fragments.MyTeachersList;
 import razor.nikhil.Fragments.Slots;
+import razor.nikhil.Fragments.Syllabus;
 import razor.nikhil.Fragments.TimeTableVP;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
@@ -63,7 +68,7 @@ import razor.nikhil.model.detailattlist_subcode;
 
 public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.HeaderItemClicked {
 
-    String TITLES[] = {"Courses", "Faculty Info", "Enter Details", "TimeTable", "Grades", "Faculty Adviser", "Leave", "CGPA Calculator", "My Teachers", "Messages", "APT Attendance", "Course Page", "Leave Request Pre"};
+    String TITLES[] = {"Courses", "Faculty Info", "Enter Details", "TimeTable", "Grades", "Faculty Adviser", "Syllabus", "CGPA Calculator", "My Teachers", "Messages", "APT Attendance", "Course Page", "Leave Request Pre"};
     int ICONS[] = {R.mipmap.user_icon,
             R.mipmap.assignment,
             R.mipmap.tick_icon,
@@ -80,6 +85,12 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
             R.mipmap.book,
             R.mipmap.ic_dns,
     };
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     public static List<Model_Slots> list;
     private static GetDetails gd;
     public static List<Model_Daywise> todayslist_m = new ArrayList<>();
@@ -99,7 +110,7 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
     int PROFILE = R.drawable.head;
     private HashMap<String, Integer> mapsubcred = new HashMap<>();
     public static Context context;
-    private Toolbar toolbar;
+    private Toolbar mToolbar;
 
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
@@ -109,6 +120,7 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
     ActionBarDrawerToggle mDrawerToggle;
     public static List<GradeModel> grades;
     private String teacherNames[];
+    private int mToolbarHeight;
 
     public void setMTWTFLists(final Context ctxt) {
         try {
@@ -206,8 +218,9 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
             e.printStackTrace();
         }
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar_layout_main);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_layout_main);
+        setSupportActionBar(mToolbar);
+        mToolbarHeight = mToolbar.getHeight();
         mRecyclerView = (RecyclerView) findViewById(R.id.RecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -216,7 +229,7 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(recycleritemlict);
         Drawer = (DrawerLayout) findViewById(R.id.DrawerLayout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, toolbar, R.string.open_drawer, R.string.close_drawer) {
+        mDrawerToggle = new ActionBarDrawerToggle(this, Drawer, mToolbar, R.string.open_drawer, R.string.close_drawer) {
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -283,7 +296,7 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
                 fragment = FacultyAdvFrag.newInstance();
                 break;
             case 7:
-                fragment = new LeaveRequest();
+                fragment = new Syllabus();
                 break;
             case 8:
                 fragment = CgpaFragment.newInstance(subnames, cur_credits_sum);
@@ -334,6 +347,18 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
         }
     }
 
+    public void hideViews() {
+        mToolbar.animate().translationY(-mToolbarHeight).setInterpolator(new AccelerateInterpolator(2)).start();
+    }
+
+    public void showViews() {
+        mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+    }
+
+    public void onMoved(int distance) {
+        mToolbar.setTranslationY(distance);
+    }
+
     @Override
     public void OnImage(View v) {
         Log.d("Image", "Yep");
@@ -343,4 +368,36 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
     public void OnProfile(View v) {
         Log.d("Profile", "Yep");
     }
+
+    public boolean toolbarIsShown() {
+        return ViewHelper.getTranslationY(mToolbar) == 0;
+    }
+
+    public boolean toolbarIsHidden() {
+        return ViewHelper.getTranslationY(mToolbar) == -mToolbar.getHeight();
+    }
+
+    public void showToolbar() {
+        moveToolbar(0);
+    }
+
+    public void hideToolbar() {
+        moveToolbar(-mToolbar.getHeight());
+    }
+
+    public void moveToolbar(float toTranslationY) {
+        if (ViewHelper.getTranslationY(mToolbar) == toTranslationY) {
+            return;
+        }
+        ValueAnimator animator = ValueAnimator.ofFloat(ViewHelper.getTranslationY(mToolbar), toTranslationY).setDuration(200);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float translationY = (float) animation.getAnimatedValue();
+                ViewHelper.setTranslationY(mToolbar, translationY);
+            }
+        });
+        animator.start();
+    }
+
 }

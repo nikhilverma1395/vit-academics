@@ -30,25 +30,25 @@ import razor.nikhil.model.AptModel;
  * Created by Nikhil Verma on 9/12/2015.
  */
 public class PostParent {
-    private final String ATTENDANCE_URL = "https://academics.vit.ac.in/student/attn_report.asp?sem=";
-    private final String TIMETABLE_URL = "https://academics.vit.ac.in/student/timetable_";
-    private final String MARKS_URL = "https://academics.vit.ac.in/student/marks.asp?sem=";
-    private final String GRADE_URL = "https://academics.vit.ac.in/student/student_history.asp";
-    private final String FAC_PHOTO = "https://academics.vit.ac.in/student/emp_photo.asp";
-    private final String FACULTY_DETAILS = "https://academics.vit.ac.in/student/faculty_advisor_view.asp";
-    private static final String winter_sem = "WS";//Jan-May
-    private static final String fall_sem = "FS";//July-Nov
-    private static final String summer_sem = "SS";//June
-    private static final String tri_sem = "TS";//Dec
-    private final ProgressDialog dialog;
-    private static String whichsem = "";
-    private String uname, pass, captchatxt;
-    private HttpClient httpClient;
-    private FragmentActivity context;
+    public static final String ATTENDANCE_URL = "https://academics.vit.ac.in/student/attn_report.asp?sem=";
+    public static final String TIMETABLE_URL = "https://academics.vit.ac.in/student/timetable_";
+    public static final String MARKS_URL = "https://academics.vit.ac.in/student/marks.asp?sem=";
+    public final String GRADE_URL = "https://academics.vit.ac.in/student/student_history.asp";
+    public final String FAC_PHOTO = "https://academics.vit.ac.in/student/emp_photo.asp";
+    public final String FACULTY_DETAILS = "https://academics.vit.ac.in/student/faculty_advisor_view.asp";
+    public static final String winter_sem = "WS";//Jan-May
+    public static final String fall_sem = "FS";//July-Nov
+    public static final String summer_sem = "SS";//June
+    public static final String tri_sem = "TS";//Dec
+    public final ProgressDialog dialog;
+    public static String whichsem = "";
+    public String uname, pass, captchatxt;
+    public HttpClient httpClient;
+    public FragmentActivity context;
     Thread[] threads;
     public String[] TNAMES;
     String todayDate = "";
-    private long in, out;
+    public long in, out;
 
     public static String getSem() {
         //To get Sem-code
@@ -69,7 +69,7 @@ public class PostParent {
         if (month >= 6 && month <= 10) {
             whichsem = fall_sem;
         }
-        return whichsem;
+        return whichsem.trim();
     }
 
     public PostParent(String reg, String pass, String capt, HttpClient htp, FragmentActivity ctxt, ProgressDialog dialog) {
@@ -86,8 +86,12 @@ public class PostParent {
         new ParentLoginPost().execute();
     }
 
+    public static String getTodayDateInFormat() {
+        String texas = new SimpleDateFormat("dd-MMM-yyyy", Locale.UK).format(new Date());
+        return texas;
+    }
 
-    private class ParentLoginPost extends AsyncTask<Void, String[], Void> {
+    public class ParentLoginPost extends AsyncTask<Void, String[], Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -278,7 +282,7 @@ public class PostParent {
 
     }
 
-    private void parseFaculty(String fadv) {
+    public void parseFaculty(String fadv) {
         SharedPrefs pref = new SharedPrefs(context);
         Document doc = Jsoup.parse(fadv);
         Elements tab = doc.getElementsByTag("table");

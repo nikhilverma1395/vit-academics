@@ -37,6 +37,17 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CardView
         regular = Typeface.createFromAsset(context.getAssets(), "Roboto-Regular.ttf");
     }
 
+    public void clear() {
+        atteds.clear();
+        cardList.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAll(List<Model_Slots> list, List<AttendBrief> list1) {
+        cardList.addAll(list);
+        atteds.addAll(list1);
+        notifyDataSetChanged();
+    }
 
     @Override
     public CoursesAdapter.CardViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

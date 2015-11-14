@@ -3,8 +3,8 @@ package razor.nikhil.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,9 +17,20 @@ import razor.nikhil.model.Model_Daywise;
  */
 public class MTWTHgetset {
     private static final String LOG_CAT = "Sqlite.MTWTF";
-    private static SQLiteOpenHelper sqLiteOpenHelper;
+    private static MTWTFhelper sqLiteOpenHelper;
     public SQLiteDatabase sqLiteDatabase;
     private String TABLE = "";
+
+    public void Delete() {
+        try {
+            open();
+            sqLiteDatabase.execSQL(" DROP TABLE " + TABLE);
+            sqLiteDatabase.execSQL(sqLiteOpenHelper.getQueryByTable(TABLE));
+            close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public MTWTHgetset(Context context, String tname) {
         this.TABLE = tname;

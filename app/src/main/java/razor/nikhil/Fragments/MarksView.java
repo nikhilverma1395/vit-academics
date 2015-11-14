@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import razor.nikhil.Activity.MainActivity;
 import razor.nikhil.R;
 import razor.nikhil.adapter.MarksGridAdapter;
 import razor.nikhil.model.DetailAtten;
@@ -50,11 +51,12 @@ public class MarksView extends Fragment {
         View view = inflater.inflate(R.layout.recycler_marks_info, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_minfo);
         mRecyclerView.setHasFixedSize(true);
+        if (!((MainActivity) getActivity()).toolbarIsShown())
+            ((MainActivity) getActivity()).showToolbar();
         //No. of Cols
         mLayoutManager = new GridLayoutManager(inflater.getContext(), 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        if (marks_cbl != null)
-        {
+        if (marks_cbl != null) {
             if (marks_cbl.getASIIGN().trim().equals("-")) {
                 mAdapter = new MarksGridAdapter(getActivity(), marks_cbl, false);
             } else {

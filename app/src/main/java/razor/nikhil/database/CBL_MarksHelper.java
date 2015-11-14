@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by Nikhil Verma on 7/29/2015.
  */
 public class CBL_MarksHelper extends SQLiteOpenHelper {
+    public String getTABLE_CREATE() {
+        return TABLE_CREATE;
+    }
 
     public static final String TABLE_NAME = "my_cbl_marks";
     public static final String _ID = "_id";

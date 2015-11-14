@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import razor.nikhil.model.Marks_Model;
  */
 public class CBL_Get_Set {
     private static final String LOG_CAT = "Academics.Marks";
-    private static SQLiteOpenHelper sqLiteOpenHelper;
+    private static CBL_MarksHelper sqLiteOpenHelper;
     public SQLiteDatabase sqLiteDatabase;
 
     public CBL_Get_Set(Context context) {
@@ -28,6 +27,13 @@ public class CBL_Get_Set {
         Log.i(LOG_CAT, "Database opened");
         sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
 
+    }
+
+    public void Delete() {
+        open();
+        sqLiteDatabase.execSQL(" DROP TABLE " + CBL_MarksHelper.TABLE_NAME);
+        sqLiteDatabase.execSQL(sqLiteOpenHelper.getTABLE_CREATE());
+        close();
     }
 
     public int getEntriesCount() {
@@ -82,29 +88,32 @@ public class CBL_Get_Set {
     }
 
 
-    public void create(Marks_Model model) {
+    public void create(List<Marks_Model> list) {
         open();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CLASS_NUMBER, model.getClassnbr());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_TYPE, model.getSubtype());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CAT1_ATTEND, model.getCAT1_Attended());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CAT1_MARKS, model.getCAT1());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CAT2_ATTEND, model.getCAT2_Attended());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CAT2_MARKS, model.getCAT2());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ1_ATTEND, model.getQUIZ1_Attended());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ1_MARKS, model.getQUIZ1());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ2_ATTEND, model.getQUIZ2_Attended());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ2_MARKS, model.getQUIZ2());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ3_ATTEND, model.getQUIZ3_Attended());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ3_MARKS, model.getQUIZ3());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_ASSIGN_ATTEND, model.getASSIGN_Attended());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_ASSIGN_MARKS, model.getASIIGN());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_LABCAM_ATTEND, model.getLABCAM_Attended());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_LABCAM_MARKS, model.getLABCAM());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUB_NAME, model.getSubname());
-        contentValues.put(CBL_MarksHelper.COLUMN_SUB_CODE, model.getSubcode());
-        long id = sqLiteDatabase.insert(CBL_MarksHelper.TABLE_NAME, null, contentValues);
-        model.setId(id);
+
+        for (Marks_Model model : list) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CLASS_NUMBER, model.getClassnbr());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_TYPE, model.getSubtype());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CAT1_ATTEND, model.getCAT1_Attended());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CAT1_MARKS, model.getCAT1());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CAT2_ATTEND, model.getCAT2_Attended());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_CAT2_MARKS, model.getCAT2());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ1_ATTEND, model.getQUIZ1_Attended());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ1_MARKS, model.getQUIZ1());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ2_ATTEND, model.getQUIZ2_Attended());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ2_MARKS, model.getQUIZ2());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ3_ATTEND, model.getQUIZ3_Attended());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_QUIZ3_MARKS, model.getQUIZ3());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_ASSIGN_ATTEND, model.getASSIGN_Attended());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_ASSIGN_MARKS, model.getASIIGN());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_LABCAM_ATTEND, model.getLABCAM_Attended());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUBJECT_LABCAM_MARKS, model.getLABCAM());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUB_NAME, model.getSubname());
+            contentValues.put(CBL_MarksHelper.COLUMN_SUB_CODE, model.getSubcode());
+            long id = sqLiteDatabase.insert(CBL_MarksHelper.TABLE_NAME, null, contentValues);
+            model.setId(id);
+        }
         close();
     }
 

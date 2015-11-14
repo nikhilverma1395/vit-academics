@@ -130,8 +130,8 @@ public class PostStudFragPre {
     private void inserindb(List<MyTeacherDet> list) {
         MyTeachGS sql = new MyTeachGS(context);
         try {
-            if (sql.getEntriesCount() == 0)
-                sql.createList(list);
+            sql.Delete();
+            sql.createList(list);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -206,7 +206,7 @@ public class PostStudFragPre {
         String content = Http.getData(fac_det_pre + href, client);
         Elements data = Jsoup.parse(content).getElementsByTag("table").get(1).getElementsByTag("tr");
         data.remove(0);
-        String name = new ParseTimeTable(null,null).FirstCharCap(data.get(0).getElementsByTag("td").get(1).html().trim());
+        String name = new ParseTimeTable(null, null).FirstCharCap(data.get(0).getElementsByTag("td").get(1).html().trim());
         Log.d("Name in Parse", name);
         mod.setNAME(name);
         String school = data.get(1).getElementsByTag("td").get(1).html().trim().replaceAll("amp;", "");

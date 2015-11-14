@@ -31,6 +31,7 @@ import java.util.Map;
 public class Http {
     public static String CRED_ERR = "credErr";
     public static String NET_ERR = "NETErr";
+    public static long INPUTSTREAM_SIZE = 0;
 
     public static String getData(String url, HttpClient client) {
         HttpGet request = new HttpGet(url);
@@ -114,6 +115,7 @@ public class Http {
             try {
                 HttpResponse response = client.execute(httppost);
                 final InputStream op = response.getEntity().getContent();
+                INPUTSTREAM_SIZE = response.getEntity().getContentLength();
                 return op;
             } catch (IOException e) {
                 e.printStackTrace();

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_dialog_slogger"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/gradeinfo_dsize"
+    android:layout_gravity="center"
+    android:layout_marginLeft="25dp"
+    android:layout_marginRight="25dp"
+    android:background="#ff2b2941"
+    android:clickable="true"
+    android:focusable="true"
+    card_view:cardBackgroundColor="#ff2b2941"
+    card_view:cardCornerRadius="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <EditText
+            android:id="@+id/regno_studentlog_myt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5.0dp"
+            android:layout_marginTop="20dp"
+            android:drawableLeft="@drawable/username"
+            android:drawablePadding="30.0dp"
+            android:gravity="left"
+            android:hint="Registration No."
+            android:inputType="textCapCharacters"
+            android:maxLength="9"
+            android:paddingBottom="25.0dp"
+            android:paddingLeft="15.0dp"
+            android:paddingTop="15.0dp"
+            android:singleLine="true"
+            android:text="13BCE0037"
+            android:textColor="#ff79838f"
+            android:textColorHint="#ffafbac6" />
+
+        <EditText
+            android:id="@+id/pass_studentlog_myt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5.0dp"
+            android:drawableLeft="@drawable/password"
+            android:drawablePadding="30.0dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:paddingBottom="25.0dp"
+            android:paddingLeft="15.0dp"
+            android:singleLine="true"
+            android:text="supermariogotze"
+            android:textColor="#ff79838f"
+            android:textColorHint="#ffafbac6" />
+
+        <RelativeLayout
+            android:id="@+id/relative_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/capImg_studentlog_myt"
+                android:layout_width="140dp"
+                android:layout_height="38dp"
+                android:layout_marginBottom="5.0dp"
+                android:layout_marginLeft="10dp"
+                android:scaleType="fitXY" />
+
+            <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
+                android:id="@+id/progress_ll_log_dialog"
+                android:layout_width="@dimen/login_ll_prog_dim"
+                android:layout_height="@dimen/login_ll_prog_dim"
+                android:layout_centerInParent="true"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/capTxt_studentlog_myt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20.0dp"
+            android:drawableLeft="@drawable/lock"
+            android:drawablePadding="30.0dp"
+            android:hint="Captcha"
+            android:maxLength="6"
+            android:paddingBottom="25.0dp"
+            android:paddingLeft="15.0dp"
+            android:singleLine="true"
+            android:textColor="#ff79838f"
+            android:textColorHint="#ffafbac6" />
+
+        <Button
+            android:id="@+id/proceedBut_studentlog_myt"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/button_selected"
+            android:text="Proceed"
+            android:textColor="#ff2e2e2e"
+            android:textSize="16sp" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

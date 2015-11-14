@@ -72,7 +72,7 @@
             <com.gc.materialdesign.views.ProgressBarCircularIndeterminate
                 android:layout_width="@dimen/login_ll_prog_dim"
                 android:visibility="invisible"
-                android:id="@+id/progress_ll_"
+                android:id="@+id/progress_ll_log_dialog_"
                 android:layout_height="@dimen/login_ll_prog_dim"
                 android:layout_gravity="right" />
         </LinearLayout>

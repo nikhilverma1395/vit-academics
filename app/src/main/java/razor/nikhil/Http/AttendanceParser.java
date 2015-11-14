@@ -32,6 +32,8 @@ public class AttendanceParser {
         Elements ele = doc.getElementsByTag("table");
         Elements subs = ele.get(3).getElementsByTag("tr");
         dates_sem_codes = new ArrayList<>();
+        Attend_GetSet set = new Attend_GetSet(context);
+        set.Delete();
         for (int t = 1; t < subs.size(); t++) {
             final Elements al = subs.get(t).getElementsByTag("td");
             AttendBrief ab = new AttendBrief();
@@ -40,7 +42,7 @@ public class AttendanceParser {
             ab.setTotal(al.get(7).html().trim());
             ab.setPercent(al.get(8).html().trim());
             ab.setSubtype(al.get(3).html().trim());
-            new Attend_GetSet(context).create(ab);
+            set.create(ab);
             Elements dates = subs.get(t).getElementsByTag("input");
             AttenDetail dd = new AttenDetail();
             dd.setSemcode(dates.get(0).attr("value"));

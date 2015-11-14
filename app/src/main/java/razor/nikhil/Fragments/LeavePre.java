@@ -3,6 +3,7 @@ package razor.nikhil.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,15 +39,24 @@ public class LeavePre extends Fragment {
     private void init(View view) {
         apply = (ButtonRectangle) view.findViewById(R.id.apply_leave);
         pending = (ButtonRectangle) view.findViewById(R.id.view_leave_req);
+        pending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFrag(R.id.container_main, null, LeaveMainPost.newInstance(false));
+            }
+        });
         apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addFrag(R.id.container_main, LeaveApply.newInstance());
+                addFrag(R.id.container_main, LeaveApply.newInstance(), null);
             }
         });
     }
 
-    private void addFrag(int container_main, LeaveApply leaveApply) {
-        getActivity().getSupportFragmentManager().beginTransaction().add(container_main, leaveApply).addToBackStack(null).commit();
+    private void addFrag(int container_main, LeaveApply leaveApply, LeaveMainPost leavePending) {
+        FragmentTransaction tr = getActivity().getSupportFragmentManager().beginTransaction();
+        if (leavePending == null)
+            tr.add(container_main, leaveApply).addToBackStack(null).commit();
+        else tr.add(container_main, leavePending).addToBackStack(null).commit();
     }
 }

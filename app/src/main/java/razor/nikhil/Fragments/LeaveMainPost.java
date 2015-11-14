@@ -18,6 +18,7 @@ import com.gc.materialdesign.widgets.SnackBar;
 
 import org.apache.http.client.HttpClient;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.text.ParseException;
@@ -34,20 +35,29 @@ import razor.nikhil.Http.ParseTimeTable;
 import razor.nikhil.R;
 import razor.nikhil.database.FacMsgGS;
 import razor.nikhil.model.FacMsgModel;
+import razor.nikhil.model.PendLeave;
 
 /**
  * Created by Nikhil Verma on 10/2/2015.
  */
 public class LeaveMainPost extends Fragment {
     private static HttpClient httpClient;
+    public static int List_tr_Size;
+    static List<PendLeave> list = new ArrayList<>();
     private EditText REGNO, PASS, CAPTXT;
     private ImageView CAPIMAG;
     private Button button;
     private String POST_LINK_PRE = "https://academics.vit.ac.in/student/leave_request.asp";
     private String MAIN_POST_LINK = "https://academics.vit.ac.in/student/leave_request_submit.asp";
+    private static boolean isPending;
 
-    public static LeaveMainPost newInstance() {
+    public static HttpClient getHttpClient() {
+        return httpClient;
+    }
+
+    public static LeaveMainPost newInstance(boolean isqPending) {
         LeaveMainPost fragment = new LeaveMainPost();
+        isPending = isqPending;
         return fragment;
     }
 
@@ -146,13 +156,19 @@ public class LeaveMainPost extends Fragment {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                dialog = ProgressDialog.show(getActivity(), "Applying for Leave",
+                String msg = "Fetching Data";
+                String msg1 = "Applying for Leave";
+                String y = msg;
+                if (isPending)
+                    y = msg1;
+                dialog = ProgressDialog.show(getActivity(), y,
                         "Wait", true);
                 button.setEnabled(false);
                 cap = CAPTXT.getText().toString();
                 uname = REGNO.getText().toString();
                 pass = PASS.getText().toString();
-                setParams();
+                if (isPending)
+                    setParams();
             }
 
             @Override
@@ -174,7 +190,50 @@ public class LeaveMainPost extends Fragment {
                 } catch (Exception e) {
                     publishProgress("Error in Logging In!");
                     e.printStackTrace();
+                    return null;
                 }
+                Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//need this as a pre-req
+                String data = Http.getData(POST_LINK_PRE, httpClient);//3nd pre-reqr
+
+                if (isPending)
+                    return applyLeave();
+                else {
+                    boolean but = getPendData(data);
+                    if (!but)
+                        return "npr";
+                    return "pend";
+                }
+            }
+
+            private boolean getPendData(String data) {
+
+                Element ele = null;
+                try {
+                    ele = Jsoup.parse(data).getElementsByTag("table").get(2);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                Elements trS = ele.getElementsByTag("tr");
+                trS.remove(0);
+                LeaveMainPost.List_tr_Size = trS.size();
+                List<PendLeave> list = new ArrayList<>();
+                for (Element ob : trS) {
+                    PendLeave pl = new PendLeave();
+                    Elements tdS = ob.getElementsByTag("td");
+                    pl.setIdL(tdS.get(1).getElementsByTag("font").get(0).html().trim());
+                    pl.setName(tdS.get(3).getElementsByTag("font").get(0).html().trim());
+                    pl.setFrom(tdS.get(4).getElementsByTag("font").get(0).html().trim());
+                    pl.setTo(tdS.get(5).getElementsByTag("font").get(0).html().trim());
+                    pl.setType(tdS.get(6).getElementsByTag("font").get(0).html().trim());
+                    pl.setStatus(tdS.get(7).getElementsByTag("font").get(0).html().trim());
+                    list.add(pl);
+                }
+                LeaveMainPost.list = list;
+                return true;
+            }
+
+            private String applyLeave() {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("apply", appprovAuth);
                 map.put("lvtype", ltype);
@@ -227,21 +286,29 @@ public class LeaveMainPost extends Fragment {
                     Log.d("Exception", e.toString());
                     e.printStackTrace();
                 }
-
                 return null;
             }
 
             @Override
             protected void onPostExecute(String aVoid) {
                 super.onPostExecute(aVoid);
-                dialog.dismiss();
-                String no = "Error in Applying Leave!";
-                String yes = "Leave Applied Successfully";
-                String param = no;
-                if (aVoid.contains("Apply Id"))
-                    param = yes;
-                SnackBar snackbar = new SnackBar(getActivity(), param, null, null);
-                snackbar.show();
+                if (isPending) {
+                    dialog.dismiss();
+                    String no = "Error in Applying Leave!";
+                    String yes = "Leave Applied Successfully";
+                    String param = no;
+                    if (aVoid.contains("Apply Id"))
+                        param = yes;
+                    SnackBar snackbar = new SnackBar(getActivity(), param, null, null);
+                    snackbar.show();
+                } else {
+                    dialog.dismiss();
+                    if (aVoid.equals("npr")) {
+                        SnackBar snackbar = new SnackBar(getActivity(), "No Pending Leave Requests!", null, null);
+                        snackbar.show();
+                    } else
+                        calLFrag(LeaveMainPost.list);
+                }
             }
         }.execute();
     }
@@ -295,9 +362,9 @@ public class LeaveMainPost extends Fragment {
         return list;
     }
 
-    private void calLFrag(List<FacMsgModel> list) {
+    private void calLFrag(List<PendLeave> list) {
         button.setEnabled(true);
-        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, GetFacMsgList.newInstance(list)).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, LeavePending.newInstance(list)).commit();
     }
 
 }

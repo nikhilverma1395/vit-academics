@@ -1,7 +1,6 @@
 package razor.nikhil.Http;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -78,16 +77,20 @@ public class FullAttendParseStore {
     private void createTables(List<AttenDetail> lists) {
         for (int i = 0; i < lists.size(); i++) {
             String cnum = lists.get(i).getClass_number().trim();
-            final String TABLE_Create = "CREATE TABLE " + " table_of_" + cnum + " (" +
-                    "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "sno" + " TEXT, " +
-                    "date" + " TEXT, " +
-                    "unit" + " TEXT " + ");";
             Query_TableName qt = new Query_TableName();
-            qt.setQuery(TABLE_Create);
+            qt.setQuery(getFullAttTableName(cnum));
             qt.setTname(cnum);
             table_queries.add(qt);
         }
+    }
+
+    public static String getFullAttTableName(String code) {
+        String TABLE_Create = "CREATE TABLE " + " table_of_" + code + " (" +
+                "_id" + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "sno" + " TEXT, " +
+                "date" + " TEXT, " +
+                "unit" + " TEXT " + ");";
+        return TABLE_Create;
     }
 
     private void getIndivAttinDiffThreads(AttenDetail lists, HttpPost httppost) {
@@ -141,14 +144,13 @@ public class FullAttendParseStore {
             }
             daysAttended.add(da);
         }
-
         return daysAttended;
     }
 
 
     private void insertIndivAttIntoDBS(final List<DetailAtten> all_sub_detail, String cnum) {
         indivDB = new IndivAttGetSet(context, "table_of_" + cnum);
+        indivDB.Delete(cnum);
         indivDB.create(all_sub_detail);
-        Log.e("Done For ", cnum);
     }
 }

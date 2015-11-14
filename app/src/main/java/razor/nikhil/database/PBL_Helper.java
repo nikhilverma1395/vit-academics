@@ -50,6 +50,10 @@ public class PBL_Helper extends SQLiteOpenHelper {
     public static final String Option4_Scored_Percent = "op4scp";
     public static final String Option5_Scored_Percent = "op5scp";
 
+    public String getTABLE_CREATE() {
+        return TABLE_CREATE;
+    }
+
     private final String TABLE_CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
             _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             course_code + " TEXT, " +

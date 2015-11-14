@@ -24,5 +24,6 @@
         android:id="@+id/recyclerView_minfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="3dp" />
+        android:clipToPadding="false"
+        android:paddingTop="?attr/actionBarSize" />
 </LinearLayout>

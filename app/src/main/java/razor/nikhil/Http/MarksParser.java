@@ -145,7 +145,7 @@ public class MarksParser {
             }
             pbldetman.add(pbldet);
         }
-        List<PBL_Model> pbl_lists = new ArrayList<>();
+        List<PBL_Model> pbl_lists;
         if (pbldetman.size() > 0) {
             pbl_lists = parseandPutPBL(pbldetman);
         } else {
@@ -156,13 +156,10 @@ public class MarksParser {
 
         try {
             final PBL_Get_Set PGS = new PBL_Get_Set(context);
-            if (PGS.getEntriesCount() == 0)
-                if (lo != null) {
-                    for (PBL_Model pm : lo) {
-                        PGS.create(pm);
-
-                    }
-                }
+            PGS.Delete();
+            if (lo != null) {
+                PGS.create(lo);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -223,12 +220,8 @@ public class MarksParser {
 
         }
         final CBL_Get_Set wer = new CBL_Get_Set(context);
-
-        if (wer.getEntriesCount() == 0) {
-            for (Marks_Model mm : marks_det) {
-                wer.create(mm);
-            }
-        }
+        wer.Delete();
+        wer.create(marks_det);
     }
 
     private List<PBL_Model> parseandPutPBL(List<List<Elements>> pbldeta) {

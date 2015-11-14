@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">ORproj</string>
+    <string name="number_of_columns_hint">Columns</string>
+    <string name="number_of_iterations_entered_incorrectly">Number of iterations must be a positive number less than 501.</string>
+    <string name="number_of_iterations_hint">Iterations</string>
+    <string name="number_of_rows_hint">Rows</string>
+    <string name="ok_string">OK</string>
+    <string name="payoff_matrix_element_entered_incorrectly_string">Only numerical content is accepted in the payoff matrix.</string>
+    <string name="payoff_matrix_size_entered_incorrectly_string">Number of rows and columns must be a positive number less than 21.</string>
+    <string name="random_button_text">Random</string>
+    <string name="results_string">Results</string>
+    <string name="row_string">row</string>
+    <string name="saddle_point_found_string">Saddle point found. Coordinates:</string>
+    <string name="subtract_added_value_from_game_value">Subtracting added value from game value</string>
+    <string name="value_string">value</string>
+    <string name="calculate_button_text">Calculate</string>
+    <string name="cant_access_the_filesystem_string">"Can't access the file system. Turn off USB storage mode."</string>
+    <string name="clear_button_text">Clear</string>
+    <string name="column_string">column</string>
+
+</resources>

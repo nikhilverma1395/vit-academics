@@ -1,1 +1,1 @@
-include ':app', ':myapplication', ':cview'
+include ':app', ':myapplication', ':cview', ':orproj', ':ornew'
