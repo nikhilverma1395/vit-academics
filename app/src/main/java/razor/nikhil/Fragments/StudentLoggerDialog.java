@@ -70,8 +70,12 @@ public class StudentLoggerDialog extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if (!noyhing)
-            Slots.swipeContainer.setRefreshing(false);
+        try {
+            if (!noyhing)
+                Slots.swipeContainer.setRefreshing(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -1,24 +1,26 @@
 package razor.nikhil.Fragments;
 
+import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.http.client.HttpClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 import razor.nikhil.Activity.MainActivity;
@@ -26,19 +28,21 @@ import razor.nikhil.Http.Http;
 import razor.nikhil.Http.PostParent;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
+import razor.nikhil.model.CoursePageModel;
 import razor.nikhil.model.FacMsgModel;
 import razor.nikhil.model.Model_Slots;
 
 /**
  * Created by Nikhil Verma on 10/2/2015.
  */
-public class CoursePage extends Fragment {
+public class CoursePage extends Fragment implements StudentLoggerDialog.WhenLoggedIn {
     private RecyclerView recyclerView;
     private static HttpClient httpClient;
-    private static String CoursePage = "https://academics.vit.ac.in/student/coursepage_view.asp?sem=";
+    private static String coursepage = "https://academics.vit.ac.in/student/coursepage_view.asp?sem=";
     private static String CoursePagePost = "https://academics.vit.ac.in/student/coursepage_view3.asp";
     private String SEM;
     private List<Model_Slots> subs;
+    ProgressDialog dialog;
 
     public static CoursePage newInstance() {
         CoursePage fragment = new CoursePage();
@@ -48,6 +52,8 @@ public class CoursePage extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (!((MainActivity) getActivity()).toolbarIsShown())
+            ((MainActivity) getActivity()).showToolbar();
         try {
             httpClient = GetDetails.getThreadSafeClient();
         } catch (Exception e) {
@@ -55,13 +61,21 @@ public class CoursePage extends Fragment {
         }
         SEM = PostParent.getSem();
         subs = MainActivity.list;
-        CoursePage += (SEM + "&crs=CSE327&slt=B1+TB1&fac=");
+        for (int y = 0; y < subs.size(); y++) {
+            if (subs.get(y).getCourse_type().toLowerCase().contains("lab"))
+                subs.remove(y);
+        }
+        coursepage += SEM + "&crs="; //+ "&slt=&fac="
         return inflater.inflate(R.layout.rv_mult_teacher, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (subs == null) {
+            Toast.makeText(getActivity(), "Subject Data Not Available", Toast.LENGTH_SHORT).show();
+            return;
+        }
         init(view);
     }
 
@@ -75,40 +89,49 @@ public class CoursePage extends Fragment {
         recyclerView.setAdapter(adap);
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(View view, int pos) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                StudentLoggerDialog editNameDialog = StudentLoggerDialog.newInstance(CoursePage.this);
+                editNameDialog.show(fm, "B");
+                coursepage += subs.get(pos).getCode() + "&slt=&fac=";
             }
         }));
     }
 
     private void mysync() {
-        new AsyncTask<Void, Void, Void>() {
+        dialog = ProgressDialog.show(getActivity(), "Wait", "Getting Subject Data..", true);
+        new AsyncTask<Void, Void, List<CoursePageModel>>() {
             @Override
-            protected Void doInBackground(Void... params) {
+            protected List<CoursePageModel> doInBackground(Void... params) {
                 Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//pre
-                final String DATA = Http.getData(CoursePage, httpClient);
-                Elements tRs = Jsoup.parse(DATA).getElementsByTag("table")
+                final String data = Http.getData(coursepage, httpClient);
+                Elements trs = Jsoup.parse(data).getElementsByTag("table")
                         .get(2).getElementsByTag("tr");
-                tRs.remove(0);//headers
-                Log.d("Data", DATA);
-                for (Element el : tRs)
+                trs.remove(0);//headers
+                List<CoursePageModel> list = new ArrayList<>();
+                for (Element el : trs)
                     try {
+                        CoursePageModel model = new CoursePageModel();
+                        model.setType(el.getElementsByTag("td").get(2).html().trim());
+                        model.setTeacher(el.getElementsByTag("td").get(3).html().trim());
+                        model.setSlot(el.getElementsByTag("td").get(5).html().trim());
                         Element td = el.getElementsByTag("td").last();
                         Elements inputs = td.getElementsByTag("input");
-                        String sem = inputs.get(0).attr("value").trim();
-                        String plancode = inputs.get(1).attr("value").trim();
-                        HashMap<String, String> map = new HashMap<>();
-                        map.put("sem", sem);
-                        map.put("crsplancode", plancode);
-                        map.put("crpnvwcmd", "View");
-                        Log.d("SEM+Cplan", sem + "\t" + plancode);
-                        String DAT = Http.postMethod(CoursePagePost, map, httpClient);//correct Data
-                        parseCP(DAT);
+                        String crsplancode = inputs.get(1).attr("value").trim();
+                        model.setCrsplancode(crsplancode);
+                        list.add(model);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                return null;
+                return list;
             }
 
+            @Override
+            protected void onPostExecute(List<CoursePageModel> coursePageModels) {
+                super.onPostExecute(coursePageModels);
+                dialog.dismiss();
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, SyllabusVersionFragment.newInstance(coursePageModels)).addToBackStack(null).commit();
+            }
         }.execute();
     }
 
@@ -121,6 +144,18 @@ public class CoursePage extends Fragment {
     private void calLFrag(List<FacMsgModel> list) {
         //    button.setEnabled(true);
         //    getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container_main, ).commit();
+    }
+
+    @Override
+    public void Success(HttpClient client) {
+        httpClient = client;
+        mysync();
+    }
+
+
+    @Override
+    public void Error(String message) {
+
     }
 
     private class Subjects extends RecyclerView.Adapter<Subjects.ViewHolder> {

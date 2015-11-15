@@ -17,8 +17,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
@@ -43,6 +41,7 @@ import razor.nikhil.Fragments.MyTeachers;
 import razor.nikhil.Fragments.MyTeachersList;
 import razor.nikhil.Fragments.Slots;
 import razor.nikhil.Fragments.Syllabus;
+import razor.nikhil.Fragments.TeeQBank;
 import razor.nikhil.Fragments.TimeTableVP;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
@@ -68,7 +67,7 @@ import razor.nikhil.model.detailattlist_subcode;
 
 public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.HeaderItemClicked {
 
-    String TITLES[] = {"Courses", "Faculty Info", "Enter Details", "TimeTable", "Grades", "Faculty Adviser", "Syllabus", "CGPA Calculator", "My Teachers", "Messages", "APT Attendance", "Course Page", "Leave Request Pre"};
+    String TITLES[] = {"Courses", "Faculty Info", "Enter Details", "TimeTable", "Grades", "Faculty Adviser", "Syllabus", "CGPA Calculator", "My Teachers", "Messages", "APT Attendance", "Course Page", "Leave Request Pre", "TEE Papers"};
     int ICONS[] = {R.mipmap.user_icon,
             R.mipmap.assignment,
             R.mipmap.tick_icon,
@@ -334,7 +333,9 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
             case 13:
                 fragment = LeavePre.newInstance();
                 break;
-
+            case 14:
+                fragment = TeeQBank.newInstance();
+                break;
             default:
                 displayView(1);
                 break;
@@ -347,16 +348,9 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
         }
     }
 
-    public void hideViews() {
-        mToolbar.animate().translationY(-mToolbarHeight).setInterpolator(new AccelerateInterpolator(2)).start();
-    }
-
-    public void showViews() {
-        mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
-    }
 
     public void onMoved(int distance) {
-        mToolbar.setTranslationY(distance);
+        mToolbar.setTranslationY(-distance);
     }
 
     @Override

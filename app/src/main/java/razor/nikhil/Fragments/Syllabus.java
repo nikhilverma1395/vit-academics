@@ -8,8 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,10 +19,6 @@ import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
 
 import org.apache.http.client.HttpClient;
 import org.jsoup.Jsoup;
@@ -34,6 +30,7 @@ import java.util.List;
 
 import razor.nikhil.Activity.MainActivity;
 import razor.nikhil.Http.Http;
+import razor.nikhil.Listener.HidingScrollListener;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
 import razor.nikhil.adapter.AllSubjectsAdapter;
@@ -44,8 +41,8 @@ import razor.nikhil.model.SyllabusSubjectVersion;
 /*
  * Created by Nikhil Verma on 10/13/2015.
  */
-public class Syllabus extends Fragment implements SearchView.OnQueryTextListener, StudentLoggerDialog.WhenLoggedIn, ObservableScrollViewCallbacks {
-    private ObservableRecyclerView recyclerView;
+public class Syllabus extends Fragment implements SearchView.OnQueryTextListener, StudentLoggerDialog.WhenLoggedIn {
+    private RecyclerView recyclerView;
     private ImageButton imageButton;
     private ProgressDialog dialog;
     private static HttpClient httpClient;
@@ -79,7 +76,7 @@ public class Syllabus extends Fragment implements SearchView.OnQueryTextListener
         setHasOptionsMenu(false);
         imageButton = (ImageButton) v.findViewById(R.id.refresh_ib_);
         no_data_rv_syll = (TextView) v.findViewById(R.id.no_data_rv_syll);
-        recyclerView = (ObservableRecyclerView) v.findViewById(R.id.recyclerView_multi_teach);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView_multi_teach);
         recyclerView.setHasFixedSize(true);
         final LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -106,7 +103,6 @@ public class Syllabus extends Fragment implements SearchView.OnQueryTextListener
     ProgressDialog dia;
 
     private void doTheThing(View view, int position) {
-
         dia = ProgressDialog.show(getActivity(), "Wait", "Getting Syllabus Versions..", true);
         new GetSubjectSyllabusVersions().execute(names.get(position));
     }
@@ -130,7 +126,7 @@ public class Syllabus extends Fragment implements SearchView.OnQueryTextListener
     }
 
 
-    private List<SyllabusCourseItem> filter(List<SyllabusCourseItem> models, String query) {
+    public static List<SyllabusCourseItem> filter(List<SyllabusCourseItem> models, String query) {
         query = query.toLowerCase();
         List<SyllabusCourseItem> filteredModelList = new ArrayList<>();
         for (SyllabusCourseItem model : models) {
@@ -167,7 +163,6 @@ public class Syllabus extends Fragment implements SearchView.OnQueryTextListener
 
     @Override
     public void Success(HttpClient client) {
-        Log.d("Yep", "goT");
         httpClient = client;
         new GetSubjects().execute();
     }
@@ -175,30 +170,6 @@ public class Syllabus extends Fragment implements SearchView.OnQueryTextListener
     @Override
     public void Error(String message) {
 
-    }
-
-    @Override
-    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-
-    }
-
-    @Override
-    public void onDownMotionEvent() {
-
-    }
-
-    @Override
-    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        MainActivity act = (MainActivity) getActivity();
-        if (scrollState == ScrollState.UP) {
-            if (act.toolbarIsShown()) {
-                act.hideToolbar();
-            }
-        } else if (scrollState == ScrollState.DOWN) {
-            if (act.toolbarIsHidden()) {
-                act.showToolbar();
-            }
-        }
     }
 
     public class GetSubjects extends AsyncTask<Void, Void, List<SyllabusCourseItem>> {
@@ -226,11 +197,31 @@ public class Syllabus extends Fragment implements SearchView.OnQueryTextListener
             recyclerView.setVisibility(View.VISIBLE);
             setHasOptionsMenu(true);
             recyclerView.setAdapter(adapter);
-            recyclerView.setScrollViewCallbacks(Syllabus.this);
+            recyclerView.setOnScrollListener(new HidingScrollListener(getActivity()) {
+                MainActivity activity = ((MainActivity) getActivity());
+
+                @Override
+                public void onMoved(int distance) {
+                    activity.onMoved(distance);
+                }
+
+                @Override
+                public void onShow() {
+                    if (activity.toolbarIsHidden())
+                        activity.showToolbar();
+                }
+
+                @Override
+                public void onHide() {
+                    if (activity.toolbarIsShown())
+                        activity.hideToolbar();
+                }
+
+            });
         }
     }
 
-    private ArrayList<SyllabusCourseItem> parseData(String data) {
+    public static ArrayList<SyllabusCourseItem> parseData(String data) {
         Element doc = Jsoup.parse(data).getElementsByTag("table").get(1);
         Elements trS = doc.getElementsByTag("tr");
         trS.remove(0);
@@ -258,7 +249,6 @@ public class Syllabus extends Fragment implements SearchView.OnQueryTextListener
             Elements versions = Jsoup.parse(dot).getElementsByTag("table").get(2).getElementsByTag("tr");
             item = params[0];
             versions.remove(0);
-            //Name - BIF205_PERL-FOR-BIOINFORMATICS_ETH_2.00_SC04.pdf
             List<SyllabusSubjectVersion> list = getData(versions);
             return list;
         }

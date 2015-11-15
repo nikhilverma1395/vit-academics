@@ -116,6 +116,7 @@ public class Http {
                 HttpResponse response = client.execute(httppost);
                 final InputStream op = response.getEntity().getContent();
                 INPUTSTREAM_SIZE = response.getEntity().getContentLength();
+                Log.d("SSize", response.getEntity().getContentLength() + "");
                 return op;
             } catch (IOException e) {
                 e.printStackTrace();

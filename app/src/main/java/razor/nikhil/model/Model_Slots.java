@@ -7,7 +7,7 @@ public class Model_Slots {
     private String number;
     private String code;
     private String LTPJC;
-long id;
+    long id;
 
     public void setId(long id) {
         this.id = id;
@@ -52,7 +52,7 @@ long id;
     }
 
     public String getCode() {
-        return code;
+        return code.trim();
     }
 
     public void setCode(String code) {
