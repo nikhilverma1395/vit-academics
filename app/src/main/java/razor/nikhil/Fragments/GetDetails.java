@@ -22,6 +22,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
 
+import razor.nikhil.Activity.MainActivity;
+import razor.nikhil.Fragments.FacInfo.GetFacDataStudLogin;
 import razor.nikhil.Http.BitmapUrlClient;
 import razor.nikhil.Http.PostParent;
 import razor.nikhil.R;
@@ -57,6 +59,15 @@ public class GetDetails extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MainActivity activity = ((MainActivity) getActivity());
+        if (activity.toolbarIsHidden()) {
+            activity.showToolbar();
+        }
+        int Color[] = getActivity().getResources().getIntArray(R.array.browns);
+        activity.setStatusBarColor(Color[0]);
+        activity.setToolBarColor(Color[7]);
+
+
         ViewGroup vg = (ViewGroup) inflater.inflate(R.layout.login_layout_stud, container, false);
         return vg;
     }

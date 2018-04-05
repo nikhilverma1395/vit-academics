@@ -86,6 +86,7 @@ public class Http {
             try {
                 HttpResponse response = client.execute(httppost);
                 op = EntityUtils.toString(response.getEntity());
+                Log.d("Data", op);
                 return op;
             } catch (Exception e) {
                 e.printStackTrace();

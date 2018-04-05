@@ -69,7 +69,7 @@ public class PostParent {
         if (month >= 6 && month <= 10) {
             whichsem = fall_sem;
         }
-        return whichsem.trim();
+        return whichsem;
     }
 
     public PostParent(String reg, String pass, String capt, HttpClient htp, FragmentActivity ctxt, ProgressDialog dialog) {

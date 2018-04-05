@@ -82,24 +82,28 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CardView
         holder.class_number_slots.setText(cl.getNumber());
         holder.teacher.setText(cl.getTeacher());
         holder.slot.setText(cl.getSlot());
-        String att = atteds.get(i).getPercent();
-        holder.attend.setText(att);
         try {
-            if (att.length() == 4) {
-                String at = att.substring(0, 3);
-                int per = Integer.parseInt(at);
-                colorIt(holder.attend, per);
+            String att = atteds.get(i).getPercent();
+            holder.attend.setText(att);
+            try {
+                if (att.length() == 4) {
+                    String at = att.substring(0, 3);
+                    int per = Integer.parseInt(at);
+                    colorIt(holder.attend, per);
+                }
+                if (att.length() == 3) {
+                    String at = att.substring(0, 2);
+                    int per = Integer.parseInt(at);
+                    colorIt(holder.attend, per);
+                    //FF5C4B
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
-            if (att.length() == 3) {
-                String at = att.substring(0, 2);
-                int per = Integer.parseInt(at);
-                colorIt(holder.attend, per);
-                //FF5C4B
-            }
-        } catch (NumberFormatException e) {
+            holder.cardView.setCardBackgroundColor(Color.parseColor(Colors[9 % (i + 1)]));
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        holder.cardView.setCardBackgroundColor(Color.parseColor(Colors[9 % (i + 1)]));
     }
 
     private void colorIt(TextView attend, int per) {

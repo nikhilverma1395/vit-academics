@@ -8,6 +8,14 @@ package razor.nikhil.model;
 public class Query_TableName {
     private String query;
 
+    public Query_TableName(String query, String tname) {
+        this.query = query;
+        this.tname = tname;
+    }
+
+    public Query_TableName() {
+    }
+
     public void setQuery(String query) {
         this.query = query;
     }

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,9 +52,13 @@ public class MarksView extends Fragment {
         View view = inflater.inflate(R.layout.recycler_marks_info, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView_minfo);
         mRecyclerView.setHasFixedSize(true);
-        if (!((MainActivity) getActivity()).toolbarIsShown())
-            ((MainActivity) getActivity()).showToolbar();
-        //No. of Cols
+        final MainActivity activity = ((MainActivity) getActivity());
+        if (activity.toolbarIsHidden()) {
+            activity.showToolbar();
+        }
+        int Color[] = getActivity().getResources().getIntArray(R.array.greens);
+        activity.setStatusBarColor(Color[0]);
+        activity.setToolBarColor(Color[7]);//No. of Cols
         mLayoutManager = new GridLayoutManager(inflater.getContext(), 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
         if (marks_cbl != null) {

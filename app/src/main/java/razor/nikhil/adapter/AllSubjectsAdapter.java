@@ -15,7 +15,11 @@ import razor.nikhil.model.SyllabusCourseItem;
  * Created by Nikhil Verma on 11/6/2015.
  */
 public class AllSubjectsAdapter extends RecyclerView.Adapter<AllSubjectsAdapter.Sub> {
-    private List<SyllabusCourseItem> list;
+    private List<SyllabusCourseItem> list = null;
+
+    public List<SyllabusCourseItem> getList() {
+        return list;
+    }
 
     public AllSubjectsAdapter(List<SyllabusCourseItem> arrayList) {
         list = arrayList;

@@ -9,7 +9,7 @@ import org.apache.http.client.HttpClient;
 import java.io.IOException;
 import java.util.HashMap;
 
-import razor.nikhil.Fragments.GetFacDataStudLogin;
+import razor.nikhil.Fragments.FacInfo.GetFacDataStudLogin;
 import razor.nikhil.database.SharedPrefs;
 
 /**

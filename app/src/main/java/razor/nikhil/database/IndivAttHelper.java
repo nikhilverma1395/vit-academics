@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.List;
 
+import razor.nikhil.Fragments.Slots;
 import razor.nikhil.Http.FullAttendParseStore;
 import razor.nikhil.model.Query_TableName;
 
@@ -25,7 +26,9 @@ public class IndivAttHelper extends SQLiteOpenHelper {
 
     public IndivAttHelper(Context context) {
         super(context, "Indiv_att", null, 1);
-        queries = FullAttendParseStore.table_queries;
+        if (Slots.sqltn.size() <= FullAttendParseStore.table_queries.size())
+            queries = FullAttendParseStore.table_queries;
+        else queries = Slots.sqltn;
     }
 
     @Override

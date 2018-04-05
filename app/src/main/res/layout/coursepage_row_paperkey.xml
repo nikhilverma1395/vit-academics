@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/coursepage_paperkey_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quiz-I Question Paper"
+        android:textColor="@android:color/background_dark"
+        android:textSize="16sp" />
+
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/coursepage_paperkey_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:text="Data-communication--Networking-by-Forouzon.pdf"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="16sp" />
+
+</LinearLayout>

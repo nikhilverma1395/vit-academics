@@ -20,6 +20,7 @@ import com.gc.materialdesign.widgets.SnackBar;
 
 import org.apache.http.client.HttpClient;
 
+import razor.nikhil.Fragments.FacInfo.GetFacDataStudLogin;
 import razor.nikhil.Http.BitmapUrlClient;
 import razor.nikhil.Http.Logins;
 import razor.nikhil.R;
@@ -49,7 +50,7 @@ public class StudentLoggerDialog extends DialogFragment {
 
     public static WhenLoggedIn listenLooged;
 
-    public abstract interface WhenLoggedIn {
+    public interface WhenLoggedIn {
         void Success(HttpClient client);
 
         void Error(String message);

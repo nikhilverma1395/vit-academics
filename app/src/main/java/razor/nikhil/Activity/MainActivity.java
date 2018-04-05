@@ -4,11 +4,19 @@ package razor.nikhil.Activity;
  * Created by Nikhil Verma on 9/15/2015.
  */
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,7 +25,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 
@@ -26,21 +37,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import razor.nikhil.Fragments.AptAtten;
-import razor.nikhil.Fragments.AptAttenList;
-import razor.nikhil.Fragments.CgpaFragment;
-import razor.nikhil.Fragments.CoursePage;
-import razor.nikhil.Fragments.FacultyAdvFrag;
+import razor.nikhil.Fragments.APTAtten.AptAtten;
+import razor.nikhil.Fragments.APTAtten.AptAttenList;
+import razor.nikhil.Fragments.CGPA.CgpaFragment;
+import razor.nikhil.Fragments.CoursePage.CoursePage;
+import razor.nikhil.Fragments.FacInfo.FacultyAdvFrag;
+import razor.nikhil.Fragments.FacInfo.GetFacDataStudLogin;
+import razor.nikhil.Fragments.FacMsg.GetFacMessage;
+import razor.nikhil.Fragments.FacMsg.GetFacMsgList;
 import razor.nikhil.Fragments.GetDetails;
-import razor.nikhil.Fragments.GetFacDataStudLogin;
-import razor.nikhil.Fragments.GetFacMessage;
-import razor.nikhil.Fragments.GetFacMsgList;
-import razor.nikhil.Fragments.GradeFragment;
-import razor.nikhil.Fragments.LeavePre;
+import razor.nikhil.Fragments.Grade.GradeFragment;
+import razor.nikhil.Fragments.Leave.LeavePre;
 import razor.nikhil.Fragments.MyTeachers;
 import razor.nikhil.Fragments.MyTeachersList;
 import razor.nikhil.Fragments.Slots;
-import razor.nikhil.Fragments.Syllabus;
+import razor.nikhil.Fragments.Syllabus.Syllabus;
 import razor.nikhil.Fragments.TeeQBank;
 import razor.nikhil.Fragments.TimeTableVP;
 import razor.nikhil.Listener.RecyclerItemClickListener;
@@ -56,6 +67,8 @@ import razor.nikhil.database.MTWTHgetset;
 import razor.nikhil.database.MyTeachGS;
 import razor.nikhil.database.PBL_Get_Set;
 import razor.nikhil.database.Slots_GetSet;
+import razor.nikhil.gcm.QuickstartPreferences;
+import razor.nikhil.gcm.RegistrationIntentService;
 import razor.nikhil.model.AttendBrief;
 import razor.nikhil.model.DetailAtten;
 import razor.nikhil.model.GradeModel;
@@ -67,8 +80,9 @@ import razor.nikhil.model.detailattlist_subcode;
 
 public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.HeaderItemClicked {
 
-    String TITLES[] = {"Courses", "Faculty Info", "Enter Details", "TimeTable", "Grades", "Faculty Adviser", "Syllabus", "CGPA Calculator", "My Teachers", "Messages", "APT Attendance", "Course Page", "Leave Request Pre", "TEE Papers"};
-    int ICONS[] = {R.mipmap.user_icon,
+    private String TITLES[] = {"Courses", "Faculty Info", "Enter Details", "TimeTable", "Grades", "Faculty Adviser",
+            "Syllabus", "CGPA Calculator", "My Teachers", "Messages", "APT Attendance", "Course Page", "Leave Request Pre", "TEE Papers"};
+    private int ICONS[] = {R.mipmap.user_icon,
             R.mipmap.assignment,
             R.mipmap.tick_icon,
             R.mipmap.book,
@@ -90,14 +104,18 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
         super.onBackPressed();
     }
 
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String TAG = "MainActivity";
+
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+
+
     public static List<Model_Slots> list;
-    private static GetDetails gd;
     public static List<Model_Daywise> todayslist_m = new ArrayList<>();
     public static List<Model_Daywise> todayslist_t = new ArrayList<>();
     public static List<Model_Daywise> todayslist_w = new ArrayList<>();
     public static List<Model_Daywise> todayslist_th = new ArrayList<>();
     public static List<Model_Daywise> todayslist_fr = new ArrayList<>();
-    public static List<detailattlist_subcode> detail_att_all = new ArrayList<>();
     public static HashMap<String, List<DetailAtten>> hash = new HashMap<>();
     public static List<AttendBrief> attendBriefs = null;
     public static List<Marks_Model> marks_det;
@@ -143,6 +161,7 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mai);
         context = getApplicationContext();
+        setUPGcm();
         try {
             //Getting the list of slots
             list = new Slots_GetSet(this).getAllCredentials();
@@ -245,6 +264,63 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
         Drawer.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
+    }
+
+    private void setUPGcm() {
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.gcm_send_message), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.token_error_message), Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        super.onPause();
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 
     RecyclerItemClickListener recycleritemlict = new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
@@ -394,4 +470,17 @@ public class MainActivity extends ActionBarActivity implements NavBarRVAdapter.H
         animator.start();
     }
 
+    public void setStatusBarColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(color);
+        }
+    }
+
+    public void setToolBarColor(int color) {
+        try {
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

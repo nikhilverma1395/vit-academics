@@ -1,0 +1,36 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_webview"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/md_blue_grey_500"
+        android:elevation="5dp"
+        android:paddingLeft="15dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <TextView
+            android:id="@+id/toolbar_text_wv"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:text="Course Page"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </android.support.v7.widget.Toolbar>
+
+
+    <com.github.ksoichiro.android.observablescrollview.ObservableWebView
+        android:id="@+id/webview_act"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:clipToPadding="false"
+        android:focusable="true"
+        android:paddingTop="?attr/actionBarSize"
+        android:scrollbars="vertical" />
+</FrameLayout>

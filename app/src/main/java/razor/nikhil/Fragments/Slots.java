@@ -7,12 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.gc.materialdesign.widgets.SnackBar;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -20,15 +20,14 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import org.apache.http.client.HttpClient;
 import org.jsoup.Jsoup;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import razor.nikhil.Activity.MainActivity;
 import razor.nikhil.Http.AttendanceParser;
+import razor.nikhil.Http.FullAttendParseStore;
 import razor.nikhil.Http.Http;
-import razor.nikhil.Http.Logins;
 import razor.nikhil.Http.MarksParser;
 import razor.nikhil.Http.ParseTimeTable;
 import razor.nikhil.Http.PostParent;
@@ -45,6 +44,7 @@ import razor.nikhil.model.DetailAtten;
 import razor.nikhil.model.Marks_Model;
 import razor.nikhil.model.Model_Slots;
 import razor.nikhil.model.PBL_Model;
+import razor.nikhil.model.Query_TableName;
 import razor.nikhil.model.detailattlist_subcode;
 
 
@@ -62,9 +62,10 @@ public class Slots extends Fragment implements ObservableScrollViewCallbacks, St
     public static SwipeRefreshLayout swipeContainer;
     private static HttpClient httpClient;
     private boolean isLoggedIn = false;
-    Thread[] threads = new Thread[3];
-    CoursesAdapter adapter;
+    private Thread[] threads = new Thread[3];
+    private CoursesAdapter adapter;
     private String[] classnbrs;
+    public static List<Query_TableName> sqltn = new ArrayList<>();
 
     public Slots() {
         lists = MainActivity.list;
@@ -76,12 +77,26 @@ public class Slots extends Fragment implements ObservableScrollViewCallbacks, St
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MainActivity activity = ((MainActivity) getActivity());
+        if (activity.toolbarIsHidden()) {
+            activity.showToolbar();
+        }
+        int Color[] = getActivity().getResources().getIntArray(R.array.reds);
+        activity.setStatusBarColor(Color[0]);
+        activity.setToolBarColor(Color[7]);
+
         httpClient = GetDetails.getThreadSafeClient();
         context = getActivity();
         final View v = inflater.inflate(R.layout.recycler, container, false);
         setRv(v);
-
         adapter = new CoursesAdapter(lists, attendBriefs, context);
+        onClickListenLogic();
+        recyclerView.setScrollViewCallbacks(this);
+        recyclerView.setAdapter(adapter);
+        return v;
+    }
+
+    private void onClickListenLogic() {
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
@@ -144,18 +159,7 @@ public class Slots extends Fragment implements ObservableScrollViewCallbacks, St
                     }
                 })
         );
-        recyclerView.setScrollViewCallbacks(this);
-        recyclerView.setAdapter(adapter);
-        return v;
-    }
 
-    static void setFinalStatic(Field field, Object newValue) throws Exception {
-        field.setAccessible(true);
-
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, newValue);
     }
 
     private void setRv(View v) {
@@ -165,21 +169,15 @@ public class Slots extends Fragment implements ObservableScrollViewCallbacks, St
         final LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
-        // Setup refresh listener which triggers new data loading
-        // define a distance
-        try {
-            setFinalStatic(SwipeRefreshLayout.class.getField("DEFAULT_CIRCLE_TARGET"), 100);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        swipeContainer.setProgressViewOffset(false, 0, 320);//works :)
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 doTheShit();
             }
         });
-        // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+        swipeContainer.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
@@ -188,40 +186,10 @@ public class Slots extends Fragment implements ObservableScrollViewCallbacks, St
 
     StudentLoggerDialog editNameDialog;
 
-    private class CheckLoggedIn extends AsyncTask<HttpClient, Void, Void> {
-        HttpClient myclient;
-
-        @Override
-        protected Void doInBackground(HttpClient... params) {
-            myclient = params[0];
-            if (myclient == null) {
-                isLoggedIn = Logins.isStudentLoggedIn(httpClient, getActivity());
-                Log.d("First", "Yo");
-            } else {
-                isLoggedIn = Logins.isStudentLoggedIn(myclient, getActivity());
-                Log.d("Sec", "Second");
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (!isLoggedIn) {
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-
-                editNameDialog = StudentLoggerDialog.newInstance(Slots.this);
-                editNameDialog.show(fm, "heck");
-            }
-            if (isLoggedIn) {
-                callTheUpdateMethods(myclient);
-            }
-        }
-    }
-
     private void doTheShit() {
-        HttpClient client = null;
-        new CheckLoggedIn().execute(client);
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        editNameDialog = StudentLoggerDialog.newInstance(Slots.this);
+        editNameDialog.show(fm, "heck");
     }
 
     @Override
@@ -250,32 +218,15 @@ public class Slots extends Fragment implements ObservableScrollViewCallbacks, St
 
     @Override
     public void Success(HttpClient client) {
-        new CheckLoggedIn().execute(client);
+        httpClient = client;
+        new Sync().execute();
     }
 
     private void callTheUpdateMethods(final HttpClient client) {
-        Runnable run = new Runnable() {
-            public void run() {
-                try {
-                    Http.getData("https://academics.vit.ac.in/student/stud_home.asp", client);//pre for most
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        Thread boo = new Thread(run);
-        boo.start();
-        try {
-            boo.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         try {
             Runnable runnable = new Runnable() {
                 public void run() {
-                    Log.d("uRL", PostParent.TIMETABLE_URL + (PostParent.getSem().toLowerCase()).toLowerCase());
-                    final String timetableHTML = Http.getData(PostParent.TIMETABLE_URL + (PostParent.getSem().toLowerCase()).toLowerCase() + ".asp", client);
-                    Log.d("HEY", timetableHTML);
+                    String timetableHTML = Http.getData(PostParent.TIMETABLE_URL + (PostParent.getSem().toLowerCase()).toLowerCase() + ".asp", client);
                     new ParseTimeTable(context, client).parser(timetableHTML);
                 }
             };
@@ -289,7 +240,6 @@ public class Slots extends Fragment implements ObservableScrollViewCallbacks, St
             threads[1] = new Thread(new Runnable() {
                 public void run() {
                     String dataq = Http.getData("https://academics.vit.ac.in/student/attn_report.asp?sem=" + PostParent.getSem().toUpperCase(), client);
-                    Log.d("DATA", dataq);
                     String from_date = Jsoup.parse(dataq).getElementsByTag("table").get(1)
                             .getElementsByTag("tr").get(2).getElementsByTag("input").get(0).attr("value");
                     final String attendanceHTML = Http.getData(PostParent.ATTENDANCE_URL + PostParent.getSem() + "&fmdt=" + from_date + "&todt=" + PostParent.getTodayDateInFormat(), client);
@@ -328,16 +278,16 @@ public class Slots extends Fragment implements ObservableScrollViewCallbacks, St
         }
         threads = null;
         threads = new Thread[2];
+
         lists = null;
         Runnable r1 = new Runnable() {
             public void run() {
-                int r = 0;
                 lists = new Slots_GetSet(context).getAllCredentials();
                 classnbrs = new String[lists.size()];
                 for (int y = 0; y < lists.size(); y++) {
                     Model_Slots ms = lists.get(y);
-                    classnbrs[r++] = ms.getNumber().trim();
-
+                    classnbrs[y] = ms.getNumber().trim();
+                    sqltn.add(new Query_TableName(FullAttendParseStore.getFullAttTableName(classnbrs[y]), classnbrs[y]));
                 }
                 hash = new HashMap<>();
                 for (int t = 0; t < classnbrs.length; t++) {
@@ -363,12 +313,28 @@ public class Slots extends Fragment implements ObservableScrollViewCallbacks, St
                 e.printStackTrace();
             }
         }
-        adapter.clear();
-        adapter.addAll(lists, new Attend_GetSet(context).getAllCredentials());
-        swipeContainer.setRefreshing(false);
     }
 
     @Override
     public void Error(String message) {
+    }
+
+    private class Sync extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            Http.getData("https://academics.vit.ac.in/student/stud_home.asp", httpClient);//pre for most
+            callTheUpdateMethods(httpClient);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.clear();
+            adapter.addAll(lists, new Attend_GetSet(context).getAllCredentials());
+            swipeContainer.setRefreshing(false);
+            SnackBar snackBar = new SnackBar(getActivity(), "Data Updated Successfully!");
+            snackBar.show();
+        }
     }
 }

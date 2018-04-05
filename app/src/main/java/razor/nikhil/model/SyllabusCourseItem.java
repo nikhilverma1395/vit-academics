@@ -16,7 +16,7 @@ public class SyllabusCourseItem {
     }
 
     public String getSUBCODE() {
-        return SUBCODE;
+        return SUBCODE.trim();
     }
 
     public void setSUBCODE(String SUBCODE) {

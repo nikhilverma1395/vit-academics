@@ -16,7 +16,8 @@ import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 
 import java.util.List;
 
-import razor.nikhil.Fragments.GetFacDataStudLogin.MutlipleResultFac;
+import razor.nikhil.Fragments.FacInfo.FacInfoFrag;
+import razor.nikhil.Fragments.FacInfo.GetFacDataStudLogin;
 import razor.nikhil.Listener.RecyclerItemClickListener;
 import razor.nikhil.R;
 
@@ -24,7 +25,7 @@ import razor.nikhil.R;
  * Created by Nikhil Verma on 9/29/2015.
  */
 public class MultipleTeacherListFrag extends Fragment {
-    private List<MutlipleResultFac> lists;
+    private List<GetFacDataStudLogin.MutlipleResultFac> lists;
     private RecyclerView recyclerView;
     private Typeface regular, light;
     private ProgressBarCircularIndeterminate progress;
@@ -32,10 +33,10 @@ public class MultipleTeacherListFrag extends Fragment {
     public MultipleTeacherListFrag() {
     }
 
-    public MultipleTeacherListFrag(List<MutlipleResultFac> list
-    ) {
+    public MultipleTeacherListFrag(List<GetFacDataStudLogin.MutlipleResultFac> list) {
         this.lists = list;
     }
+
 
     @Nullable
     @Override
